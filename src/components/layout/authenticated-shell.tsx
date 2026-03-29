@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 const navigation = [
   { to: '/app', label: 'Overview', end: true },
   { to: '/app/assets', label: 'Assets' },
+  { to: '/app/users', label: 'Users' },
   { to: '/app/imports', label: 'Imports' },
   { to: '/app/audit-logs', label: 'Audit Logs' },
 ]
