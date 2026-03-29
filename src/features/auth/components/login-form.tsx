@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
-import { login } from '@/features/auth/api/login'
+import { HttpError } from '@/lib/http-client'
+import { useLoginMutation } from '@/features/auth/hooks/use-session'
 import { type LoginInput, loginSchema } from '@/features/auth/schemas/login-schema'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,7 +17,8 @@ import {
 import { Input } from '@/components/ui/input'
 
 export function LoginForm() {
-  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null)
+  const navigate = useNavigate()
+  const loginMutation = useLoginMutation()
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -26,8 +28,19 @@ export function LoginForm() {
   })
 
   async function onSubmit(values: LoginInput) {
-    const result = await login(values)
-    setSubmittedEmail(result.user.email)
+    form.clearErrors('root')
+
+    try {
+      await loginMutation.mutateAsync(values)
+      navigate('/app', { replace: true })
+    } catch (error) {
+      const message =
+        error instanceof HttpError && error.status === 401
+          ? 'Invalid email or password.'
+          : 'Unable to sign in right now.'
+
+      form.setError('root', { message })
+    }
   }
 
   return (
@@ -65,16 +78,14 @@ export function LoginForm() {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
+          {form.formState.errors.root?.message ? (
+            <p className="text-sm text-destructive">{form.formState.errors.root.message}</p>
+          ) : null}
+          <Button className="w-full" type="submit" disabled={loginMutation.isPending}>
+            {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
           </Button>
         </form>
       </Form>
-      {submittedEmail ? (
-        <p className="text-sm text-muted-foreground">
-          Placeholder submission completed for {submittedEmail}.
-        </p>
-      ) : null}
     </div>
   )
 }
