@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { AssetDetail } from '@/features/assets/types/asset'
 
@@ -28,6 +31,11 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
           {asset.displayName || asset.assetTag}
         </CardTitle>
         <p className="text-sm text-muted-foreground">{asset.assetTag}</p>
+        <div>
+          <Button asChild variant="outline">
+            <Link to={`/app/assets/${asset.id}/edit`}>Edit</Link>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <DetailRow label="Status" value={asset.status} />

@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import { AuthenticatedShell } from '@/components/layout/authenticated-shell'
 import { AppShell } from '@/components/layout/app-shell'
 import { AssetCreatePage } from '@/pages/asset-create-page'
+import { AssetEditPage } from '@/pages/asset-edit-page'
 import { LoginPage } from '@/features/auth/components/login-page'
 import { RedirectIfAuthenticated, RequireSession } from '@/features/auth/components/session-guard'
 import { AssetDetailPage } from '@/pages/asset-detail-page'
@@ -52,6 +53,10 @@ export const router = createBrowserRouter([
           {
             path: 'assets/:assetId',
             element: <AssetDetailPage />,
+          },
+          {
+            path: 'assets/:assetId/edit',
+            element: <AssetEditPage />,
           },
           {
             path: 'audit-logs',

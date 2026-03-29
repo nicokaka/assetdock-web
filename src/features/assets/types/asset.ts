@@ -18,6 +18,9 @@ export type AssetDetail = {
   id: string
   assetTag: string
   displayName: string | null
+  categoryId: string | null
+  manufacturerId: string | null
+  currentLocationId: string | null
   status: AssetStatus
   serialNumber: string | null
   hostname: string | null

@@ -1,7 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -18,26 +16,18 @@ import {
   useLocationsQuery,
   useManufacturersQuery,
 } from '@/features/catalog/hooks/use-catalog-lookups'
-import { useCreateAssetMutation } from '@/features/assets/hooks/use-create-asset'
-import { HttpError } from '@/lib/http-client'
+import {
+  assetFormSchema,
+  type AssetFormValues,
+} from '@/features/assets/types/asset-form'
 
-const optionalUuidField = z.union([z.uuid('Select a valid option.'), z.literal('')])
-
-const assetCreateSchema = z.object({
-  assetTag: z.string().trim().min(1, 'Asset tag is required.'),
-  displayName: z.string().trim().min(1, 'Display name is required.'),
-  serialNumber: z.string().trim().optional(),
-  hostname: z.string().trim().optional(),
-  description: z.string().trim().optional(),
-  categoryId: optionalUuidField,
-  manufacturerId: optionalUuidField,
-  currentLocationId: optionalUuidField,
-})
-
-type AssetCreateFormValues = z.infer<typeof assetCreateSchema>
-
-function optionalValue(value: string | undefined) {
-  return value ? value : undefined
+type AssetFormProps = {
+  defaultValues: AssetFormValues
+  submitLabel: string
+  pendingLabel: string
+  isPending: boolean
+  errorMessage?: string
+  onSubmit: (values: AssetFormValues) => Promise<void>
 }
 
 function getLookupStateMessage(isPending: boolean, isError: boolean, emptyLabel: string) {
@@ -52,55 +42,25 @@ function getLookupStateMessage(isPending: boolean, isError: boolean, emptyLabel:
   return emptyLabel
 }
 
-export function AssetCreateForm() {
-  const navigate = useNavigate()
-  const createAssetMutation = useCreateAssetMutation()
+export function AssetForm({
+  defaultValues,
+  submitLabel,
+  pendingLabel,
+  isPending,
+  errorMessage,
+  onSubmit,
+}: AssetFormProps) {
   const categoriesQuery = useCategoriesQuery()
   const manufacturersQuery = useManufacturersQuery()
   const locationsQuery = useLocationsQuery()
-  const form = useForm<AssetCreateFormValues>({
-    resolver: zodResolver(assetCreateSchema),
-    defaultValues: {
-      assetTag: '',
-      displayName: '',
-      serialNumber: '',
-      hostname: '',
-      description: '',
-      categoryId: '',
-      manufacturerId: '',
-      currentLocationId: '',
-    },
+  const form = useForm<AssetFormValues>({
+    resolver: zodResolver(assetFormSchema),
+    defaultValues,
   })
 
   const categories = categoriesQuery.data?.filter((item) => item.active) ?? []
   const manufacturers = manufacturersQuery.data?.filter((item) => item.active) ?? []
   const locations = locationsQuery.data?.filter((item) => item.active) ?? []
-
-  async function onSubmit(values: AssetCreateFormValues) {
-    form.clearErrors('root')
-
-    try {
-      const asset = await createAssetMutation.mutateAsync({
-        assetTag: values.assetTag,
-        displayName: values.displayName,
-        serialNumber: optionalValue(values.serialNumber),
-        hostname: optionalValue(values.hostname),
-        description: optionalValue(values.description),
-        categoryId: optionalValue(values.categoryId),
-        manufacturerId: optionalValue(values.manufacturerId),
-        currentLocationId: optionalValue(values.currentLocationId),
-      })
-
-      navigate(`/app/assets/${asset.id}`, { replace: true })
-    } catch (error) {
-      const message =
-        error instanceof HttpError && error.status === 400
-          ? 'Unable to create the asset with the provided data.'
-          : 'Unable to create the asset right now.'
-
-      form.setError('root', { message })
-    }
-  }
 
   return (
     <Form {...form}>
@@ -257,11 +217,9 @@ export function AssetCreateForm() {
             </FormItem>
           )}
         />
-        {form.formState.errors.root?.message ? (
-          <p className="text-sm text-destructive">{form.formState.errors.root.message}</p>
-        ) : null}
-        <Button type="submit" disabled={createAssetMutation.isPending}>
-          {createAssetMutation.isPending ? 'Creating...' : 'Create asset'}
+        {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
+        <Button type="submit" disabled={isPending}>
+          {isPending ? pendingLabel : submitLabel}
         </Button>
       </form>
     </Form>
