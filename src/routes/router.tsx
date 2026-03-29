@@ -9,6 +9,7 @@ import { AuditLogsPage } from '@/pages/audit-logs-page'
 import { AppOverviewPage } from '@/pages/app-overview-page'
 import { AssetsPage } from '@/pages/assets-page'
 import { HomePage } from '@/pages/home-page'
+import { ImportsPage } from '@/pages/imports-page'
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
           {
             path: 'audit-logs',
             element: <AuditLogsPage />,
+          },
+          {
+            path: 'imports',
+            element: <ImportsPage />,
           },
         ],
       },

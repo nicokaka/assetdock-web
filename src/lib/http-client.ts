@@ -7,6 +7,10 @@ type RequestOptions = {
   signal?: AbortSignal
 }
 
+function isFormData(value: unknown): value is FormData {
+  return typeof FormData !== 'undefined' && value instanceof FormData
+}
+
 function getCookie(name: string) {
   const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   const match = document.cookie.match(new RegExp(`(?:^|; )${escapedName}=([^;]*)`))
@@ -15,7 +19,7 @@ function getCookie(name: string) {
 }
 
 function shouldIncludeJsonContentType(body: unknown, headers: Headers) {
-  return body !== undefined && !headers.has('Content-Type')
+  return body !== undefined && !isFormData(body) && !headers.has('Content-Type')
 }
 
 function shouldAttachCsrfToken(method: HttpMethod) {
@@ -60,7 +64,12 @@ export class HttpClient {
       signal,
       credentials: 'include',
       headers: requestHeaders,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body:
+        body === undefined
+          ? undefined
+          : isFormData(body)
+            ? body
+            : JSON.stringify(body),
     })
 
     if (!response.ok) {
