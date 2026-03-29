@@ -1,9 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom'
 
+import { AuthenticatedShell } from '@/components/layout/authenticated-shell'
 import { AppShell } from '@/components/layout/app-shell'
 import { LoginPage } from '@/features/auth/components/login-page'
 import { RedirectIfAuthenticated, RequireSession } from '@/features/auth/components/session-guard'
-import { AppPage } from '@/pages/app-page'
+import { AppOverviewPage } from '@/pages/app-overview-page'
+import { AssetsPage } from '@/pages/assets-page'
 import { HomePage } from '@/pages/home-page'
 
 export const router = createBrowserRouter([
@@ -27,9 +29,19 @@ export const router = createBrowserRouter([
         path: 'app',
         element: (
           <RequireSession>
-            <AppPage />
+            <AuthenticatedShell />
           </RequireSession>
         ),
+        children: [
+          {
+            index: true,
+            element: <AppOverviewPage />,
+          },
+          {
+            path: 'assets',
+            element: <AssetsPage />,
+          },
+        ],
       },
     ],
   },
