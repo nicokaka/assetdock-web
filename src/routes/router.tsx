@@ -12,6 +12,8 @@ import { AppOverviewPage } from '@/pages/app-overview-page'
 import { AssetsPage } from '@/pages/assets-page'
 import { HomePage } from '@/pages/home-page'
 import { ImportsPage } from '@/pages/imports-page'
+import { UserDetailPage } from '@/pages/user-detail-page'
+import { UsersPage } from '@/pages/users-page'
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +59,14 @@ export const router = createBrowserRouter([
           {
             path: 'assets/:assetId/edit',
             element: <AssetEditPage />,
+          },
+          {
+            path: 'users',
+            element: <UsersPage />,
+          },
+          {
+            path: 'users/:userId',
+            element: <UserDetailPage />,
           },
           {
             path: 'audit-logs',
