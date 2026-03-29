@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { AssetListItem } from '@/features/assets/types/asset'
 
@@ -16,7 +18,12 @@ export function AssetsList({ assets }: AssetsListProps) {
         <Card key={asset.id} className="border-border shadow-none">
           <CardHeader className="gap-1">
             <CardTitle className="text-base font-medium">
-              {formatAssetName(asset)}
+              <Link
+                to={`/app/assets/${asset.id}`}
+                className="transition-colors hover:text-primary"
+              >
+                {formatAssetName(asset)}
+              </Link>
             </CardTitle>
             <CardDescription>{asset.assetTag}</CardDescription>
           </CardHeader>

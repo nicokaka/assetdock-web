@@ -4,6 +4,7 @@ import { AuthenticatedShell } from '@/components/layout/authenticated-shell'
 import { AppShell } from '@/components/layout/app-shell'
 import { LoginPage } from '@/features/auth/components/login-page'
 import { RedirectIfAuthenticated, RequireSession } from '@/features/auth/components/session-guard'
+import { AssetDetailPage } from '@/pages/asset-detail-page'
 import { AppOverviewPage } from '@/pages/app-overview-page'
 import { AssetsPage } from '@/pages/assets-page'
 import { HomePage } from '@/pages/home-page'
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
           {
             path: 'assets',
             element: <AssetsPage />,
+          },
+          {
+            path: 'assets/:assetId',
+            element: <AssetDetailPage />,
           },
         ],
       },

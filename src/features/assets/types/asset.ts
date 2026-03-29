@@ -13,3 +13,14 @@ export type AssetListItem = {
   status: AssetStatus
   archivedAt: string | null
 }
+
+export type AssetDetail = {
+  id: string
+  assetTag: string
+  displayName: string | null
+  status: AssetStatus
+  serialNumber: string | null
+  hostname: string | null
+  description: string | null
+  archivedAt: string | null
+}
