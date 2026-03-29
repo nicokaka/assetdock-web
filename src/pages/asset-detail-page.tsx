@@ -55,7 +55,7 @@ export function AssetDetailPage() {
         </Card>
       ) : null}
 
-      {assetQuery.isSuccess ? <AssetDetailView asset={assetQuery.data} /> : null}
+      {assetQuery.isSuccess ? <AssetDetailView key={assetQuery.data.id} asset={assetQuery.data} /> : null}
     </section>
   )
 }
