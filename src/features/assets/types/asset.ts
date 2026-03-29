@@ -31,4 +31,7 @@ export type CreateAssetInput = {
   serialNumber?: string
   hostname?: string
   description?: string
+  categoryId?: string
+  manufacturerId?: string
+  currentLocationId?: string
 }
