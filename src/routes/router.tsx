@@ -12,6 +12,7 @@ import { AppOverviewPage } from '@/pages/app-overview-page'
 import { AssetsPage } from '@/pages/assets-page'
 import { HomePage } from '@/pages/home-page'
 import { ImportsPage } from '@/pages/imports-page'
+import { UserCreatePage } from '@/pages/user-create-page'
 import { UserDetailPage } from '@/pages/user-detail-page'
 import { UsersPage } from '@/pages/users-page'
 
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
           {
             path: 'users',
             element: <UsersPage />,
+          },
+          {
+            path: 'users/new',
+            element: <UserCreatePage />,
           },
           {
             path: 'users/:userId',

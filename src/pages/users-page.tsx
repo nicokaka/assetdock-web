@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { UsersList } from '@/features/users/components/users-list'
 import { useUsersListQuery } from '@/features/users/hooks/use-users'
@@ -7,11 +10,16 @@ export function UsersPage() {
 
   return (
     <section className="space-y-6">
-      <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Users</h1>
-        <p className="text-sm text-muted-foreground">
-          Review the users visible to the current session.
-        </p>
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight">Users</h1>
+          <p className="text-sm text-muted-foreground">
+            Review the users visible to the current session.
+          </p>
+        </div>
+        <Button asChild variant="outline">
+          <Link to="/app/users/new">New User</Link>
+        </Button>
       </header>
 
       {usersQuery.isPending ? (
