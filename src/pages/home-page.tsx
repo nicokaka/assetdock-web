@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function HomePage() {
@@ -9,16 +12,19 @@ export function HomePage() {
             AssetDock Web
           </CardTitle>
           <CardDescription className="max-w-xl text-sm leading-6">
-            Frontend foundation for the AssetDock platform, prepared for incremental
-            integration with the security-first backend.
+            Frontend foundation for the AssetDock platform, prepared for gradual
+            integration with the API.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <p className="text-sm leading-6 text-muted-foreground">
-            This frontend is intentionally minimal at this stage. Routing,
-            shared providers, UI primitives, and local development foundations
-            are in place for the next steps.
+            The app is intentionally small at this stage. Routing, shared
+            providers, and the first authentication-facing screen are ready for
+            the next iteration.
           </p>
+          <Button asChild variant="outline">
+            <Link to="/login">Go to login</Link>
+          </Button>
         </CardContent>
       </Card>
     </section>
