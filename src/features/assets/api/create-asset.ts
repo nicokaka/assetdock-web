@@ -2,7 +2,7 @@ import type { AssetDetail, CreateAssetInput } from '@/features/assets/types/asse
 import { httpClient } from '@/lib/http-client'
 
 export async function createAsset(input: CreateAssetInput) {
-  return httpClient.request<AssetDetail>('/api/v1/assets', {
+  return httpClient.request<AssetDetail>('/assets', {
     method: 'POST',
     body: input,
   })

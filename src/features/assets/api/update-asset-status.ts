@@ -6,7 +6,7 @@ type UpdateAssetStatusInput = {
 }
 
 export async function updateAssetStatus(assetId: string, input: UpdateAssetStatusInput) {
-  return httpClient.request<AssetDetail>(`/api/v1/assets/${assetId}/status`, {
+  return httpClient.request<AssetDetail>(`/assets/${assetId}/status`, {
     method: 'PATCH',
     body: input,
   })

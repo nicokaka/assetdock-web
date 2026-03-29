@@ -5,7 +5,7 @@ import type {
 import { httpClient } from '@/lib/http-client'
 
 export async function assignAsset(assetId: string, input: AssignAssetInput) {
-  return httpClient.request<AssetAssignment>(`/api/v1/assets/${assetId}/assignments`, {
+  return httpClient.request<AssetAssignment>(`/assets/${assetId}/assignments`, {
     method: 'POST',
     body: input,
   })

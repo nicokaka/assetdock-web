@@ -52,7 +52,11 @@ export class HttpClient {
     }
 
     if (shouldAttachCsrfToken(method)) {
-      const csrfToken = getCookie('X-CSRF-Token') ?? getCookie('csrf_token') ?? getCookie('XSRF-TOKEN')
+      const csrfToken =
+        getCookie('assetdock_csrf') ??
+        getCookie('X-CSRF-Token') ??
+        getCookie('csrf_token') ??
+        getCookie('XSRF-TOKEN')
 
       if (csrfToken) {
         requestHeaders.set('X-CSRF-Token', csrfToken)

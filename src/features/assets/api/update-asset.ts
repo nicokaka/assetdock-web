@@ -2,7 +2,7 @@ import type { AssetDetail, CreateAssetInput } from '@/features/assets/types/asse
 import { httpClient } from '@/lib/http-client'
 
 export async function updateAsset(assetId: string, input: CreateAssetInput) {
-  return httpClient.request<AssetDetail>(`/api/v1/assets/${assetId}`, {
+  return httpClient.request<AssetDetail>(`/assets/${assetId}`, {
     method: 'PATCH',
     body: input,
   })
