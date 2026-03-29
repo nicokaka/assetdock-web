@@ -162,7 +162,7 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">
               {activeAssignment
-                ? `There is an active assignment for user ${activeAssignment.userId}.`
+                ? 'There is an active assignment for this asset.'
                 : 'There is no active assignment for this asset.'}
             </p>
             <div className="flex gap-2">
@@ -208,7 +208,9 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
               {assignments.map((assignment) => (
                 <div key={assignment.id} className="rounded-md border border-border p-4">
                   <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-sm font-medium text-foreground">{assignment.userId}</p>
+                    <p className="text-sm font-medium text-foreground">
+                      User {assignment.userId}
+                    </p>
                     <p className="text-sm text-muted-foreground">
                       {assignment.unassignedAt ? 'Closed' : 'Active'}
                     </p>

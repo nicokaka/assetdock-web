@@ -30,7 +30,7 @@ export function ImportJobSummary({ job }: ImportJobSummaryProps) {
           Progress: {job.processedRows} / {job.totalRows}
         </div>
         <div>
-          Result: {job.successCount} success, {job.errorCount} errors
+          Result: {job.successCount} succeeded, {job.errorCount} failed
         </div>
         {job.failureReason ? (
           <div className="sm:col-span-2">Failure: {job.failureReason}</div>

@@ -10,7 +10,7 @@ export function LoginPage() {
             Sign in
           </CardTitle>
           <CardDescription>
-            Access the AssetDock web application.
+            Access the authenticated area of AssetDock Web.
           </CardDescription>
         </CardHeader>
         <CardContent>

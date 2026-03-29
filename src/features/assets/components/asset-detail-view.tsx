@@ -33,7 +33,11 @@ function DetailRow({
   return (
     <div className="grid gap-1 sm:grid-cols-[160px_1fr] sm:gap-4">
       <div className="text-sm text-muted-foreground">{label}</div>
-      <div className="text-sm text-foreground">{value || 'Not provided'}</div>
+      <div className="text-sm text-foreground">
+        {label === 'Archived at' && value
+          ? new Date(value).toLocaleString()
+          : value || 'Not provided'}
+      </div>
     </div>
   )
 }

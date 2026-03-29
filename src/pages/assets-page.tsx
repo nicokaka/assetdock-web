@@ -14,7 +14,7 @@ export function AssetsPage() {
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">Assets</h1>
           <p className="text-sm text-muted-foreground">
-            A simple list view of assets from the authenticated area.
+            Review the assets available to the current session.
           </p>
         </div>
         <Button asChild variant="outline">
@@ -43,8 +43,7 @@ export function AssetsPage() {
           <CardHeader>
             <CardTitle className="text-base font-medium">No assets yet</CardTitle>
             <CardDescription>
-              Assets will appear here once the backend returns data for the current
-              session.
+              Assets will appear here once they are available to the current session.
             </CardDescription>
           </CardHeader>
         </Card>

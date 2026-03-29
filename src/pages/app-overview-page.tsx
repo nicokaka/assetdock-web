@@ -15,7 +15,7 @@ export function AppOverviewPage() {
             Overview
           </CardTitle>
           <CardDescription>
-            The authenticated area is ready for the first operational screens.
+            Use the main areas to review assets, users, imports, and audit activity.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -26,12 +26,20 @@ export function AppOverviewPage() {
             <p>{sessionQuery.data?.user.email}</p>
           </div>
           <p className="text-sm leading-6 text-muted-foreground">
-            Start with the assets area to inspect the first list-based view of the
-            product.
+            Start with assets for inventory work, users for access administration,
+            or audit logs for a quick operational trace.
           </p>
-          <Button asChild variant="outline">
-            <Link to="/app/assets">Open assets</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline">
+              <Link to="/app/assets">Open assets</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/app/users">Open users</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/app/audit-logs">Open audit logs</Link>
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </section>
