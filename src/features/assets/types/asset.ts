@@ -24,3 +24,11 @@ export type AssetDetail = {
   description: string | null
   archivedAt: string | null
 }
+
+export type CreateAssetInput = {
+  assetTag: string
+  displayName: string
+  serialNumber?: string
+  hostname?: string
+  description?: string
+}

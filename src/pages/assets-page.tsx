@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom'
+
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AssetsList } from '@/features/assets/components/assets-list'
 import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
@@ -7,11 +10,16 @@ export function AssetsPage() {
 
   return (
     <section className="space-y-6">
-      <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Assets</h1>
-        <p className="text-sm text-muted-foreground">
-          A simple list view of assets from the authenticated area.
-        </p>
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight">Assets</h1>
+          <p className="text-sm text-muted-foreground">
+            A simple list view of assets from the authenticated area.
+          </p>
+        </div>
+        <Button asChild variant="outline">
+          <Link to="/app/assets/new">New Asset</Link>
+        </Button>
       </header>
 
       {assetsQuery.isPending ? (
