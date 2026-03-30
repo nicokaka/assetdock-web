@@ -40,7 +40,7 @@ export function AssetCreatePage() {
             New Asset
           </CardTitle>
           <CardDescription>
-            Create a new asset with the core fields needed for this first step.
+            Create a new asset with the core fields currently supported in the app.
           </CardDescription>
         </CardHeader>
         <CardContent>

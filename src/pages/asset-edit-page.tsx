@@ -65,7 +65,7 @@ export function AssetEditPage() {
           <CardHeader>
             <CardTitle className="text-base font-medium">Unable to load asset</CardTitle>
             <CardDescription>
-              Please try again in a moment.
+              Please refresh the page or try again in a moment.
             </CardDescription>
           </CardHeader>
         </Card>

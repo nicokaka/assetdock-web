@@ -29,7 +29,7 @@ export function ImportsPage() {
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">Imports</h1>
         <p className="text-sm text-muted-foreground">
-          Upload a CSV file and inspect the resulting import job.
+          Upload a CSV file and review the resulting import job.
         </p>
       </header>
 
@@ -63,6 +63,12 @@ export function ImportsPage() {
                 </Button>
               ) : null}
             </div>
+
+            {file ? (
+              <p className="text-sm text-muted-foreground">
+                Selected file: {file.name}
+              </p>
+            ) : null}
           </form>
 
           {!file && !uploadMutation.isPending && !uploadMutation.isError && !currentJob ? (
@@ -72,7 +78,7 @@ export function ImportsPage() {
           ) : null}
 
           {uploadMutation.isError ? (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-destructive">
               Unable to upload the CSV right now.
             </p>
           ) : null}

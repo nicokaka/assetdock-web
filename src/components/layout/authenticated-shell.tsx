@@ -28,8 +28,8 @@ export function AuthenticatedShell() {
               {sessionQuery.data?.user.fullName}
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <nav className="flex items-center gap-1 rounded-lg border border-border p-1">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <nav className="flex flex-wrap items-center gap-1 rounded-lg border border-border p-1">
               {navigation.map((item) => (
                 <NavLink
                   key={item.to}
@@ -50,6 +50,7 @@ export function AuthenticatedShell() {
               variant="outline"
               onClick={() => logoutMutation.mutate()}
               disabled={logoutMutation.isPending}
+              className="self-start sm:self-auto"
             >
               {logoutMutation.isPending ? 'Signing out...' : 'Sign out'}
             </Button>

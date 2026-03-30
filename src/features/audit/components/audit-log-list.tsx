@@ -24,6 +24,14 @@ function formatTarget(item: AuditLogItem) {
   return `${item.resourceType ?? 'Resource'} · ${item.resourceId}`
 }
 
+function formatEventType(value: string) {
+  return value
+    .toLowerCase()
+    .split('_')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ')
+}
+
 export function AuditLogList({ items }: AuditLogListProps) {
   return (
     <div className="space-y-3">
@@ -31,7 +39,7 @@ export function AuditLogList({ items }: AuditLogListProps) {
         <Card key={item.id} className="border-border shadow-none">
           <CardHeader className="gap-1">
             <CardTitle className="text-base font-medium">
-              {item.eventType}
+              {formatEventType(item.eventType)}
             </CardTitle>
             <p className="text-sm text-muted-foreground">
               {formatTimestamp(item.occurredAt)}

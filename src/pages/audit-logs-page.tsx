@@ -10,7 +10,7 @@ export function AuditLogsPage() {
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">Audit Logs</h1>
         <p className="text-sm text-muted-foreground">
-          A simple read-only view of recent security and operational events.
+          Review recent security and operational events visible to the current session.
         </p>
       </header>
 
@@ -35,8 +35,7 @@ export function AuditLogsPage() {
           <CardHeader>
             <CardTitle className="text-base font-medium">No audit logs found</CardTitle>
             <CardDescription>
-              Audit entries will appear here when the backend returns results for the
-              current session.
+              Audit entries will appear here when results are available for the current session.
             </CardDescription>
           </CardHeader>
         </Card>

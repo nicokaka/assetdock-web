@@ -49,7 +49,7 @@ export function AssetDetailPage() {
               Unable to load asset
             </CardTitle>
             <CardDescription>
-              Please try again in a moment.
+              Please refresh the page or try again in a moment.
             </CardDescription>
           </CardHeader>
         </Card>
