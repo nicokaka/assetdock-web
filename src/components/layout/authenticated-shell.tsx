@@ -18,47 +18,54 @@ export function AuthenticatedShell() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-8 sm:px-8">
-        <header className="flex flex-col gap-4 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1">
-            <div className="text-sm font-medium tracking-tight text-foreground">
-              AssetDock Web
-            </div>
-            <div className="text-sm text-muted-foreground">
-              {sessionQuery.data?.user.fullName}
-            </div>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <nav className="flex flex-wrap items-center gap-1 rounded-lg border border-border p-1">
-              {navigation.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.end}
-                  className={({ isActive }) =>
-                    cn(
-                      'rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground',
-                      isActive && 'bg-secondary text-foreground'
-                    )
-                  }
+      <div className="relative isolate min-h-screen overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,rgba(15,23,42,0.08),transparent_60%)]" />
+        <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-5 sm:px-6 lg:px-8">
+          <header className="sticky top-0 z-20 mb-8 rounded-2xl border border-border/80 bg-background/88 px-4 py-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/72 sm:px-5">
+            <div className="flex flex-col gap-4">
+              <div className="space-y-1">
+                <div className="text-sm font-semibold tracking-tight text-foreground">
+                  AssetDock Web
+                </div>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                  <span>{sessionQuery.data?.user.fullName}</span>
+                  <span className="hidden text-border sm:inline">•</span>
+                  <span>{sessionQuery.data?.user.email}</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <nav className="flex flex-wrap items-center gap-1.5">
+                  {navigation.map((item) => (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      end={item.end}
+                      className={({ isActive }) =>
+                        cn(
+                          'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
+                          isActive && 'bg-secondary text-foreground shadow-sm'
+                        )
+                      }
+                    >
+                      {item.label}
+                    </NavLink>
+                  ))}
+                </nav>
+                <Button
+                  variant="outline"
+                  onClick={() => logoutMutation.mutate()}
+                  disabled={logoutMutation.isPending}
+                  className="self-start border-border/80 bg-background/80 lg:self-auto"
                 >
-                  {item.label}
-                </NavLink>
-              ))}
-            </nav>
-            <Button
-              variant="outline"
-              onClick={() => logoutMutation.mutate()}
-              disabled={logoutMutation.isPending}
-              className="self-start sm:self-auto"
-            >
-              {logoutMutation.isPending ? 'Signing out...' : 'Sign out'}
-            </Button>
-          </div>
-        </header>
-        <main className="flex-1 py-8">
-          <Outlet />
-        </main>
+                  {logoutMutation.isPending ? 'Signing out...' : 'Sign out'}
+                </Button>
+              </div>
+            </div>
+          </header>
+          <main className="flex-1 pb-10">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   )

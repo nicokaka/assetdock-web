@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { PageHeader } from '@/components/layout/page-header'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ImportJobSummary } from '@/features/imports/components/import-job-summary'
@@ -26,14 +27,12 @@ export function ImportsPage() {
 
   return (
     <section className="space-y-6">
-      <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Imports</h1>
-        <p className="text-sm text-muted-foreground">
-          Upload a CSV file and review the resulting import job.
-        </p>
-      </header>
+      <PageHeader
+        title="Imports"
+        description="Upload a CSV file and review the resulting import job."
+      />
 
-      <Card className="max-w-2xl border-border shadow-none">
+      <Card className="max-w-2xl border-border/80 bg-card/78 shadow-sm">
         <CardHeader>
           <CardTitle className="text-base font-medium">CSV import</CardTitle>
           <CardDescription>
@@ -46,7 +45,7 @@ export function ImportsPage() {
               type="file"
               accept=".csv,text/csv"
               onChange={(event) => setFile(event.target.files?.[0] ?? null)}
-              className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-md file:border file:border-border file:bg-background file:px-3 file:py-2 file:text-sm file:text-foreground"
+              className="block w-full rounded-lg border border-dashed border-border/80 bg-background/80 px-3 py-3 text-sm text-muted-foreground transition-colors duration-200 file:mr-4 file:rounded-md file:border file:border-border file:bg-background file:px-3 file:py-2 file:text-sm file:text-foreground hover:border-border"
             />
             <div className="flex items-center gap-3">
               <Button type="submit" disabled={!file || uploadMutation.isPending}>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 
+import { PageHeader } from '@/components/layout/page-header'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AssetsList } from '@/features/assets/components/assets-list'
@@ -10,28 +11,26 @@ export function AssetsPage() {
 
   return (
     <section className="space-y-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">Assets</h1>
-          <p className="text-sm text-muted-foreground">
-            Review the assets available to the current session.
-          </p>
-        </div>
-        <Button asChild variant="outline">
+      <PageHeader
+        title="Assets"
+        description="Review the assets available to the current session."
+        action={
+          <Button asChild variant="outline">
           <Link to="/app/assets/new">New Asset</Link>
-        </Button>
-      </header>
+          </Button>
+        }
+      />
 
       {assetsQuery.isPending ? (
-        <Card className="border-border shadow-none">
+        <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardContent className="py-6 text-sm text-muted-foreground">
-            Loading assets...
+            Loading assets…
           </CardContent>
         </Card>
       ) : null}
 
       {assetsQuery.isError ? (
-        <Card className="border-border shadow-none">
+        <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardContent className="py-6 text-sm text-muted-foreground">
             Unable to load assets right now.
           </CardContent>
@@ -39,11 +38,11 @@ export function AssetsPage() {
       ) : null}
 
       {assetsQuery.isSuccess && assetsQuery.data.length === 0 ? (
-        <Card className="border-border shadow-none">
+        <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardHeader>
             <CardTitle className="text-base font-medium">No assets yet</CardTitle>
             <CardDescription>
-              Assets will appear here once they are available to the current session.
+              Create the first asset to start working with the inventory area.
             </CardDescription>
           </CardHeader>
         </Card>
