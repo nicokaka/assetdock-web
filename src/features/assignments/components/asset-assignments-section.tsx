@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   useAssignAssetMutation,
@@ -209,17 +210,17 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
                 <div key={assignment.id} className="rounded-md border border-border p-4">
                   <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-sm font-medium text-foreground">
-                      User {assignment.userId}
+                      User {assignment.userId.slice(0, 8)}…
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <Badge variant={assignment.unassignedAt ? 'muted' : 'success'}>
                       {assignment.unassignedAt ? 'Closed' : 'Active'}
-                    </p>
+                    </Badge>
                   </div>
                   <div className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
                     <p>Assigned: {formatTimestamp(assignment.assignedAt)}</p>
                     <p>Unassigned: {formatTimestamp(assignment.unassignedAt)}</p>
-                    <p>Location: {assignment.locationId ?? 'Not provided'}</p>
-                    <p>Assigned by: {assignment.assignedBy}</p>
+                    <p>Location: {assignment.locationId ? `${assignment.locationId.slice(0, 8)}…` : '—'}</p>
+                    <p>Assigned by: {assignment.assignedBy.slice(0, 8)}…</p>
                   </div>
                   {assignment.notes ? (
                     <p className="mt-3 text-sm text-foreground">{assignment.notes}</p>
