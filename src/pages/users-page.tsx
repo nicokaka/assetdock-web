@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 
+import { PageHeader } from '@/components/layout/page-header'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { UsersList } from '@/features/users/components/users-list'
@@ -10,20 +11,18 @@ export function UsersPage() {
 
   return (
     <section className="space-y-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">Users</h1>
-          <p className="text-sm text-muted-foreground">
-            Review the users visible to the current session.
-          </p>
-        </div>
-        <Button asChild variant="outline">
+      <PageHeader
+        title="Users"
+        description="Review the users visible to the current session."
+        action={
+          <Button asChild variant="outline">
           <Link to="/app/users/new">New User</Link>
-        </Button>
-      </header>
+          </Button>
+        }
+      />
 
       {usersQuery.isPending ? (
-        <Card className="border-border shadow-none">
+        <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardHeader>
             <CardTitle className="text-base font-medium">Loading users</CardTitle>
             <CardDescription>
@@ -34,7 +33,7 @@ export function UsersPage() {
       ) : null}
 
       {usersQuery.isError ? (
-        <Card className="border-border shadow-none">
+        <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardHeader>
             <CardTitle className="text-base font-medium">Unable to load users</CardTitle>
             <CardDescription>
@@ -45,11 +44,11 @@ export function UsersPage() {
       ) : null}
 
       {usersQuery.isSuccess && usersQuery.data.length === 0 ? (
-        <Card className="border-border shadow-none">
+        <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardHeader>
             <CardTitle className="text-base font-medium">No users found</CardTitle>
             <CardDescription>
-              Users will appear here once they are available for the current session.
+              Create the first user when this workspace is ready to grow.
             </CardDescription>
           </CardHeader>
         </Card>

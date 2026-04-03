@@ -1,3 +1,4 @@
+import { PageHeader } from '@/components/layout/page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AuditLogList } from '@/features/audit/components/audit-log-list'
 import { useAuditLogsQuery } from '@/features/audit/hooks/use-audit-logs'
@@ -7,23 +8,21 @@ export function AuditLogsPage() {
 
   return (
     <section className="space-y-6">
-      <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Audit Logs</h1>
-        <p className="text-sm text-muted-foreground">
-          Review recent security and operational events visible to the current session.
-        </p>
-      </header>
+      <PageHeader
+        title="Audit Logs"
+        description="Review recent security and operational events visible to the current session."
+      />
 
       {auditLogsQuery.isPending ? (
-        <Card className="border-border shadow-none">
+        <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardContent className="py-6 text-sm text-muted-foreground">
-            Loading audit logs...
+            Loading audit logs…
           </CardContent>
         </Card>
       ) : null}
 
       {auditLogsQuery.isError ? (
-        <Card className="border-border shadow-none">
+        <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardContent className="py-6 text-sm text-muted-foreground">
             Unable to load audit logs right now.
           </CardContent>
@@ -31,11 +30,11 @@ export function AuditLogsPage() {
       ) : null}
 
       {auditLogsQuery.isSuccess && auditLogsQuery.data.items.length === 0 ? (
-        <Card className="border-border shadow-none">
+        <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardHeader>
             <CardTitle className="text-base font-medium">No audit logs found</CardTitle>
             <CardDescription>
-              Audit entries will appear here when results are available for the current session.
+              Audit entries will appear here when activity becomes available for this session.
             </CardDescription>
           </CardHeader>
         </Card>
