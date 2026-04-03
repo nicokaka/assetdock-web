@@ -6,6 +6,7 @@ import { userRoleOptions, userStatusOptions } from '@/features/users/types/user-
 import { useUpdateUserRoles, useUpdateUserStatus } from '@/features/users/hooks/use-user-lifecycle-actions'
 import type { UserDetail, UserRole, UserStatus } from '@/features/users/types/user'
 import { HttpError } from '@/lib/http-client'
+import { cn } from '@/lib/utils'
 
 type UserDetailViewProps = {
   user: UserDetail
@@ -26,8 +27,35 @@ function DetailRow({
   )
 }
 
+const statusLabels: Record<string, string> = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+  LOCKED: 'Locked',
+}
+
+const roleLabels: Record<string, string> = {
+  SUPER_ADMIN: 'Super Admin',
+  ORG_ADMIN: 'Org Admin',
+  ASSET_MANAGER: 'Asset Manager',
+  AUDITOR: 'Auditor',
+  VIEWER: 'Viewer',
+}
+
+function userStatusClassName(status: string) {
+  switch (status) {
+    case 'ACTIVE':
+      return 'border-emerald-200 bg-emerald-50 text-emerald-700'
+    case 'INACTIVE':
+      return 'border-slate-200 bg-slate-100 text-slate-700'
+    case 'LOCKED':
+      return 'border-rose-200 bg-rose-50 text-rose-700'
+    default:
+      return 'border-border/70 bg-background/80 text-muted-foreground'
+  }
+}
+
 function formatRoles(roles: UserDetail['roles']) {
-  return roles.length > 0 ? roles.join(', ') : 'No roles'
+  return roles.length > 0 ? roles.map(r => roleLabels[r] ?? r).join(', ') : 'No roles'
 }
 
 function formatTimestamp(value: string) {
@@ -45,7 +73,17 @@ export function UserDetailView({ user }: UserDetailViewProps) {
           <p className="text-sm text-muted-foreground">{user.email}</p>
         </CardHeader>
         <CardContent className="space-y-4">
-          <DetailRow label="Status" value={user.status} />
+          <div className="grid gap-1 sm:grid-cols-[160px_1fr] sm:gap-4">
+            <div className="text-sm text-muted-foreground">Status</div>
+            <div>
+              <span className={cn(
+                'inline-block rounded-full border px-2.5 py-1 text-[11px] font-medium tracking-[0.06em]',
+                userStatusClassName(user.status)
+              )}>
+                {statusLabels[user.status] ?? user.status}
+              </span>
+            </div>
+          </div>
           <DetailRow label="Roles" value={formatRoles(user.roles)} />
           <DetailRow label="Created" value={formatTimestamp(user.createdAt)} />
           <DetailRow label="Updated" value={formatTimestamp(user.updatedAt)} />
@@ -95,7 +133,7 @@ function UserLifecycleActions({ user }: UserDetailViewProps) {
           >
             {userStatusOptions.map((status) => (
               <option key={status} value={status}>
-                {status}
+                {statusLabels[status] ?? status}
               </option>
             ))}
           </select>
@@ -134,7 +172,7 @@ function UserLifecycleActions({ user }: UserDetailViewProps) {
           >
             {userRoleOptions.map((role) => (
               <option key={role} value={role}>
-                {role}
+                {roleLabels[role] ?? role}
               </option>
             ))}
           </select>

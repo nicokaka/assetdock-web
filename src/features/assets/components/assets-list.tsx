@@ -12,14 +12,25 @@ function formatAssetName(asset: AssetListItem) {
   return asset.displayName || asset.assetTag
 }
 
+const statusLabels: Record<AssetListItem['status'], string> = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+  IN_STOCK: 'In Stock',
+  IN_MAINTENANCE: 'Maintenance',
+  RETIRED: 'Retired',
+  LOST: 'Lost',
+}
+
 function formatStatusLabel(status: AssetListItem['status']) {
-  return status.toLowerCase().replaceAll('_', ' ')
+  return statusLabels[status] ?? status
 }
 
 function statusClassName(status: AssetListItem['status']) {
   switch (status) {
     case 'ACTIVE':
       return 'border-emerald-200 bg-emerald-50 text-emerald-700'
+    case 'IN_STOCK':
+      return 'border-sky-200 bg-sky-50 text-sky-700'
     case 'INACTIVE':
       return 'border-slate-200 bg-slate-100 text-slate-700'
     case 'IN_MAINTENANCE':

@@ -8,6 +8,20 @@ type UsersListProps = {
   users: UserSummary[]
 }
 
+const statusLabels: Record<string, string> = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+  LOCKED: 'Locked',
+}
+
+const roleLabels: Record<string, string> = {
+  SUPER_ADMIN: 'Super Admin',
+  ORG_ADMIN: 'Org Admin',
+  ASSET_MANAGER: 'Asset Manager',
+  AUDITOR: 'Auditor',
+  VIEWER: 'Viewer',
+}
+
 function statusClassName(status: UserSummary['status']) {
   switch (status) {
     case 'ACTIVE':
@@ -37,7 +51,7 @@ export function UsersList({ users }: UsersListProps) {
                       statusClassName(user.status)
                     )}
                   >
-                    {user.status.toLowerCase()}
+                    {statusLabels[user.status] ?? user.status.toLowerCase()}
                   </span>
                   <div className="flex min-w-0 flex-wrap gap-1.5">
                     {user.roles.length > 0 ? (
@@ -46,7 +60,7 @@ export function UsersList({ users }: UsersListProps) {
                           key={role}
                           className="rounded-md border border-border/70 bg-background/80 px-2 py-1 text-[11px] font-medium text-muted-foreground"
                         >
-                          {role}
+                          {roleLabels[role] ?? role}
                         </span>
                       ))
                     ) : (
