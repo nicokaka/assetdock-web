@@ -10,6 +10,7 @@ import {
 } from '@/features/assets/hooks/use-asset-lifecycle-actions'
 import type { AssetDetail } from '@/features/assets/types/asset'
 import { HttpError } from '@/lib/http-client'
+import { cn } from '@/lib/utils'
 
 type AssetDetailViewProps = {
   asset: AssetDetail
@@ -18,10 +19,39 @@ type AssetDetailViewProps = {
 const statusOptions = [
   'ACTIVE',
   'INACTIVE',
+  'IN_STOCK',
   'IN_MAINTENANCE',
   'RETIRED',
   'LOST',
 ] as const
+
+const statusLabels: Record<string, string> = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+  IN_STOCK: 'In Stock',
+  IN_MAINTENANCE: 'Maintenance',
+  RETIRED: 'Retired',
+  LOST: 'Lost',
+}
+
+function statusClassName(status: string) {
+  switch (status) {
+    case 'ACTIVE':
+      return 'border-emerald-200 bg-emerald-50 text-emerald-700'
+    case 'IN_STOCK':
+      return 'border-sky-200 bg-sky-50 text-sky-700'
+    case 'INACTIVE':
+      return 'border-slate-200 bg-slate-100 text-slate-700'
+    case 'IN_MAINTENANCE':
+      return 'border-amber-200 bg-amber-50 text-amber-700'
+    case 'RETIRED':
+      return 'border-zinc-200 bg-zinc-100 text-zinc-700'
+    case 'LOST':
+      return 'border-rose-200 bg-rose-50 text-rose-700'
+    default:
+      return 'border-border/70 bg-background/80 text-muted-foreground'
+  }
+}
 
 function DetailRow({
   label,
@@ -95,7 +125,17 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <DetailRow label="Status" value={asset.status} />
+          <div className="grid gap-1 sm:grid-cols-[160px_1fr] sm:gap-4">
+            <div className="text-sm text-muted-foreground">Status</div>
+            <div>
+              <span className={cn(
+                'inline-block rounded-full border px-2.5 py-1 text-[11px] font-medium tracking-[0.06em]',
+                statusClassName(asset.status)
+              )}>
+                {statusLabels[asset.status] ?? asset.status}
+              </span>
+            </div>
+          </div>
           <div className="space-y-3 rounded-md border border-border p-4">
             <div className="space-y-1">
               <h2 className="text-sm font-medium text-foreground">Lifecycle</h2>
@@ -117,7 +157,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                 >
                   {statusOptions.map((option) => (
                     <option key={option} value={option}>
-                      {option}
+                      {statusLabels[option] ?? option}
                     </option>
                   ))}
                 </select>

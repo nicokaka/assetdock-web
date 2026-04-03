@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   AssetForm,
@@ -29,9 +29,9 @@ export function AssetCreatePage() {
   return (
     <section className="space-y-6">
       <div>
-        <Button asChild variant="outline">
-          <Link to="/app/assets">Back to assets</Link>
-        </Button>
+        <Link to="/app/assets" className={buttonVariants({ variant: 'outline' })}>
+          Back to assets
+        </Link>
       </div>
 
       <Card className="max-w-2xl border-border shadow-none">

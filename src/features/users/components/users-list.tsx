@@ -1,87 +1,100 @@
 import { Link } from 'react-router-dom'
 
-import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import type { UserSummary } from '@/features/users/types/user'
-import { cn } from '@/lib/utils'
 
 type UsersListProps = {
   users: UserSummary[]
 }
 
-function statusClassName(status: UserSummary['status']) {
+const statusLabels: Record<string, string> = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+  LOCKED: 'Locked',
+}
+
+const roleLabels: Record<string, string> = {
+  SUPER_ADMIN: 'Super Admin',
+  ORG_ADMIN: 'Org Admin',
+  ASSET_MANAGER: 'Asset Manager',
+  AUDITOR: 'Auditor',
+  VIEWER: 'Viewer',
+}
+
+function statusVariant(status: UserSummary['status']) {
   switch (status) {
     case 'ACTIVE':
-      return 'border-emerald-200 bg-emerald-50 text-emerald-700'
+      return 'success' as const
     case 'INACTIVE':
-      return 'border-slate-200 bg-slate-100 text-slate-700'
+      return 'muted' as const
     case 'LOCKED':
-      return 'border-rose-200 bg-rose-50 text-rose-700'
+      return 'danger' as const
   }
 }
 
 export function UsersList({ users }: UsersListProps) {
   return (
-    <div className="space-y-2.5">
-      {users.map((user) => (
-        <Card
-          key={user.id}
-          className="border-border/80 bg-card/78 py-0 shadow-sm hover:border-border hover:shadow-md"
-        >
-          <CardContent className="px-0">
-            <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-start sm:justify-between sm:px-6">
-              <div className="min-w-0 space-y-2">
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <span
-                    className={cn(
-                      'rounded-full border px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.08em]',
-                      statusClassName(user.status)
-                    )}
-                  >
-                    {user.status.toLowerCase()}
-                  </span>
-                  <div className="flex min-w-0 flex-wrap gap-1.5">
-                    {user.roles.length > 0 ? (
-                      user.roles.map((role) => (
-                        <span
-                          key={role}
-                          className="rounded-md border border-border/70 bg-background/80 px-2 py-1 text-[11px] font-medium text-muted-foreground"
-                        >
-                          {role}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="rounded-md border border-border/70 bg-background/80 px-2 py-1 text-[11px] font-medium text-muted-foreground">
-                        No roles
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-base font-medium text-foreground">
-                    <Link
-                      to={`/app/users/${user.id}`}
-                      className="transition-colors duration-200 hover:text-primary"
-                    >
-                      {user.fullName}
-                    </Link>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-                    <span>{user.email}</span>
-                  </div>
-                </div>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Status</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>Roles</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {users.map((user) => (
+          <TableRow key={user.id}>
+            <TableCell>
+              <Badge variant={statusVariant(user.status)}>
+                {statusLabels[user.status] ?? user.status}
+              </Badge>
+            </TableCell>
+            <TableCell>
+              <Link
+                to={`/app/users/${user.id}`}
+                className="font-medium text-foreground transition-colors hover:text-primary"
+              >
+                {user.fullName}
+              </Link>
+            </TableCell>
+            <TableCell className="text-muted-foreground">
+              {user.email}
+            </TableCell>
+            <TableCell>
+              <div className="flex flex-wrap gap-1">
+                {user.roles.length > 0 ? (
+                  user.roles.map((role) => (
+                    <Badge key={role} variant="outline" className="text-[11px]">
+                      {roleLabels[role] ?? role}
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-sm text-muted-foreground">No roles</span>
+                )}
               </div>
-              <div className="flex shrink-0 items-center">
-                <Link
-                  to={`/app/users/${user.id}`}
-                  className="text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
-                >
-                  View details
-                </Link>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+            </TableCell>
+            <TableCell className="text-right">
+              <Link
+                to={`/app/users/${user.id}`}
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                View
+              </Link>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   )
 }
