@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AssetDetailView } from '@/features/assets/components/asset-detail-view'
 import { useAssetDetailQuery } from '@/features/assets/hooks/use-asset-detail'
@@ -18,9 +18,9 @@ export function AssetDetailPage() {
   return (
     <section className="space-y-6">
       <div>
-        <Button asChild variant="outline">
-          <Link to="/app/assets">Back to assets</Link>
-        </Button>
+        <Link to="/app/assets" className={buttonVariants({ variant: 'outline' })}>
+          Back to assets
+        </Link>
       </div>
 
       {assetQuery.isPending ? (

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { UserForm } from '@/features/users/components/user-form'
 import { useCreateUserMutation } from '@/features/users/hooks/use-create-user'
@@ -26,9 +26,9 @@ export function UserCreatePage() {
   return (
     <section className="space-y-6">
       <div>
-        <Button asChild variant="outline">
-          <Link to="/app/users">Back to users</Link>
-        </Button>
+        <Link to="/app/users" className={buttonVariants({ variant: 'outline' })}>
+          Back to users
+        </Link>
       </div>
 
       <Card className="max-w-2xl border-border shadow-none">

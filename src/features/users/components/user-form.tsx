@@ -18,6 +18,20 @@ import {
   userStatusOptions,
 } from '@/features/users/types/user-form'
 
+const statusLabels: Record<string, string> = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+  LOCKED: 'Locked',
+}
+
+const roleLabels: Record<string, string> = {
+  SUPER_ADMIN: 'Super Admin',
+  ORG_ADMIN: 'Org Admin',
+  ASSET_MANAGER: 'Asset Manager',
+  AUDITOR: 'Auditor',
+  VIEWER: 'Viewer',
+}
+
 type UserFormProps = {
   defaultValues: UserFormValues
   submitLabel: string
@@ -105,7 +119,7 @@ export function UserForm({
                 >
                   {userRoleOptions.map((role) => (
                     <option key={role} value={role}>
-                      {role}
+                      {roleLabels[role] ?? role}
                     </option>
                   ))}
                 </select>
@@ -127,7 +141,7 @@ export function UserForm({
                 >
                   {userStatusOptions.map((status) => (
                     <option key={status} value={status}>
-                      {status}
+                      {statusLabels[status] ?? status}
                     </option>
                   ))}
                 </select>

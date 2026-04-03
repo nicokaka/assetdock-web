@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { UserDetailView } from '@/features/users/components/user-detail-view'
 import { useUserDetailQuery } from '@/features/users/hooks/use-users'
@@ -18,9 +18,9 @@ export function UserDetailPage() {
   return (
     <section className="space-y-6">
       <div>
-        <Button asChild variant="outline">
-          <Link to="/app/users">Back to users</Link>
-        </Button>
+        <Link to="/app/users" className={buttonVariants({ variant: 'outline' })}>
+          Back to users
+        </Link>
       </div>
 
       {userQuery.isPending ? (
