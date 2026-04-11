@@ -17,10 +17,18 @@ export function UserDetailPage() {
 
   return (
     <section className="space-y-6">
-      <div>
+      <div className="flex items-center gap-2">
         <Link to="/app/users" className={buttonVariants({ variant: 'outline' })}>
           Back to users
         </Link>
+        {userQuery.isSuccess ? (
+          <Link
+            to={`/app/users/${userId}/edit`}
+            className={buttonVariants({ variant: 'outline' })}
+          >
+            Edit user
+          </Link>
+        ) : null}
       </div>
 
       {userQuery.isPending ? (
