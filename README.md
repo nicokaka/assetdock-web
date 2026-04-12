@@ -1,75 +1,113 @@
-# AssetDock Web
+<br/>
+<div align="center">
+<h1 align="center">AssetDock Web</h1>
+<p align="center">
+A serious, B2B-style React application for managing IT assets, users, and audit logs.
+</p>
+<p align="center">
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19-61dafb?style=flat&logo=react" alt="React 19" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.9-3178c6?style=flat&logo=typescript" alt="TypeScript" /></a>
+  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-8-646cff?style=flat&logo=vite" alt="Vite 8" /></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-4-06b6d4?style=flat&logo=tailwindcss" alt="Tailwind 4" /></a>
+  <a href="https://playwright.dev/"><img src="https://img.shields.io/badge/Playwright-E2E-2eab5c?style=flat&logo=playwright" alt="Playwright" /></a>
+</p>
+</div>
 
-AssetDock Web is the frontend companion for the AssetDock API. It is an internal web application designed to manage the lifecycle of IT assets and their assignments to users. This repository contains a consolidated Minimum Viable Product (MVP) that is fully integrated with the backend API.
+<br/>
 
-## Technology Stack
+## Overview
 
-* React 19
-* TypeScript
-* Vite
-* Tailwind CSS v4 and Radix UI
-* React Router DOM v7
-* TanStack React Query v5
-* React Hook Form and Zod
-* Playwright
+AssetDock Web is the companion frontend for the [`assetdock-api`](https://github.com/nicokaka/assetdock-api) backend service. It provides a cohesive, authenticated workspace to track organizational inventory, track user lifecycles, assign devices, parse bulk CSV imports, and inspect chronological system activity.
 
-## MVP Features
+Designed specifically for organizational administrators, the UI explicitly completely rejects buzzwords and gamification. Instead, it relies on a sober, content-first layout built with Tailwind CSS 4, utilizing deep native system colors and high-density information displays.
 
-The current implementation provides functional interfaces for the following core areas:
+## Architecture & Flows
 
-* **Authentication**: Login and logout flows interacting with the backend session management.
-* **Assets**: Comprehensive CRUD operations, lifecycle tracking, and management of asset states and assignments.
-* **Assignments**: Workflows to allocate and reclaim assets from users.
-* **Users**: Listing and detailed views of user profiles and their corresponding asset assignments.
-* **Audit Logs**: A read-only interface to view the operational trail of the system.
-* **Imports**: An entry point to submit CSV files for batch importing of assets and user data.
+The architecture bridges the stateless React application with the stateful Spring Boot backend utilizing standard web security practices (Cookie-based Sessions and Anti-CSRF Tokens).
 
-## Relationship with AssetDock API
+```mermaid
+graph LR
+    subgraph Browser ["AssetDock Web (Vite + React)"]
+        UI[React Components]
+        Context[React Query Cache]
+        Http[HTTP Interceptor\nwith CSRF extraction]
+        
+        UI --> Context
+        Context --> Http
+    end
 
-This web client is designed to operate seamlessly with the `assetdock-api`. It relies entirely on the API for data persistence, business logic, and session state. The frontend acts as a thin presentation layer, consuming the JSON endpoints exposed by the API and rendering the application state accordingly. Local development requires the backend to be running concurrently or configured to point to a valid API instance.
+    subgraph API ["AssetDock API (Spring Boot)"]
+        Filter[SecurityFilterChain\nSession + CSRF]
+        Controllers[Resource Endpoints]
+        DB[(PostgreSQL)]
 
-## Authentication and Security Notes
+        Filter --> Controllers
+        Controllers --> DB
+    end
 
-The application implements a secure, cookie-based authentication mechanism.
-* **Session Management**: Authentication tokens are not stored in the frontend directly (e.g., LocalStorage or SessionStorage). Instead, secure, HTTP-only cookies are utilized and managed by the backend.
-* **CSRF Protection**: The application is configured to handle Anti-CSRF mechanisms provided by the backend to prevent cross-site request forgery attacks.
-* The frontend coordinates the login credentials and relies on the browser's native cookie handling for authenticated requests.
+    Http -->|POST /login| Filter
+    Filter -.->|Set-Cookie: SESSION\nSet-Cookie: X-CSRF-Token| Http
+    Http -->|Subsequent Requests\n+ Cookie\n+ X-CSRF-Token Header| Filter
+```
 
-## Configuration
+## Features Complete (MVP)
 
-Environment variables are used to configure the application for different environments. Create a `.env` file in the root directory based on the provided `.env.example`.
+1. **Authentication Foundation**: Full cookie-based session guarding and automatic token attachment via Vite Axios/Fetch wrapper.
+2. **Asset Management**: Complete CRUD operations, lifecycle state machine tracking (`IN_STOCK`, `RETIRED`, `LOST`), and detailed views.
+3. **Identity Operations**: User listings, detailed active profiles, role elevation flows, and integrated asset assignment histories.
+4. **Assignments**: Checking out and checking in assets directly from the asset detail interface, tracked chronologically.
+5. **CSV Imports**: Drag-and-drop ingestion of bulk asset sheets tracking progress against system import jobs.
+6. **Audit Interface**: Operational read-only view of the central `audit_logs` table for tracking high-privilege state changes.
 
-Main variables:
-* `VITE_API_URL`: The base URL for the `assetdock-api` instances (e.g., `http://localhost:8080`).
+## Areas & Previews
 
-## Running Locally
+> *(Screenshots to be added here for local MVP demonstrations)*
 
-To set up and run the application locally, ensure Node.js is installed.
+* **Home & Overview (Dashboard)**
+* **Assets Table & Detail**
+* **User Management & Editing**
+* **Audit Logs Viewer**
+* **CSV Imports Module**
+
+## Getting Started
+
+### 1. Requirements
+
+- Node.js 22 (enforced via `.node-version`)
+- A running instance of `assetdock-api` on `localhost:8080` (or update the proxy target in `vite.config.ts`).
+
+### 2. Setup & Run
 
 ```bash
-# Install dependencies
+# Clone the repository
+git clone https://github.com/nicokaka/assetdock-web.git
+
+# Install dependencies (React 19, Tailwind 4, React Query v5)
 npm install
 
-# Start the development server
+# Start the Vite development server (automatically proxies /api to port 8080)
 npm run dev
 ```
 
+Visit `http://localhost:5173` to access the AssetDock welcome screen.
+
 ## Testing
 
-The project includes smoke tests covering main user flows using Playwright.
+The frontend incorporates a suite of strict Playwright End-to-End smoke tests simulating a complete administrative user journey. To run the tests (requires the API to be operational locally):
 
 ```bash
-# Run tests headlessly
-npm run e2e
+# Install Playwright browser binaries (First time only)
+npx playwright install --with-deps
 
-# Run tests with visible browser
-npm run e2e:headed
+# Run the E2E suite
+npm run e2e
 ```
 
-## Demo Script
+## Tooling Commands
 
-A detailed walkthrough of the optimal demo flow exists in `docs/demo-script.md`. It outlines the recommended path to showcase the core MVP features, involving user authentication, asset creation, and audit log reviews.
+* `npm run build`: Type-checks (`tsc`) and bundles for production via Vite.
+* `npm run lint`: Checks conventions through ESLint and Prettier integrated configurations.
 
-## Project Status
+---
 
-The Web MVP is currently considered completed. The application features a consolidated visual pass, working routing, real integration with the API, and verified E2E smoke tests.
+*This application forms the visual layer of the completed AssetDock MVP architecture.*
