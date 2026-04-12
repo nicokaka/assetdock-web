@@ -3,7 +3,7 @@ import type { SessionResponse } from '@/features/auth/types/session'
 import { HttpError, httpClient } from '@/lib/http-client'
 
 export async function login(credentials: LoginInput) {
-  return httpClient.request<SessionResponse>('/auth/login', {
+  return httpClient.request<SessionResponse>('/api/v1/web/auth/login', {
     method: 'POST',
     body: credentials,
   })
@@ -11,7 +11,7 @@ export async function login(credentials: LoginInput) {
 
 export async function getSession() {
   try {
-    return await httpClient.request<SessionResponse>('/auth/me')
+    return await httpClient.request<SessionResponse>('/api/v1/web/auth/me')
   } catch (error) {
     if (error instanceof HttpError && error.status === 401) {
       return null
@@ -23,7 +23,7 @@ export async function getSession() {
 
 export async function logout() {
   try {
-    await httpClient.request<void>('/auth/logout', {
+    await httpClient.request<void>('/api/v1/web/auth/logout', {
       method: 'POST',
     })
   } catch (error) {

@@ -53,8 +53,7 @@ export class HttpClient {
   private readonly baseUrl: string
 
   constructor(baseUrl = import.meta.env.VITE_API_URL ?? '') {
-    // Standardize all requests to the web API prefix to avoid path inconsistencies
-    this.baseUrl = baseUrl.endsWith('/api/v1/web') ? baseUrl : `${baseUrl}/api/v1/web`
+    this.baseUrl = baseUrl
   }
 
   async request<TResponse>(path: string, options: RequestOptions = {}) {
