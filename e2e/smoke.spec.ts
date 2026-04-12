@@ -72,4 +72,23 @@ test.describe('mvp smoke', () => {
     await expect(page.locator('section').getByText('Imports', { exact: true })).toBeVisible()
     await expect(page.getByText('Select a CSV file to start an import.')).toBeVisible()
   })
+  test('user edit page saves profile changes', async ({ page }) => {
+    await login(page)
+    await page.locator('header nav').getByRole('link', { name: 'Users', exact: true }).click()
+
+    const firstUserLink = page.locator('a[href^="/app/users/"]').first()
+    await expect(firstUserLink).toBeVisible()
+    await firstUserLink.click()
+    await expect(page).toHaveURL(/\/app\/users\/[^/]+$/)
+
+    await page.getByRole('link', { name: 'Edit' }).click()
+    await expect(page).toHaveURL(/\/app\/users\/[^/]+\/edit$/)
+
+    const editedName = `PW User ${Date.now()}`
+    await page.getByLabel('Full name').fill(editedName)
+    await page.getByRole('button', { name: 'Save changes' }).click()
+
+    await expect(page).toHaveURL(/\/app\/users\/[^/]+$/)
+    await expect(page.locator('section').getByText(editedName)).toBeVisible()
+  })
 })
