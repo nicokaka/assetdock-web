@@ -17,8 +17,6 @@ type AssetDetailViewProps = {
 }
 
 const statusOptions = [
-  'ACTIVE',
-  'INACTIVE',
   'IN_STOCK',
   'IN_MAINTENANCE',
   'RETIRED',
