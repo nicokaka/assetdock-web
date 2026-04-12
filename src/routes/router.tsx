@@ -14,6 +14,7 @@ import { HomePage } from '@/pages/home-page'
 import { ImportsPage } from '@/pages/imports-page'
 import { UserCreatePage } from '@/pages/user-create-page'
 import { UserDetailPage } from '@/pages/user-detail-page'
+import { UserEditPage } from '@/pages/user-edit-page'
 import { UsersPage } from '@/pages/users-page'
 
 export const router = createBrowserRouter([
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
           {
             path: 'users/:userId',
             element: <UserDetailPage />,
+          },
+          {
+            path: 'users/:userId/edit',
+            element: <UserEditPage />,
           },
           {
             path: 'audit-logs',
