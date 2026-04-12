@@ -10,31 +10,14 @@ import {
 } from '@/features/assignments/hooks/use-asset-assignments'
 import { useLocationsQuery } from '@/features/catalog/hooks/use-catalog-lookups'
 import { useUsersQuery } from '@/features/users/hooks/use-user-lookup'
+import { formatTimestamp, getLookupStateMessage } from '@/lib/format'
 import { HttpError } from '@/lib/http-client'
 
 type AssetAssignmentsSectionProps = {
   assetId: string
 }
 
-function formatTimestamp(value: string | null) {
-  if (!value) {
-    return 'Active'
-  }
 
-  return new Date(value).toLocaleString()
-}
-
-function getLookupStateMessage(isPending: boolean, isError: boolean, emptyLabel: string) {
-  if (isPending) {
-    return 'Loading...'
-  }
-
-  if (isError) {
-    return 'Unavailable'
-  }
-
-  return emptyLabel
-}
 
 export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProps) {
   const [userId, setUserId] = useState('')
@@ -212,6 +195,9 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
                 const assigneeName = assignee ? assignee.fullName : `User ${assignment.userId.slice(0, 8)}…`
                 const assignerName = assigner ? assigner.fullName : `${assignment.assignedBy.slice(0, 8)}…`
 
+                const location = locations.find(l => l.id === assignment.locationId)
+                const locationName = location ? location.name : assignment.locationId ? `${assignment.locationId.slice(0, 8)}…` : '—'
+
                 return (
                   <div key={assignment.id} className="rounded-md border border-border p-4">
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
@@ -225,7 +211,7 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
                     <div className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
                       <p>Assigned: {formatTimestamp(assignment.assignedAt)}</p>
                       <p>Unassigned: {formatTimestamp(assignment.unassignedAt)}</p>
-                      <p>Location: {assignment.locationId ? `${assignment.locationId.slice(0, 8)}…` : '—'}</p>
+                      <p>Location: {locationName}</p>
                       <p>Assigned by: {assignerName}</p>
                     </div>
                     {assignment.notes ? (

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { PageHeader } from '@/components/layout/page-header'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { TableSkeleton } from '@/components/ui/table-skeleton'
 import { UsersList } from '@/features/users/components/users-list'
 import { useUsersListQuery } from '@/features/users/hooks/use-users'
 
@@ -22,14 +23,7 @@ export function UsersPage() {
       />
 
       {usersQuery.isPending ? (
-        <Card className="border-border/80 bg-card/78 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-base font-medium">Loading users</CardTitle>
-            <CardDescription>
-              Fetching the current user list.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        <TableSkeleton columns={4} />
       ) : null}
 
       {usersQuery.isError ? (

@@ -1,5 +1,6 @@
 import { PageHeader } from '@/components/layout/page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { TableSkeleton } from '@/components/ui/table-skeleton'
 import { AuditLogList } from '@/features/audit/components/audit-log-list'
 import { useAuditLogsQuery } from '@/features/audit/hooks/use-audit-logs'
 
@@ -14,11 +15,7 @@ export function AuditLogsPage() {
       />
 
       {auditLogsQuery.isPending ? (
-        <Card className="border-border/80 bg-card/78 shadow-sm">
-          <CardContent className="py-6 text-sm text-muted-foreground">
-            Loading audit logs…
-          </CardContent>
-        </Card>
+        <TableSkeleton columns={5} />
       ) : null}
 
       {auditLogsQuery.isError ? (

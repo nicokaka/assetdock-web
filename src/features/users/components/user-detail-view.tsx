@@ -1,65 +1,17 @@
-import { useState } from 'react'
-
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { userRoleOptions, userStatusOptions } from '@/features/users/types/user-form'
-import { useUpdateUserRoles, useUpdateUserStatus } from '@/features/users/hooks/use-user-lifecycle-actions'
-import type { UserDetail, UserRole, UserStatus } from '@/features/users/types/user'
-import { HttpError } from '@/lib/http-client'
+import type { UserDetail } from '@/features/users/types/user'
+import { userRoleLabels, userStatusClassName, userStatusLabels } from '@/features/users/constants/labels'
+import { UserLifecycleActions } from '@/features/users/components/user-lifecycle-actions'
+import { DetailRow } from '@/components/ui/detail-row'
+import { formatTimestamp } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
 type UserDetailViewProps = {
   user: UserDetail
 }
 
-function DetailRow({
-  label,
-  value,
-}: {
-  label: string
-  value: string
-}) {
-  return (
-    <div className="grid gap-1 sm:grid-cols-[160px_1fr] sm:gap-4">
-      <div className="text-sm text-muted-foreground">{label}</div>
-      <div className="text-sm text-foreground">{value}</div>
-    </div>
-  )
-}
-
-const statusLabels: Record<string, string> = {
-  ACTIVE: 'Active',
-  INACTIVE: 'Inactive',
-  LOCKED: 'Locked',
-}
-
-const roleLabels: Record<string, string> = {
-  SUPER_ADMIN: 'Super Admin',
-  ORG_ADMIN: 'Org Admin',
-  ASSET_MANAGER: 'Asset Manager',
-  AUDITOR: 'Auditor',
-  VIEWER: 'Viewer',
-}
-
-function userStatusClassName(status: string) {
-  switch (status) {
-    case 'ACTIVE':
-      return 'border-emerald-200 bg-emerald-50 text-emerald-700'
-    case 'INACTIVE':
-      return 'border-slate-200 bg-slate-100 text-slate-700'
-    case 'LOCKED':
-      return 'border-rose-200 bg-rose-50 text-rose-700'
-    default:
-      return 'border-border/70 bg-background/80 text-muted-foreground'
-  }
-}
-
 function formatRoles(roles: UserDetail['roles']) {
-  return roles.length > 0 ? roles.map(r => roleLabels[r] ?? r).join(', ') : 'No roles'
-}
-
-function formatTimestamp(value: string) {
-  return new Date(value).toLocaleString()
+  return roles.length > 0 ? roles.map(r => userRoleLabels[r] ?? r).join(', ') : 'No roles'
 }
 
 export function UserDetailView({ user }: UserDetailViewProps) {
@@ -80,7 +32,7 @@ export function UserDetailView({ user }: UserDetailViewProps) {
                 'inline-block rounded-full border px-2.5 py-1 text-[11px] font-medium tracking-[0.06em]',
                 userStatusClassName(user.status)
               )}>
-                {statusLabels[user.status] ?? user.status}
+                {userStatusLabels[user.status] ?? user.status}
               </span>
             </div>
           </div>
@@ -98,102 +50,3 @@ export function UserDetailView({ user }: UserDetailViewProps) {
   )
 }
 
-function UserLifecycleActions({ user }: UserDetailViewProps) {
-  const [statusValue, setStatusValue] = useState<UserStatus>(user.status)
-  const [roleValues, setRoleValues] = useState<UserRole[]>(user.roles)
-
-  const updateStatusMutation = useUpdateUserStatus(user.id)
-  const updateRolesMutation = useUpdateUserRoles(user.id)
-
-  const statusErrorMessage =
-    updateStatusMutation.error instanceof HttpError && updateStatusMutation.error.status === 400
-      ? 'Unable to save the selected status.'
-      : updateStatusMutation.isError
-        ? 'Unable to update status right now.'
-        : undefined
-
-  const rolesErrorMessage =
-    updateRolesMutation.error instanceof HttpError && updateRolesMutation.error.status === 400
-      ? 'Unable to save the selected roles.'
-      : updateRolesMutation.isError
-        ? 'Unable to update roles right now.'
-        : undefined
-
-  return (
-    <>
-      <Card className="border-border shadow-none">
-        <CardHeader className="gap-1">
-          <CardTitle className="text-base font-medium">Status</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <select
-            value={statusValue}
-            onChange={(event) => setStatusValue(event.target.value as UserStatus)}
-            className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-          >
-            {userStatusOptions.map((status) => (
-              <option key={status} value={status}>
-                {statusLabels[status] ?? status}
-              </option>
-            ))}
-          </select>
-          {statusErrorMessage ? (
-            <p className="text-sm text-destructive">{statusErrorMessage}</p>
-          ) : null}
-          <Button
-            type="button"
-            variant="outline"
-            disabled={updateStatusMutation.isPending || statusValue === user.status}
-            onClick={async () => {
-              await updateStatusMutation.mutateAsync(statusValue)
-            }}
-          >
-            {updateStatusMutation.isPending ? 'Saving status...' : 'Save status'}
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card className="border-border shadow-none">
-        <CardHeader className="gap-1">
-          <CardTitle className="text-base font-medium">Roles</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <select
-            multiple
-            value={roleValues}
-            onChange={(event) => {
-              const values = Array.from(
-                event.target.selectedOptions,
-                (option) => option.value as UserRole,
-              )
-              setRoleValues(values)
-            }}
-            className="min-h-28 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-          >
-            {userRoleOptions.map((role) => (
-              <option key={role} value={role}>
-                {roleLabels[role] ?? role}
-              </option>
-            ))}
-          </select>
-          {rolesErrorMessage ? (
-            <p className="text-sm text-destructive">{rolesErrorMessage}</p>
-          ) : null}
-          <Button
-            type="button"
-            variant="outline"
-            disabled={
-              updateRolesMutation.isPending ||
-              JSON.stringify([...roleValues].sort()) === JSON.stringify([...user.roles].sort())
-            }
-            onClick={async () => {
-              await updateRolesMutation.mutateAsync(roleValues)
-            }}
-          >
-            {updateRolesMutation.isPending ? 'Saving roles...' : 'Save roles'}
-          </Button>
-        </CardContent>
-      </Card>
-    </>
-  )
-}

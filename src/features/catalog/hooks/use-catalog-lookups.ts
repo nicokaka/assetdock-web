@@ -8,6 +8,7 @@ export function useCategoriesQuery() {
   return useQuery({
     queryKey: ['catalog', 'categories'],
     queryFn: listCategories,
+    staleTime: 5 * 60 * 1000,
   })
 }
 
@@ -15,6 +16,7 @@ export function useManufacturersQuery() {
   return useQuery({
     queryKey: ['catalog', 'manufacturers'],
     queryFn: listManufacturers,
+    staleTime: 5 * 60 * 1000,
   })
 }
 
@@ -22,5 +24,6 @@ export function useLocationsQuery() {
   return useQuery({
     queryKey: ['catalog', 'locations'],
     queryFn: listLocations,
+    staleTime: 5 * 60 * 1000,
   })
 }

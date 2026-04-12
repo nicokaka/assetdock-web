@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AssetsList } from '@/features/assets/components/assets-list'
 import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
+import { TableSkeleton } from '@/components/ui/table-skeleton'
 
 export function AssetsPage() {
   const assetsQuery = useAssetsQuery()
@@ -22,11 +23,7 @@ export function AssetsPage() {
       />
 
       {assetsQuery.isPending ? (
-        <Card className="border-border/80 bg-card/78 shadow-sm">
-          <CardContent className="py-6 text-sm text-muted-foreground">
-            Loading assets…
-          </CardContent>
-        </Card>
+        <TableSkeleton columns={5} />
       ) : null}
 
       {assetsQuery.isError ? (

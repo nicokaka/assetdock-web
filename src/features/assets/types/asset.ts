@@ -39,3 +39,5 @@ export type CreateAssetInput = {
   manufacturerId?: string
   currentLocationId?: string
 }
+
+export type UpdateAssetInput = Partial<CreateAssetInput>

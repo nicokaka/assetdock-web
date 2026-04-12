@@ -3,12 +3,26 @@ import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { AssetAssignmentsSection } from '@/features/assignments/components/asset-assignments-section'
 import {
   useArchiveAssetMutation,
   useUpdateAssetStatusMutation,
 } from '@/features/assets/hooks/use-asset-lifecycle-actions'
 import type { AssetDetail } from '@/features/assets/types/asset'
+import { assetStatusClassName, assetStatusLabels } from '@/features/assets/constants/labels'
+import { DetailRow } from '@/components/ui/detail-row'
+import { formatTimestamp } from '@/lib/format'
 import { HttpError } from '@/lib/http-client'
 import { cn } from '@/lib/utils'
 
@@ -17,58 +31,15 @@ type AssetDetailViewProps = {
 }
 
 const statusOptions = [
+  'ACTIVE',
+  'INACTIVE',
   'IN_STOCK',
   'IN_MAINTENANCE',
   'RETIRED',
   'LOST',
 ] as const
 
-const statusLabels: Record<string, string> = {
-  ACTIVE: 'Active',
-  INACTIVE: 'Inactive',
-  IN_STOCK: 'In Stock',
-  IN_MAINTENANCE: 'Maintenance',
-  RETIRED: 'Retired',
-  LOST: 'Lost',
-}
 
-function statusClassName(status: string) {
-  switch (status) {
-    case 'ACTIVE':
-      return 'border-emerald-200 bg-emerald-50 text-emerald-700'
-    case 'IN_STOCK':
-      return 'border-sky-200 bg-sky-50 text-sky-700'
-    case 'INACTIVE':
-      return 'border-slate-200 bg-slate-100 text-slate-700'
-    case 'IN_MAINTENANCE':
-      return 'border-amber-200 bg-amber-50 text-amber-700'
-    case 'RETIRED':
-      return 'border-zinc-200 bg-zinc-100 text-zinc-700'
-    case 'LOST':
-      return 'border-rose-200 bg-rose-50 text-rose-700'
-    default:
-      return 'border-border/70 bg-background/80 text-muted-foreground'
-  }
-}
-
-function DetailRow({
-  label,
-  value,
-}: {
-  label: string
-  value: string | null
-}) {
-  return (
-    <div className="grid gap-1 sm:grid-cols-[160px_1fr] sm:gap-4">
-      <div className="text-sm text-muted-foreground">{label}</div>
-      <div className="text-sm text-foreground">
-        {label === 'Archived at' && value
-          ? new Date(value).toLocaleString()
-          : value || 'Not provided'}
-      </div>
-    </div>
-  )
-}
 
 export function AssetDetailView({ asset }: AssetDetailViewProps) {
   const [draftStatus, setDraftStatus] = useState<AssetDetail['status'] | null>(null)
@@ -83,14 +54,6 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
   }
 
   async function handleArchive() {
-    const confirmed = window.confirm(
-      'Archive this asset? This action is intended for retired or lost assets.',
-    )
-
-    if (!confirmed) {
-      return
-    }
-
     await archiveAssetMutation.mutateAsync()
   }
 
@@ -128,9 +91,9 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
             <div>
               <span className={cn(
                 'inline-block rounded-full border px-2.5 py-1 text-[11px] font-medium tracking-[0.06em]',
-                statusClassName(asset.status)
+                assetStatusClassName(asset.status)
               )}>
-                {statusLabels[asset.status] ?? asset.status}
+                {assetStatusLabels[asset.status] ?? asset.status}
               </span>
             </div>
           </div>
@@ -155,7 +118,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                 >
                   {statusOptions.map((option) => (
                     <option key={option} value={option}>
-                      {statusLabels[option] ?? option}
+                      {assetStatusLabels[option] ?? option}
                     </option>
                   ))}
                 </select>
@@ -176,14 +139,37 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                   ? 'This asset has already been archived.'
                   : 'Archive is intended for retired or lost assets.'}
               </p>
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={() => void handleArchive()}
-                disabled={isArchived || archiveAssetMutation.isPending}
-              >
-                {archiveAssetMutation.isPending ? 'Archiving...' : 'Archive asset'}
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    disabled={isArchived || archiveAssetMutation.isPending}
+                  >
+                    {archiveAssetMutation.isPending ? 'Archiving...' : 'Archive asset'}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Archive this asset?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action is intended for retired or lost assets. It will mark the asset as archived. Are you sure you want to proceed?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={(e) => {
+                        e.preventDefault()
+                        handleArchive()
+                      }}
+                      disabled={archiveAssetMutation.isPending}
+                    >
+                      Archive
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
 
             {statusErrorMessage ? (
@@ -196,7 +182,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
           <DetailRow label="Serial number" value={asset.serialNumber} />
           <DetailRow label="Hostname" value={asset.hostname} />
           <DetailRow label="Description" value={asset.description} />
-          <DetailRow label="Archived at" value={asset.archivedAt} />
+          <DetailRow label="Archived at" value={formatTimestamp(asset.archivedAt)} />
         </CardContent>
       </Card>
 

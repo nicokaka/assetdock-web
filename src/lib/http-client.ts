@@ -28,11 +28,24 @@ function shouldAttachCsrfToken(method: HttpMethod) {
 
 export class HttpError extends Error {
   readonly status: number
+  readonly body: unknown
 
-  constructor(status: number) {
-    super(`HTTP ${status}`)
+  constructor(status: number, body?: unknown) {
+    let message = `HTTP ${status}`
+    if (body !== null && typeof body === 'object') {
+      const b = body as Record<string, unknown>
+      if (typeof b.message === 'string') message = b.message
+      else if (typeof b.detail === 'string') message = b.detail
+      else if (typeof b.error === 'string') message = b.error
+      else message = JSON.stringify(body)
+    } else if (typeof body === 'string' && body.trim() !== '') {
+      message = body
+    }
+
+    super(message)
     this.name = 'HttpError'
     this.status = status
+    this.body = body
   }
 }
 
@@ -40,7 +53,8 @@ export class HttpClient {
   private readonly baseUrl: string
 
   constructor(baseUrl = import.meta.env.VITE_API_URL ?? '') {
-    this.baseUrl = baseUrl
+    // Standardize all requests to the web API prefix to avoid path inconsistencies
+    this.baseUrl = baseUrl.endsWith('/api/v1/web') ? baseUrl : `${baseUrl}/api/v1/web`
   }
 
   async request<TResponse>(path: string, options: RequestOptions = {}) {
@@ -77,7 +91,20 @@ export class HttpClient {
     })
 
     if (!response.ok) {
-      throw new HttpError(response.status)
+      let body: unknown = undefined
+      const contentType = response.headers.get('content-type')
+      
+      try {
+        if (contentType && contentType.includes('application/json')) {
+          body = await response.json()
+        } else {
+          body = await response.text()
+        }
+      } catch {
+        // Ignore parsing errors
+      }
+
+      throw new HttpError(response.status, body)
     }
 
     if (response.status === 204) {

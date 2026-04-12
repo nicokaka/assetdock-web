@@ -21,6 +21,6 @@ function buildQueryString(filters?: AuditLogFilters) {
 
 export async function listAuditLogs(filters?: AuditLogFilters) {
   return httpClient.request<AuditLogPage>(
-    `/api/v1/audit-logs${buildQueryString(filters)}`
+    `/audit-logs${buildQueryString(filters)}`
   )
 }

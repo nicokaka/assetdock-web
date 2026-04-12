@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import {
   useCategoriesQuery,
   useLocationsQuery,
@@ -20,6 +21,7 @@ import {
   assetFormSchema,
   type AssetFormValues,
 } from '@/features/assets/types/asset-form'
+import { getLookupStateMessage } from '@/lib/format'
 
 type AssetFormProps = {
   defaultValues: AssetFormValues
@@ -30,17 +32,7 @@ type AssetFormProps = {
   onSubmit: (values: AssetFormValues) => Promise<void>
 }
 
-function getLookupStateMessage(isPending: boolean, isError: boolean, emptyLabel: string) {
-  if (isPending) {
-    return 'Loading...'
-  }
 
-  if (isError) {
-    return 'Unavailable'
-  }
-
-  return emptyLabel
-}
 
 export function AssetForm({
   defaultValues,
@@ -211,7 +203,7 @@ export function AssetForm({
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input placeholder="Primary engineering laptop" {...field} />
+                <Textarea placeholder="Primary engineering laptop" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

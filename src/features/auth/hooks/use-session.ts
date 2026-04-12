@@ -30,7 +30,8 @@ export function useLogoutMutation() {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.setQueryData(sessionQueryKey, null)
+      queryClient.clear()
+      window.location.assign('/login')
     },
   })
 }

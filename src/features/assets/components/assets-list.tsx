@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { AssetListItem } from '@/features/assets/types/asset'
+import { assetStatusLabels, assetStatusVariant } from '@/features/assets/constants/labels'
 
 type AssetsListProps = {
   assets: AssetListItem[]
@@ -19,31 +20,7 @@ function formatAssetName(asset: AssetListItem) {
   return asset.displayName || asset.assetTag
 }
 
-const statusLabels: Record<AssetListItem['status'], string> = {
-  ACTIVE: 'Active',
-  INACTIVE: 'Inactive',
-  IN_STOCK: 'In Stock',
-  IN_MAINTENANCE: 'Maintenance',
-  RETIRED: 'Retired',
-  LOST: 'Lost',
-}
 
-function statusVariant(status: AssetListItem['status']) {
-  switch (status) {
-    case 'ACTIVE':
-      return 'success' as const
-    case 'IN_STOCK':
-      return 'info' as const
-    case 'INACTIVE':
-      return 'muted' as const
-    case 'IN_MAINTENANCE':
-      return 'warning' as const
-    case 'RETIRED':
-      return 'muted' as const
-    case 'LOST':
-      return 'danger' as const
-  }
-}
 
 export function AssetsList({ assets }: AssetsListProps) {
   return (
@@ -62,8 +39,8 @@ export function AssetsList({ assets }: AssetsListProps) {
           <TableRow key={asset.id}>
             <TableCell>
               <div className="flex items-center gap-2">
-                <Badge variant={statusVariant(asset.status)}>
-                  {statusLabels[asset.status] ?? asset.status}
+                <Badge variant={assetStatusVariant(asset.status)}>
+                  {assetStatusLabels[asset.status] ?? asset.status}
                 </Badge>
                 {asset.archivedAt ? (
                   <Badge variant="muted">Archived</Badge>

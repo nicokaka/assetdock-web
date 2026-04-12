@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import { AuthenticatedShell } from '@/components/layout/authenticated-shell'
 import { AppShell } from '@/components/layout/app-shell'
+import { RouteErrorBoundary } from '@/components/layout/route-error-boundary'
 import { AssetCreatePage } from '@/pages/asset-create-page'
 import { AssetEditPage } from '@/pages/asset-edit-page'
 import { LoginPage } from '@/features/auth/components/login-page'
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <AppShell />,
+    errorElement: <RouteErrorBoundary />,
     children: [
       {
         index: true,
