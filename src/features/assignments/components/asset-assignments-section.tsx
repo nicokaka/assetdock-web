@@ -206,27 +206,34 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
 
           {assignmentsQuery.isSuccess && assignments.length > 0 ? (
             <div className="space-y-3">
-              {assignments.map((assignment) => (
-                <div key={assignment.id} className="rounded-md border border-border p-4">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="text-sm font-medium text-foreground">
-                      User {assignment.userId.slice(0, 8)}…
-                    </p>
-                    <Badge variant={assignment.unassignedAt ? 'muted' : 'success'}>
-                      {assignment.unassignedAt ? 'Closed' : 'Active'}
-                    </Badge>
+              {assignments.map((assignment) => {
+                const assignee = (usersQuery.data ?? []).find(u => u.id === assignment.userId)
+                const assigner = (usersQuery.data ?? []).find(u => u.id === assignment.assignedBy)
+                const assigneeName = assignee ? assignee.fullName : `User ${assignment.userId.slice(0, 8)}…`
+                const assignerName = assigner ? assigner.fullName : `${assignment.assignedBy.slice(0, 8)}…`
+
+                return (
+                  <div key={assignment.id} className="rounded-md border border-border p-4">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="text-sm font-medium text-foreground">
+                        {assigneeName}
+                      </p>
+                      <Badge variant={assignment.unassignedAt ? 'muted' : 'success'}>
+                        {assignment.unassignedAt ? 'Closed' : 'Active'}
+                      </Badge>
+                    </div>
+                    <div className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
+                      <p>Assigned: {formatTimestamp(assignment.assignedAt)}</p>
+                      <p>Unassigned: {formatTimestamp(assignment.unassignedAt)}</p>
+                      <p>Location: {assignment.locationId ? `${assignment.locationId.slice(0, 8)}…` : '—'}</p>
+                      <p>Assigned by: {assignerName}</p>
+                    </div>
+                    {assignment.notes ? (
+                      <p className="mt-3 text-sm text-foreground">{assignment.notes}</p>
+                    ) : null}
                   </div>
-                  <div className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                    <p>Assigned: {formatTimestamp(assignment.assignedAt)}</p>
-                    <p>Unassigned: {formatTimestamp(assignment.unassignedAt)}</p>
-                    <p>Location: {assignment.locationId ? `${assignment.locationId.slice(0, 8)}…` : '—'}</p>
-                    <p>Assigned by: {assignment.assignedBy.slice(0, 8)}…</p>
-                  </div>
-                  {assignment.notes ? (
-                    <p className="mt-3 text-sm text-foreground">{assignment.notes}</p>
-                  ) : null}
-                </div>
-              ))}
+                )
+              })}
             </div>
           ) : null}
         </div>
