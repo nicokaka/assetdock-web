@@ -30,7 +30,7 @@ export function AppOverviewPage() {
         <KpiCard
           label="Assigned"
           value={isLoading ? '—' : stats.assigned}
-          sublabel={isLoading ? '' : `${stats.healthRate}% of inventory in use`}
+          sublabel={isLoading ? '' : `${stats.healthRate}% operational (assigned + in stock)`}
           icon={<CheckCircle2 className="h-4 w-4" />}
           to="/app/assets"
           accent="success"

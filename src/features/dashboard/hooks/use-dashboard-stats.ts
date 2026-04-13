@@ -23,9 +23,11 @@ export function useDashboardStats() {
     const nonArchived = assets.filter((a) => !a.archivedAt)
     const total = nonArchived.length
     const assigned = nonArchived.filter((a) => a.status === 'ASSIGNED').length
+    const inStock = nonArchived.filter((a) => a.status === 'IN_STOCK').length
     const issues =
       nonArchived.filter((a) => a.status === 'LOST' || a.status === 'IN_MAINTENANCE').length
-    const healthRate = total > 0 ? Math.round((assigned / total) * 100) : 0
+    const operational = assigned + inStock
+    const healthRate = total > 0 ? Math.round((operational / total) * 100) : 0
 
     // Donut chart data
     const statusCounts = nonArchived.reduce<Record<string, number>>((acc, asset) => {
@@ -33,23 +35,15 @@ export function useDashboardStats() {
       return acc
     }, {})
 
-    const statusChartData = Object.entries(statusCounts).map(([status, count]) => ({
-      status,
-      label: assetStatusLabels[status] ?? status,
-      count,
-      fill: STATUS_COLORS[status] ?? 'hsl(220 9% 56%)',
-      percentage: total > 0 ? Math.round((count / total) * 100) : 0,
-    }))
-
-    // Health bar data (stacked)
-    const healthBarData = [
-      {
-        name: 'Assets',
-        ...Object.fromEntries(
-          Object.entries(statusCounts).map(([status, count]) => [status, count])
-        ),
-      },
-    ]
+    const statusChartData = Object.entries(statusCounts)
+      .map(([status, count]) => ({
+        status,
+        label: assetStatusLabels[status] ?? status,
+        count,
+        fill: STATUS_COLORS[status] ?? 'hsl(220 9% 56%)',
+        percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+      }))
+      .sort((a, b) => b.count - a.count)
 
     return {
       total,
@@ -58,7 +52,6 @@ export function useDashboardStats() {
       issues,
       healthRate,
       statusChartData,
-      healthBarData,
       statusCounts,
     }
   }, [assetsQuery.data, usersQuery.data])

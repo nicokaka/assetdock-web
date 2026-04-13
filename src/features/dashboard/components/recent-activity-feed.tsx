@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom'
 import {
   LogIn,
+  LogOut,
   UserPlus,
   Package,
   PackageCheck,
   PackageX,
-  AlertTriangle,
+  Clock,
   RefreshCw,
   ArrowRight,
+  Activity,
 } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -16,13 +18,16 @@ import type { AuditLogItem } from '@/features/audit/types/audit-log'
 
 function getEventIcon(eventType: string) {
   if (eventType.startsWith('LOGIN')) return <LogIn className="h-3.5 w-3.5" />
+  if (eventType === 'WEB_SESSION_CREATED') return <LogIn className="h-3.5 w-3.5" />
+  if (eventType === 'WEB_SESSION_LOGGED_OUT') return <LogOut className="h-3.5 w-3.5" />
+  if (eventType === 'WEB_SESSION_EXPIRED') return <Clock className="h-3.5 w-3.5" />
   if (eventType === 'USER_CREATED') return <UserPlus className="h-3.5 w-3.5" />
   if (eventType === 'ASSET_CREATED') return <Package className="h-3.5 w-3.5" />
   if (eventType === 'ASSET_ASSIGNED') return <PackageCheck className="h-3.5 w-3.5" />
   if (eventType === 'ASSET_UNASSIGNED') return <PackageX className="h-3.5 w-3.5" />
   if (eventType === 'ASSET_UPDATED' || eventType === 'USER_UPDATED')
     return <RefreshCw className="h-3.5 w-3.5" />
-  return <AlertTriangle className="h-3.5 w-3.5" />
+  return <Activity className="h-3.5 w-3.5" />
 }
 
 function getEventLabel(eventType: string): string {
@@ -46,6 +51,7 @@ function getEventLabel(eventType: string): string {
     CSV_IMPORT_FAILED: 'CSV import failed',
     WEB_SESSION_CREATED: 'Session started',
     WEB_SESSION_LOGGED_OUT: 'Session ended',
+    WEB_SESSION_EXPIRED: 'Session expired',
   }
   return labels[eventType] ?? eventType.replace(/_/g, ' ').toLowerCase()
 }

@@ -1,6 +1,5 @@
-import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 const STATUS_COLORS: Record<string, string> = {
   ASSIGNED: 'hsl(142 71% 45%)',
@@ -18,61 +17,40 @@ const STATUS_LABELS: Record<string, string> = {
   LOST: 'Lost',
 }
 
-type StatusCount = Record<string, number>
+// Display order: most positive statuses first
+const STATUS_ORDER = ['ASSIGNED', 'IN_STOCK', 'IN_MAINTENANCE', 'RETIRED', 'LOST']
 
 type Props = {
-  statusCounts: StatusCount
+  statusCounts: Record<string, number>
   total: number
   healthRate: number
 }
 
-function CustomTooltip({
-  active,
-  payload,
-}: {
-  active?: boolean
-  payload?: Array<{ dataKey: string; value: number }>
-}) {
-  if (!active || !payload?.length) return null
-  const item = payload[0]
-  return (
-    <div className="rounded-lg border border-border/50 bg-background px-3 py-2 text-xs shadow-xl">
-      <p className="font-medium text-foreground">
-        {STATUS_LABELS[item.dataKey] ?? item.dataKey}
-      </p>
-      <p className="text-muted-foreground">
-        {item.value} asset{item.value !== 1 ? 's' : ''}
-      </p>
-    </div>
-  )
-}
-
 export function AssetHealthBar({ statusCounts, total, healthRate }: Props) {
-  const statuses = Object.keys(statusCounts)
+  const orderedStatuses = STATUS_ORDER.filter((s) => statusCounts[s] !== undefined)
 
-  // For the stacked bar we use a different approach — one bar per status,
-  // rendered as a vertical grouped chart showing distribution
-  const barData = statuses.map((status) => ({
-    name: STATUS_LABELS[status] ?? status,
-    status,
-    count: statusCounts[status],
-    fill: STATUS_COLORS[status] ?? 'hsl(220 9% 56%)',
-  }))
+  const healthColor =
+    healthRate >= 70
+      ? 'text-emerald-600'
+      : healthRate >= 40
+        ? 'text-amber-600'
+        : 'text-rose-600'
 
   return (
     <Card className="border-border/80 bg-card/78 shadow-sm">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium text-muted-foreground">
             Asset Health
           </CardTitle>
-          <span className="text-sm font-semibold text-emerald-600">
+          <span className={cn('text-sm font-semibold', healthColor)}>
             {healthRate}% operational
           </span>
         </div>
-        {/* Progress bar */}
+
+        {/* Segmented progress bar */}
         <div className="mt-2 flex h-2 w-full overflow-hidden rounded-full bg-secondary">
-          {statuses.map((status) => {
+          {orderedStatuses.map((status) => {
             const pct = total > 0 ? (statusCounts[status] / total) * 100 : 0
             return (
               <div
@@ -88,31 +66,42 @@ export function AssetHealthBar({ statusCounts, total, healthRate }: Props) {
           })}
         </div>
       </CardHeader>
-      <CardContent className="pt-2">
-        <div className="h-36">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={barData}
-              margin={{ top: 4, right: 0, left: 0, bottom: 0 }}
-              barSize={28}
-            >
-              <XAxis
-                dataKey="name"
-                tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <Tooltip
-                content={<CustomTooltip />}
-                cursor={{ fill: 'hsl(var(--accent))', opacity: 0.5 }}
-              />
-              <Bar dataKey="count" radius={[4, 4, 0, 0]} animationDuration={600}>
-                {barData.map((entry) => (
-                  <Cell key={entry.status} fill={entry.fill} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+
+      {/* Compact breakdown list — Stripe style */}
+      <CardContent className="pt-0">
+        <div className="divide-y divide-border/40">
+          {orderedStatuses.map((status) => {
+            const count = statusCounts[status]
+            const pct = total > 0 ? Math.round((count / total) * 100) : 0
+            return (
+              <div key={status} className="flex items-center gap-3 py-2.5">
+                {/* Color dot */}
+                <span
+                  className="h-2 w-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: STATUS_COLORS[status] }}
+                />
+                {/* Label */}
+                <span className="flex-1 text-xs text-muted-foreground">
+                  {STATUS_LABELS[status]}
+                </span>
+                {/* Mini bar */}
+                <div className="h-1.5 w-20 overflow-hidden rounded-full bg-secondary">
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{
+                      width: `${pct}%`,
+                      backgroundColor: STATUS_COLORS[status],
+                    }}
+                  />
+                </div>
+                {/* Count + % */}
+                <span className="w-14 text-right text-xs tabular-nums text-foreground">
+                  {count}
+                  <span className="ml-1 text-muted-foreground">({pct}%)</span>
+                </span>
+              </div>
+            )
+          })}
         </div>
       </CardContent>
     </Card>
