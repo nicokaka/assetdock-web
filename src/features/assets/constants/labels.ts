@@ -1,6 +1,5 @@
 export const assetStatusLabels: Record<string, string> = {
-  ACTIVE: 'Active',
-  INACTIVE: 'Inactive',
+  ASSIGNED: 'Assigned',
   IN_STOCK: 'In Stock',
   IN_MAINTENANCE: 'Maintenance',
   RETIRED: 'Retired',
@@ -9,12 +8,10 @@ export const assetStatusLabels: Record<string, string> = {
 
 export function assetStatusClassName(status: string) {
   switch (status) {
-    case 'ACTIVE':
+    case 'ASSIGNED':
       return 'border-emerald-200 bg-emerald-50 text-emerald-700'
     case 'IN_STOCK':
       return 'border-sky-200 bg-sky-50 text-sky-700'
-    case 'INACTIVE':
-      return 'border-slate-200 bg-slate-100 text-slate-700'
     case 'IN_MAINTENANCE':
       return 'border-amber-200 bg-amber-50 text-amber-700'
     case 'RETIRED':
@@ -28,12 +25,10 @@ export function assetStatusClassName(status: string) {
 
 export function assetStatusVariant(status: string) {
   switch (status) {
-    case 'ACTIVE':
+    case 'ASSIGNED':
       return 'success' as const
     case 'IN_STOCK':
       return 'info' as const
-    case 'INACTIVE':
-      return 'muted' as const
     case 'IN_MAINTENANCE':
       return 'warning' as const
     case 'RETIRED':
@@ -44,3 +39,4 @@ export function assetStatusVariant(status: string) {
       return 'default' as const
   }
 }
+
