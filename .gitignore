@@ -26,4 +26,6 @@ test-results
 *.sln
 *.sw?
 .vercel
-\n# Tooling & Docs\ndocs_contexto_apiweb/
+
+# Tooling & Docs
+docs_contexto_apiweb/
