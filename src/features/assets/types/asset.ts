@@ -1,6 +1,5 @@
 export type AssetStatus =
-  | 'ACTIVE'
-  | 'INACTIVE'
+  | 'ASSIGNED'
   | 'IN_STOCK'
   | 'IN_MAINTENANCE'
   | 'RETIRED'
