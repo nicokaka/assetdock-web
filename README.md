@@ -61,8 +61,6 @@ graph LR
 
 ## Areas & Previews
 
-> *(Screenshots to be added here for local MVP demonstrations)*
-
 * **Home & Overview (Dashboard)**
 * **Assets Table & Detail**
 * **User Management & Editing**
