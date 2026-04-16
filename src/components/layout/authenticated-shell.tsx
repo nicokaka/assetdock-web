@@ -7,8 +7,6 @@ import { useLogoutMutation, useSessionQuery } from '@/features/auth/hooks/use-se
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { cn } from '@/lib/utils'
 
-
-
 export function AuthenticatedShell() {
   const sessionQuery = useSessionQuery()
   const logoutMutation = useLogoutMutation()
