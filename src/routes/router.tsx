@@ -1,22 +1,28 @@
 import { createBrowserRouter } from 'react-router-dom'
 
+// Shell components are eagerly loaded — always needed and tiny.
 import { AuthenticatedShell } from '@/components/layout/authenticated-shell'
 import { AppShell } from '@/components/layout/app-shell'
 import { RouteErrorBoundary } from '@/components/layout/route-error-boundary'
-import { AssetCreatePage } from '@/pages/asset-create-page'
-import { AssetEditPage } from '@/pages/asset-edit-page'
-import { LoginPage } from '@/features/auth/components/login-page'
+import { PageSuspense } from '@/components/layout/page-suspense'
 import { RedirectIfAuthenticated, RequireSession } from '@/features/auth/components/session-guard'
-import { AssetDetailPage } from '@/pages/asset-detail-page'
-import { AuditLogsPage } from '@/pages/audit-logs-page'
-import { AppOverviewPage } from '@/pages/app-overview-page'
-import { AssetsPage } from '@/pages/assets-page'
-import { HomePage } from '@/pages/home-page'
-import { ImportsPage } from '@/pages/imports-page'
-import { UserCreatePage } from '@/pages/user-create-page'
-import { UserDetailPage } from '@/pages/user-detail-page'
-import { UserEditPage } from '@/pages/user-edit-page'
-import { UsersPage } from '@/pages/users-page'
+
+// Lazy page components — each loaded on demand as a separate JS chunk.
+import {
+  LoginPage,
+  HomePage,
+  AppOverviewPage,
+  AssetsPage,
+  AssetCreatePage,
+  AssetDetailPage,
+  AssetEditPage,
+  UsersPage,
+  UserCreatePage,
+  UserDetailPage,
+  UserEditPage,
+  AuditLogsPage,
+  ImportsPage,
+} from '@/routes/lazy-pages'
 
 export const router = createBrowserRouter([
   {
@@ -26,13 +32,19 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: (
+          <PageSuspense>
+            <HomePage />
+          </PageSuspense>
+        ),
       },
       {
         path: 'login',
         element: (
           <RedirectIfAuthenticated>
-            <LoginPage />
+            <PageSuspense>
+              <LoginPage />
+            </PageSuspense>
           </RedirectIfAuthenticated>
         ),
       },
@@ -46,47 +58,91 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <AppOverviewPage />,
+            element: (
+              <PageSuspense>
+                <AppOverviewPage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'assets',
-            element: <AssetsPage />,
+            element: (
+              <PageSuspense>
+                <AssetsPage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'assets/new',
-            element: <AssetCreatePage />,
+            element: (
+              <PageSuspense>
+                <AssetCreatePage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'assets/:assetId',
-            element: <AssetDetailPage />,
+            element: (
+              <PageSuspense>
+                <AssetDetailPage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'assets/:assetId/edit',
-            element: <AssetEditPage />,
+            element: (
+              <PageSuspense>
+                <AssetEditPage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'users',
-            element: <UsersPage />,
+            element: (
+              <PageSuspense>
+                <UsersPage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'users/new',
-            element: <UserCreatePage />,
+            element: (
+              <PageSuspense>
+                <UserCreatePage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'users/:userId',
-            element: <UserDetailPage />,
+            element: (
+              <PageSuspense>
+                <UserDetailPage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'users/:userId/edit',
-            element: <UserEditPage />,
+            element: (
+              <PageSuspense>
+                <UserEditPage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'audit-logs',
-            element: <AuditLogsPage />,
+            element: (
+              <PageSuspense>
+                <AuditLogsPage />
+              </PageSuspense>
+            ),
           },
           {
             path: 'imports',
-            element: <ImportsPage />,
+            element: (
+              <PageSuspense>
+                <ImportsPage />
+              </PageSuspense>
+            ),
           },
         ],
       },
