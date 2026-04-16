@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { listAssets } from '@/features/assets/api/list-assets'
+import { listAssets, type AssetListFilters } from '@/features/assets/api/list-assets'
 
-export function useAssetsQuery() {
+export function useAssetsQuery(filters?: AssetListFilters) {
   return useQuery({
-    queryKey: ['assets'],
-    queryFn: listAssets,
+    queryKey: ['assets', filters],
+    queryFn: () => listAssets(filters),
   })
 }

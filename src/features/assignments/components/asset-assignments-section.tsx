@@ -31,7 +31,7 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
 
   const assignments = assignmentsQuery.data ?? []
   const users = useMemo(
-    () => (usersQuery.data ?? []).filter((user) => user.status === 'ACTIVE'),
+    () => (usersQuery.data?.items ?? []).filter((user) => user.status === 'ACTIVE'),
     [usersQuery.data],
   )
   const locations = useMemo(
@@ -190,8 +190,8 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
           {assignmentsQuery.isSuccess && assignments.length > 0 ? (
             <div className="space-y-3">
               {assignments.map((assignment) => {
-                const assignee = (usersQuery.data ?? []).find(u => u.id === assignment.userId)
-                const assigner = (usersQuery.data ?? []).find(u => u.id === assignment.assignedBy)
+                const assignee = (usersQuery.data?.items ?? []).find(u => u.id === assignment.userId)
+                const assigner = (usersQuery.data?.items ?? []).find(u => u.id === assignment.assignedBy)
                 const assigneeName = assignee ? assignee.fullName : `User ${assignment.userId.slice(0, 8)}…`
                 const assignerName = assigner ? assigner.fullName : `${assignment.assignedBy.slice(0, 8)}…`
 

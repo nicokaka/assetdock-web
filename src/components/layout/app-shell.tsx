@@ -1,4 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Toaster } from '@/components/ui/sonner'
 
 export function AppShell() {
   const location = useLocation()
@@ -39,6 +40,7 @@ export function AppShell() {
           </main>
         </div>
       </div>
+      <Toaster richColors position="top-right" closeButton />
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { archiveAsset } from '@/features/assets/api/archive-asset'
 import { updateAssetStatus } from '@/features/assets/api/update-asset-status'
@@ -12,6 +13,10 @@ export function useUpdateAssetStatusMutation(assetId: string) {
     onSuccess: (asset) => {
       queryClient.invalidateQueries({ queryKey: ['assets'] })
       queryClient.setQueryData(['assets', asset.id], asset)
+      toast.success('Asset status updated')
+    },
+    onError: () => {
+      toast.error('Failed to update status')
     },
   })
 }
@@ -24,6 +29,10 @@ export function useArchiveAssetMutation(assetId: string) {
     onSuccess: (asset) => {
       queryClient.invalidateQueries({ queryKey: ['assets'] })
       queryClient.setQueryData(['assets', asset.id], asset)
+      toast.success('Asset archived')
+    },
+    onError: () => {
+      toast.error('Failed to archive asset')
     },
   })
 }

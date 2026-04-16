@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { getUser } from '@/features/users/api/get-user'
-import { listUsers } from '@/features/users/api/list-users'
+import { listUsers, type UserListFilters } from '@/features/users/api/list-users'
 
-export function useUsersListQuery() {
+export function useUsersListQuery(filters?: UserListFilters) {
   return useQuery({
-    queryKey: ['users', 'list'],
-    queryFn: listUsers,
+    queryKey: ['users', 'list', filters],
+    queryFn: () => listUsers(filters),
   })
 }
 

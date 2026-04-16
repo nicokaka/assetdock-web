@@ -5,7 +5,7 @@ import { listUsers } from '@/features/users/api/list-users'
 export function useUsersQuery() {
   return useQuery({
     queryKey: ['users', 'lookup'],
-    queryFn: listUsers,
+    queryFn: () => listUsers(),
     staleTime: 5 * 60 * 1000,
   })
 }

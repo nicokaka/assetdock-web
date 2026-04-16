@@ -1,20 +1,18 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { Search } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { CommandPalette } from '@/components/ui/command-palette'
 import { useLogoutMutation, useSessionQuery } from '@/features/auth/hooks/use-session'
+import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { cn } from '@/lib/utils'
 
-const navigation = [
-  { to: '/app', label: 'Overview', end: true },
-  { to: '/app/assets', label: 'Assets' },
-  { to: '/app/users', label: 'Users' },
-  { to: '/app/imports', label: 'Imports' },
-  { to: '/app/audit-logs', label: 'Audit Logs' },
-]
+
 
 export function AuthenticatedShell() {
   const sessionQuery = useSessionQuery()
   const logoutMutation = useLogoutMutation()
+  const { stats } = useDashboardStats()
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -35,30 +33,85 @@ export function AuthenticatedShell() {
               </div>
               <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <nav className="flex flex-wrap items-center gap-1.5">
-                  {navigation.map((item) => (
-                    <NavLink
-                      key={item.to}
-                      to={item.to}
-                      end={item.end}
-                      className={({ isActive }) =>
-                        cn(
-                          'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
-                          isActive && 'bg-secondary text-foreground shadow-sm'
-                        )
-                      }
-                    >
-                      {item.label}
-                    </NavLink>
-                  ))}
+                  <NavLink
+                    to="/app"
+                    end
+                    className={({ isActive }) =>
+                      cn(
+                        'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
+                        isActive && 'bg-secondary text-foreground shadow-sm'
+                      )
+                    }
+                  >
+                    Overview
+                  </NavLink>
+                  <NavLink
+                    to="/app/assets"
+                    className={({ isActive }) =>
+                      cn(
+                        'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
+                        isActive && 'bg-secondary text-foreground shadow-sm'
+                      )
+                    }
+                  >
+                    Assets {stats.total > 0 && <span className="ml-1 opacity-60">({stats.total})</span>}
+                  </NavLink>
+                  <NavLink
+                    to="/app/users"
+                    className={({ isActive }) =>
+                      cn(
+                        'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
+                        isActive && 'bg-secondary text-foreground shadow-sm'
+                      )
+                    }
+                  >
+                    Users {stats.userCount > 0 && <span className="ml-1 opacity-60">({stats.userCount})</span>}
+                  </NavLink>
+                  <NavLink
+                    to="/app/imports"
+                    className={({ isActive }) =>
+                      cn(
+                        'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
+                        isActive && 'bg-secondary text-foreground shadow-sm'
+                      )
+                    }
+                  >
+                    Imports
+                  </NavLink>
+                  <NavLink
+                    to="/app/audit-logs"
+                    className={({ isActive }) =>
+                      cn(
+                        'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
+                        isActive && 'bg-secondary text-foreground shadow-sm'
+                      )
+                    }
+                  >
+                    Audit Logs
+                  </NavLink>
                 </nav>
-                <Button
-                  variant="outline"
-                  onClick={() => logoutMutation.mutate()}
-                  disabled={logoutMutation.isPending}
-                  className="self-start border-border/80 bg-background/80 lg:self-auto"
-                >
-                  {logoutMutation.isPending ? 'Signing out...' : 'Sign out'}
-                </Button>
+                <div className="flex items-center gap-2 self-start lg:self-auto">
+                  <div className="hidden lg:flex items-center text-sm text-muted-foreground/60 mr-2">
+                    Press <kbd className="mx-1 rounded border bg-muted px-1.5 font-mono text-[10px]">Cmd K</kbd> to search
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
+                    className="border-border/80 bg-background/80 hover:bg-accent/80"
+                    size="icon"
+                  >
+                    <Search className="h-4 w-4" />
+                    <span className="sr-only">Search</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => logoutMutation.mutate()}
+                    disabled={logoutMutation.isPending}
+                    className="border-border/80 bg-background/80 hover:bg-accent/80"
+                  >
+                    {logoutMutation.isPending ? '...' : 'Sign out'}
+                  </Button>
+                </div>
               </div>
             </div>
           </header>
@@ -67,6 +120,7 @@ export function AuthenticatedShell() {
           </main>
         </div>
       </div>
+      <CommandPalette />
     </div>
   )
 }

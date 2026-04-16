@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
-import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
-import { useUsersListQuery } from '@/features/users/hooks/use-users'
+import { getDashboardStats } from '@/features/dashboard/api/get-dashboard-stats'
 import { assetStatusLabels } from '@/features/assets/constants/labels'
 
 const STATUS_COLORS: Record<string, string> = {
@@ -13,52 +13,71 @@ const STATUS_COLORS: Record<string, string> = {
 }
 
 export function useDashboardStats() {
-  const assetsQuery = useAssetsQuery()
-  const usersQuery = useUsersListQuery()
+  const query = useQuery({
+    queryKey: ['dashboard', 'stats'],
+    queryFn: getDashboardStats,
+  })
 
   const stats = useMemo(() => {
-    const assets = assetsQuery.data ?? []
-    const users = usersQuery.data ?? []
+    if (!query.data) {
+      return {
+        total: 0,
+        assigned: 0,
+        userCount: 0,
+        issues: 0,
+        healthRate: 0,
+        statusChartData: [],
+        statusCounts: {},
+      }
+    }
 
-    const nonArchived = assets.filter((a) => !a.archivedAt)
-    const total = nonArchived.length
-    const assigned = nonArchived.filter((a) => a.status === 'ASSIGNED').length
-    const inStock = nonArchived.filter((a) => a.status === 'IN_STOCK').length
-    const issues =
-      nonArchived.filter((a) => a.status === 'LOST' || a.status === 'IN_MAINTENANCE').length
-    const operational = assigned + inStock
-    const healthRate = total > 0 ? Math.round((operational / total) * 100) : 0
+    const {
+      totalAssets,
+      assignedAssets,
+      inStockAssets,
+      inMaintenanceAssets,
+      retiredAssets,
+      lostAssets,
+      totalUsers,
+    } = query.data
 
-    // Donut chart data
-    const statusCounts = nonArchived.reduce<Record<string, number>>((acc, asset) => {
-      acc[asset.status] = (acc[asset.status] ?? 0) + 1
-      return acc
-    }, {})
+    const operational = assignedAssets + inStockAssets
+    const issues = inMaintenanceAssets + lostAssets
+    const healthRate = totalAssets > 0 ? Math.round((operational / totalAssets) * 100) : 0
+
+    const statusCounts: Record<string, number> = {
+      ASSIGNED: assignedAssets,
+      IN_STOCK: inStockAssets,
+      IN_MAINTENANCE: inMaintenanceAssets,
+      RETIRED: retiredAssets,
+      LOST: lostAssets,
+    }
 
     const statusChartData = Object.entries(statusCounts)
+      .filter((entry) => entry[1] > 0)
       .map(([status, count]) => ({
         status,
         label: assetStatusLabels[status] ?? status,
         count,
         fill: STATUS_COLORS[status] ?? 'hsl(220 9% 56%)',
-        percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+        percentage: totalAssets > 0 ? Math.round((count / totalAssets) * 100) : 0,
       }))
       .sort((a, b) => b.count - a.count)
 
     return {
-      total,
-      assigned,
-      userCount: users.length,
+      total: totalAssets,
+      assigned: assignedAssets,
+      userCount: totalUsers,
       issues,
       healthRate,
       statusChartData,
       statusCounts,
     }
-  }, [assetsQuery.data, usersQuery.data])
+  }, [query.data])
 
   return {
     stats,
-    isLoading: assetsQuery.isPending || usersQuery.isPending,
-    isError: assetsQuery.isError || usersQuery.isError,
+    isLoading: query.isPending,
+    isError: query.isError,
   }
 }

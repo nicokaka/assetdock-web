@@ -16,3 +16,11 @@ export type UserSummary = {
 export type UserDetail = UserSummary
 
 export type UserLookupItem = Pick<UserSummary, 'id' | 'fullName' | 'email' | 'status'>
+
+export type UserPageView = {
+  items: UserSummary[]
+  page: number
+  size: number
+  totalItems: number
+  totalPages: number
+}

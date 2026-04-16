@@ -40,3 +40,11 @@ export type CreateAssetInput = {
 }
 
 export type UpdateAssetInput = Partial<CreateAssetInput>
+
+export type AssetPageView = {
+  items: AssetListItem[]
+  page: number
+  size: number
+  totalItems: number
+  totalPages: number
+}

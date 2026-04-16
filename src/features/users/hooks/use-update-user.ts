@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { updateUser } from '@/features/users/api/update-user'
 import type { UserDetail } from '@/features/users/types/user'
@@ -18,6 +19,10 @@ export function useUpdateUserMutation(userId: string) {
     mutationFn: (input: UpdateUserProfileInput) => updateUser(userId, input),
     onSuccess: (user) => {
       syncUserCaches(queryClient, user)
+      toast.success('User profile updated')
+    },
+    onError: () => {
+      toast.error('Failed to update user profile')
     },
   })
 }

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { updateUserRoles } from '@/features/users/api/update-user-roles'
 import { updateUserStatus } from '@/features/users/api/update-user-status'
@@ -18,6 +19,10 @@ export function useUpdateUserStatus(userId: string) {
     mutationFn: (status: UserStatus) => updateUserStatus(userId, { status }),
     onSuccess: (user) => {
       syncUserCaches(queryClient, user)
+      toast.success('User status updated')
+    },
+    onError: () => {
+      toast.error('Failed to update status')
     },
   })
 }
@@ -29,6 +34,10 @@ export function useUpdateUserRoles(userId: string) {
     mutationFn: (roles: UserRole[]) => updateUserRoles(userId, { roles }),
     onSuccess: (user) => {
       syncUserCaches(queryClient, user)
+      toast.success('User privileges updated')
+    },
+    onError: () => {
+      toast.error('Failed to update privileges')
     },
   })
 }

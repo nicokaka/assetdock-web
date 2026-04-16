@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { assignAsset } from '@/features/assignments/api/assign-asset'
 import { listAssetAssignments } from '@/features/assignments/api/list-asset-assignments'
@@ -22,6 +23,10 @@ export function useAssignAssetMutation(assetId: string) {
       queryClient.invalidateQueries({ queryKey: ['assets'] })
       queryClient.invalidateQueries({ queryKey: ['assets', assetId] })
       queryClient.invalidateQueries({ queryKey: ['assets', assetId, 'assignments'] })
+      toast.success('Asset assigned successfully')
+    },
+    onError: () => {
+      toast.error('Failed to assign asset')
     },
   })
 }
@@ -35,6 +40,10 @@ export function useUnassignAssetMutation(assetId: string) {
       queryClient.invalidateQueries({ queryKey: ['assets'] })
       queryClient.invalidateQueries({ queryKey: ['assets', assetId] })
       queryClient.invalidateQueries({ queryKey: ['assets', assetId, 'assignments'] })
+      toast.success('Asset unassigned')
+    },
+    onError: () => {
+      toast.error('Failed to unassign asset')
     },
   })
 }
