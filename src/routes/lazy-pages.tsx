@@ -8,6 +8,10 @@ export const LoginPage = lazy(() =>
   import('@/features/auth/components/login-page').then((m) => ({ default: m.LoginPage })),
 )
 
+export const SetupPage = lazy(() =>
+  import('@/pages/setup-page').then((m) => ({ default: m.SetupPage })),
+)
+
 export const HomePage = lazy(() =>
   import('@/pages/home-page').then((m) => ({ default: m.HomePage })),
 )

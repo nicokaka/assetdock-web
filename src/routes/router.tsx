@@ -10,6 +10,7 @@ import { RedirectIfAuthenticated, RequireSession } from '@/features/auth/compone
 // Lazy page components — each loaded on demand as a separate JS chunk.
 import {
   LoginPage,
+  SetupPage,
   HomePage,
   AppOverviewPage,
   AssetsPage,
@@ -35,6 +36,14 @@ export const router = createBrowserRouter([
         element: (
           <PageSuspense>
             <HomePage />
+          </PageSuspense>
+        ),
+      },
+      {
+        path: 'setup',
+        element: (
+          <PageSuspense>
+            <SetupPage />
           </PageSuspense>
         ),
       },
