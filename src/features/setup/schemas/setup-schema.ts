@@ -14,11 +14,11 @@ export const setupSchema = z.object({
   organizationName: z
     .string()
     .min(2, 'Organization name must be at least 2 characters.')
-    .max(100, 'Organization name must be at most 100 characters.'),
+    .max(200, 'Organization name must be at most 200 characters.'),
   adminFullName: z
     .string()
     .min(2, 'Full name must be at least 2 characters.')
-    .max(100, 'Full name must be at most 100 characters.'),
+    .max(200, 'Full name must be at most 200 characters.'),
   adminEmail: z.email('Enter a valid email address.'),
   adminPassword: passwordSchema,
 })

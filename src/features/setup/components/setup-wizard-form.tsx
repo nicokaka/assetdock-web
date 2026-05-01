@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { HttpError } from '@/lib/http-client'
 import { useSetup } from '@/features/setup/hooks/use-setup'
@@ -29,7 +29,7 @@ export function SetupWizardForm() {
     },
   })
 
-  const password = form.watch('adminPassword')
+  const password = useWatch({ control: form.control, name: 'adminPassword' })
 
   async function onSubmit(values: SetupInput) {
     form.clearErrors('root')

@@ -16,14 +16,21 @@ export function RequireSession({ children }: PropsWithChildren) {
   // Check setup status BEFORE checking session.
   // If the system is not configured, there are no users to authenticate.
   const setupQuery = useSetupStatus()
-  const sessionQuery = useSessionQuery()
+  const isConfigured = setupQuery.data?.configured === true
 
-  if (setupQuery.isPending || sessionQuery.isPending) {
+  // Only trigger the session fetch if the system is configured.
+  const sessionQuery = useSessionQuery({ enabled: isConfigured })
+
+  if (setupQuery.isPending) {
     return <SessionLoadingState />
   }
 
   if (setupQuery.data && !setupQuery.data.configured) {
     return <Navigate to="/setup" replace />
+  }
+
+  if (sessionQuery.isPending) {
+    return <SessionLoadingState />
   }
 
   if (!sessionQuery.data) {
@@ -34,7 +41,7 @@ export function RequireSession({ children }: PropsWithChildren) {
 }
 
 export function RedirectIfAuthenticated({ children }: PropsWithChildren) {
-  const sessionQuery = useSessionQuery()
+  const sessionQuery = useSessionQuery({ enabled: true })
 
   if (sessionQuery.isPending) {
     return <SessionLoadingState />

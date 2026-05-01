@@ -1,15 +1,13 @@
-import { HttpError, httpClient } from '@/lib/http-client'
+import { httpClient } from '@/lib/http-client'
 import type { SetupRequest, SetupResponse, SetupStatusResponse } from '@/features/setup/types/setup-types'
 
 export async function getSetupStatus(): Promise<SetupStatusResponse> {
   try {
     return await httpClient.request<SetupStatusResponse>('/api/v1/setup/status')
-  } catch (error) {
-    // If the backend is unreachable, assume configured to avoid blocking the login flow.
-    if (error instanceof HttpError) {
-      throw error
-    }
-    throw error
+  } catch {
+    // If the backend is unreachable or fails, assume configured
+    // to fall back to the normal login flow, avoiding blocking the app.
+    return { configured: true }
   }
 }
 

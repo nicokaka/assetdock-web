@@ -5,11 +5,12 @@ import type { LoginInput } from '@/features/auth/schemas/login-schema'
 
 const sessionQueryKey = ['session'] as const
 
-export function useSessionQuery() {
+export function useSessionQuery(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: sessionQueryKey,
     queryFn: getSession,
     staleTime: 60_000,
+    enabled: options?.enabled,
   })
 }
 
