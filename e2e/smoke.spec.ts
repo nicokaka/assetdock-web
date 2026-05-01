@@ -3,6 +3,20 @@ import { expect, test } from '@playwright/test'
 import { login } from './helpers/session'
 
 test.describe('mvp smoke', () => {
+  test('setup wizard renders and intercepts /app when system is unconfigured', async ({ page }) => {
+    // Intercept the API call to force a "not configured" state
+    await page.route('**/api/v1/setup/status', async (route) => {
+      await route.fulfill({ json: { configured: false } })
+    })
+
+    await page.goto('/app')
+    
+    // Should redirect to setup instead of login
+    await expect(page).toHaveURL(/\/setup$/)
+    await expect(page.locator('h1').getByText('Welcome to AssetDock', { exact: true })).toBeVisible()
+    await expect(page.getByLabel('Organization name')).toBeVisible()
+  })
+
   test('login, refresh keeps the session, and logout clears it', async ({ page }) => {
     await login(page)
 
