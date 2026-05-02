@@ -41,7 +41,18 @@ export function RequireSession({ children }: PropsWithChildren) {
 }
 
 export function RedirectIfAuthenticated({ children }: PropsWithChildren) {
-  const sessionQuery = useSessionQuery({ enabled: true })
+  const setupQuery = useSetupStatus()
+  const isConfigured = setupQuery.data?.configured === true
+
+  const sessionQuery = useSessionQuery({ enabled: isConfigured })
+
+  if (setupQuery.isPending) {
+    return <SessionLoadingState />
+  }
+
+  if (setupQuery.data && !setupQuery.data.configured) {
+    return <Navigate to="/setup" replace />
+  }
 
   if (sessionQuery.isPending) {
     return <SessionLoadingState />
@@ -49,6 +60,20 @@ export function RedirectIfAuthenticated({ children }: PropsWithChildren) {
 
   if (sessionQuery.data) {
     return <Navigate to="/app" replace />
+  }
+
+  return children
+}
+
+export function RedirectIfConfigured({ children }: PropsWithChildren) {
+  const setupQuery = useSetupStatus()
+
+  if (setupQuery.isPending) {
+    return <SessionLoadingState />
+  }
+
+  if (setupQuery.data?.configured) {
+    return <Navigate to="/login" replace />
   }
 
   return children

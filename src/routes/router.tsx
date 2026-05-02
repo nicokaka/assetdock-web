@@ -5,7 +5,7 @@ import { AuthenticatedShell } from '@/components/layout/authenticated-shell'
 import { AppShell } from '@/components/layout/app-shell'
 import { RouteErrorBoundary } from '@/components/layout/route-error-boundary'
 import { PageSuspense } from '@/components/layout/page-suspense'
-import { RedirectIfAuthenticated, RequireSession } from '@/features/auth/components/session-guard'
+import { RedirectIfAuthenticated, RequireSession, RedirectIfConfigured } from '@/features/auth/components/session-guard'
 
 // Lazy page components — each loaded on demand as a separate JS chunk.
 import {
@@ -42,9 +42,11 @@ export const router = createBrowserRouter([
       {
         path: 'setup',
         element: (
-          <PageSuspense>
-            <SetupPage />
-          </PageSuspense>
+          <RedirectIfConfigured>
+            <PageSuspense>
+              <SetupPage />
+            </PageSuspense>
+          </RedirectIfConfigured>
         ),
       },
       {
