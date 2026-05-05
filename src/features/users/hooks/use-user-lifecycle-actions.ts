@@ -39,7 +39,8 @@ export function useUpdateUserStatus(userId: string) {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] })
+      // Use void to handle the floating promise correctly
+      void queryClient.invalidateQueries({ queryKey: ['users'] })
     },
   })
 }
@@ -78,7 +79,8 @@ export function useUpdateUserRoles(userId: string) {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] })
+      // Use void to handle the floating promise correctly
+      void queryClient.invalidateQueries({ queryKey: ['users'] })
     },
   })
 }

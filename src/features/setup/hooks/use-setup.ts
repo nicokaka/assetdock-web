@@ -14,7 +14,7 @@ export function useSetup() {
     mutationFn: (data: SetupInput) => postSetup(data),
     onSuccess: () => {
       // Invalidate the setup status so any subsequent guard check reflects the new state.
-      queryClient.invalidateQueries({ queryKey: setupStatusQueryKey })
+      void queryClient.invalidateQueries({ queryKey: setupStatusQueryKey })
       toast.success('System configured successfully. You can now sign in.')
       navigate('/login', { replace: true })
     },

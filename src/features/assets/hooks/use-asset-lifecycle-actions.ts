@@ -39,7 +39,7 @@ export function useUpdateAssetStatusMutation(assetId: string) {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['assets'] })
+      void queryClient.invalidateQueries({ queryKey: ['assets'] })
     },
   })
 }
@@ -78,7 +78,7 @@ export function useArchiveAssetMutation(assetId: string) {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['assets'] })
+      void queryClient.invalidateQueries({ queryKey: ['assets'] })
     },
   })
 }

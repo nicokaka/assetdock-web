@@ -10,7 +10,7 @@ export function useCreateAssetMutation() {
   return useMutation({
     mutationFn: (input: CreateAssetInput) => createAsset(input),
     onSuccess: (asset) => {
-      queryClient.invalidateQueries({ queryKey: ['assets'] })
+      void queryClient.invalidateQueries({ queryKey: ['assets'] })
       queryClient.setQueryData(['assets', asset.id], asset)
       toast.success('Asset created successfully')
     },

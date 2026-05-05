@@ -39,7 +39,7 @@ export function useUpdateUserMutation(userId: string) {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] })
+      void queryClient.invalidateQueries({ queryKey: ['users'] })
     },
   })
 }

@@ -10,7 +10,7 @@ export function useCreateUserMutation() {
   return useMutation({
     mutationFn: (input: CreateUserInput) => createUser(input),
     onSuccess: (user) => {
-      queryClient.invalidateQueries({ queryKey: ['users'] })
+      void queryClient.invalidateQueries({ queryKey: ['users'] })
       queryClient.setQueryData(['users', 'detail', user.id], user)
       toast.success('User created successfully')
     },

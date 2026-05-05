@@ -3,13 +3,16 @@ import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useSetupStatus } from '@/features/setup/hooks/use-setup-status'
 import { useApiHealth } from '@/features/setup/hooks/use-api-health'
 import { useSessionQuery } from '@/features/auth/hooks/use-session'
 
 export function HomePage() {
   const { t } = useTranslation()
   const healthQuery = useApiHealth()
-  const sessionQuery = useSessionQuery({ enabled: true })
+  const setupQuery = useSetupStatus()
+  const isConfigured = setupQuery.data?.configured === true
+  const sessionQuery = useSessionQuery({ enabled: isConfigured })
   const isHealthy = healthQuery.data === true
 
   return (

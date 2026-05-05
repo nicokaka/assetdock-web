@@ -44,7 +44,7 @@ export function useUpdateAssetMutation(assetId: string) {
 
     onSettled: () => {
       // Revalidate list and detail regardless of success/failure.
-      queryClient.invalidateQueries({ queryKey: ['assets'] })
+      void queryClient.invalidateQueries({ queryKey: ['assets'] })
     },
   })
 }

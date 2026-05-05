@@ -20,9 +20,9 @@ export function useAssignAssetMutation(assetId: string) {
   return useMutation({
     mutationFn: (input: AssignAssetInput) => assignAsset(assetId, input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['assets'] })
-      queryClient.invalidateQueries({ queryKey: ['assets', assetId] })
-      queryClient.invalidateQueries({ queryKey: ['assets', assetId, 'assignments'] })
+      void queryClient.invalidateQueries({ queryKey: ['assets'] })
+      void queryClient.invalidateQueries({ queryKey: ['assets', assetId] })
+      void queryClient.invalidateQueries({ queryKey: ['assets', assetId, 'assignments'] })
       toast.success('Asset assigned successfully')
     },
     onError: () => {
@@ -37,9 +37,9 @@ export function useUnassignAssetMutation(assetId: string) {
   return useMutation({
     mutationFn: () => unassignAsset(assetId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['assets'] })
-      queryClient.invalidateQueries({ queryKey: ['assets', assetId] })
-      queryClient.invalidateQueries({ queryKey: ['assets', assetId, 'assignments'] })
+      void queryClient.invalidateQueries({ queryKey: ['assets'] })
+      void queryClient.invalidateQueries({ queryKey: ['assets', assetId] })
+      void queryClient.invalidateQueries({ queryKey: ['assets', assetId, 'assignments'] })
       toast.success('Asset unassigned')
     },
     onError: () => {
