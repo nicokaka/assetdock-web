@@ -1,4 +1,6 @@
+import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { Badge } from '@/components/ui/badge'
 import {
@@ -40,16 +42,18 @@ function statusVariant(status: UserSummary['status']) {
   }
 }
 
-export function UsersList({ users }: UsersListProps) {
+export const UsersList = React.memo(function UsersList({ users }: UsersListProps) {
+  const { t } = useTranslation()
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Status</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Roles</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead>{t('userForm.labels.status', 'Status')}</TableHead>
+          <TableHead>{t('userForm.labels.fullName', 'Name')}</TableHead>
+          <TableHead>{t('userForm.labels.email', 'Email')}</TableHead>
+          <TableHead>{t('userForm.labels.roles', 'Roles')}</TableHead>
+          <TableHead className="text-right">{t('app.assets.table.actions', 'Actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -57,7 +61,7 @@ export function UsersList({ users }: UsersListProps) {
           <TableRow key={user.id}>
             <TableCell>
               <Badge variant={statusVariant(user.status)}>
-                {statusLabels[user.status] ?? user.status}
+                {t(`userForm.status.${user.status.toLowerCase()}`, statusLabels[user.status] ?? user.status)}
               </Badge>
             </TableCell>
             <TableCell>
@@ -76,11 +80,11 @@ export function UsersList({ users }: UsersListProps) {
                 {user.roles.length > 0 ? (
                   user.roles.map((role) => (
                     <Badge key={role} variant="outline" className="text-[11px]">
-                      {roleLabels[role] ?? role}
+                      {t(`userForm.roles.${role.toLowerCase()}`, roleLabels[role] ?? role)}
                     </Badge>
                   ))
                 ) : (
-                  <span className="text-sm text-muted-foreground">No roles</span>
+                  <span className="text-sm text-muted-foreground">{t('details.user.noRoles', 'No roles')}</span>
                 )}
               </div>
             </TableCell>
@@ -89,7 +93,7 @@ export function UsersList({ users }: UsersListProps) {
                 to={`/app/users/${user.id}`}
                 className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
-                View
+                {t('app.assets.table.view', 'View')}
               </Link>
             </TableCell>
           </TableRow>
@@ -97,4 +101,4 @@ export function UsersList({ users }: UsersListProps) {
       </TableBody>
     </Table>
   )
-}
+})

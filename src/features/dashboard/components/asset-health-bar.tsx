@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 const STATUS_COLORS: Record<string, string> = {
   ASSIGNED: 'hsl(142 71% 45%)',
@@ -27,6 +28,7 @@ type Props = {
 }
 
 export function AssetHealthBar({ statusCounts, total, healthRate }: Props) {
+  const { t } = useTranslation()
   const orderedStatuses = STATUS_ORDER.filter((s) => statusCounts[s] !== undefined)
 
   const healthColor =
@@ -41,10 +43,10 @@ export function AssetHealthBar({ statusCounts, total, healthRate }: Props) {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Asset Health
+            {t('app.overview.health.title', 'Asset Health')}
           </CardTitle>
           <span className={cn('text-sm font-semibold', healthColor)}>
-            {healthRate}% operational
+            {healthRate}% {t('app.overview.health.operational', 'operational')}
           </span>
         </div>
 
@@ -60,7 +62,7 @@ export function AssetHealthBar({ statusCounts, total, healthRate }: Props) {
                   width: `${pct}%`,
                   backgroundColor: STATUS_COLORS[status] ?? 'hsl(220 9% 56%)',
                 }}
-                title={`${STATUS_LABELS[status]}: ${statusCounts[status]}`}
+                title={`${t(`app.overview.status.${status}`, STATUS_LABELS[status])}: ${statusCounts[status]}`}
               />
             )
           })}
@@ -82,7 +84,7 @@ export function AssetHealthBar({ statusCounts, total, healthRate }: Props) {
                 />
                 {/* Label */}
                 <span className="flex-1 text-xs text-muted-foreground">
-                  {STATUS_LABELS[status]}
+                  {t(`app.overview.status.${status}`, STATUS_LABELS[status])}
                 </span>
                 {/* Mini bar */}
                 <div className="h-1.5 w-20 overflow-hidden rounded-full bg-secondary">

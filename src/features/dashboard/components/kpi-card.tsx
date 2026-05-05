@@ -15,16 +15,16 @@ type KpiCardProps = {
 
 const accentStyles = {
   default: 'text-foreground',
-  success: 'text-emerald-600',
-  warning: 'text-amber-600',
-  danger: 'text-rose-600',
+  success: 'text-emerald-600 dark:text-emerald-500',
+  warning: 'text-amber-600 dark:text-amber-500',
+  danger: 'text-rose-600 dark:text-rose-500',
 }
 
 const iconStyles = {
   default: 'bg-secondary text-muted-foreground',
-  success: 'bg-emerald-50 text-emerald-600',
-  warning: 'bg-amber-50 text-amber-600',
-  danger: 'bg-rose-50 text-rose-600',
+  success: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-500',
+  warning: 'bg-amber-500/15 text-amber-600 dark:text-amber-500',
+  danger: 'bg-rose-500/15 text-rose-600 dark:text-rose-500',
 }
 
 function KpiContent({ label, value, sublabel, icon, accent = 'default' }: KpiCardProps) {

@@ -1,4 +1,5 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -28,6 +29,7 @@ function toDefaultValues(asset: NonNullable<ReturnType<typeof useAssetDetailQuer
 
 export function AssetEditPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { assetId = '' } = useParams()
   const assetQuery = useAssetDetailQuery(assetId)
   const updateAssetMutation = useUpdateAssetMutation(assetId)
@@ -39,17 +41,17 @@ export function AssetEditPage() {
 
   const errorMessage =
     updateAssetMutation.error instanceof HttpError && updateAssetMutation.error.status === 400
-      ? 'Unable to save the asset with the provided data.'
+      ? t('assetForm.errorEdit', 'Unable to save the asset with the provided data.')
       : updateAssetMutation.isError
-        ? 'Unable to save the asset right now.'
+        ? t('assetForm.errorGeneric', 'Unable to save the asset right now.')
         : undefined
 
   return (
     <section className="space-y-6">
       <div>
-        <Link to={`/app/assets/${assetId}`} className={buttonVariants({ variant: 'outline' })}>
-          Back to asset
-        </Link>
+        <button onClick={() => navigate(`/app/assets/${assetId}`)} className={buttonVariants({ variant: 'outline' })}>
+          {t('assetForm.back', 'Back to asset')}
+        </button>
       </div>
 
       {assetQuery.isPending ? (
@@ -75,17 +77,17 @@ export function AssetEditPage() {
         <Card className="max-w-2xl border-border shadow-none">
           <CardHeader>
             <CardTitle className="text-2xl font-semibold tracking-tight">
-              Edit Asset
+              {t('assetForm.titleEdit', 'Edit Asset')}
             </CardTitle>
             <CardDescription>
-              Update the core asset fields currently supported in the frontend.
+              {t('assetForm.descriptionEdit', 'Update the asset information and lifecycle data.')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <AssetForm
               defaultValues={toDefaultValues(assetQuery.data)}
-              submitLabel="Save changes"
-              pendingLabel="Saving..."
+              submitLabel={t('assetForm.submitEdit', 'Save changes')}
+              pendingLabel={t('assetForm.submittingEdit', 'Saving...')}
               isPending={updateAssetMutation.isPending}
               errorMessage={errorMessage}
               onSubmit={handleSubmit}

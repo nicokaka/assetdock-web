@@ -1,0 +1,340 @@
+{
+  "common": {
+    "welcome": "Welcome to AssetDock",
+    "login": "Login"
+  },
+  "auth": {
+    "login": {
+      "subtitle": "Browser session sign-in",
+      "title": "Sign in",
+      "description": "Use your AssetDock credentials to access the authenticated workspace for assets, users, imports, and audit activity.",
+      "accessApp": "Access the app",
+      "accessAppDescription": "The current session stays in the browser through the backend web auth flow.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "name@company.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "hidePassword": "Hide password",
+      "showPassword": "Show password",
+      "submitButton": "Sign in",
+      "submitButtonLoading": "Signing in...",
+      "forgotPassword": "Forgot your password? Contact your organization administrator.",
+      "errorGeneric": "Unable to sign in right now.",
+      "errorInvalid": "Invalid email or password.",
+      "errorLocked": "Your account has been locked. Contact your administrator."
+    }
+  },
+  "app": {
+    "header": {
+      "overview": "Overview",
+      "assets": "Assets",
+      "users": "Users",
+      "imports": "Imports",
+      "auditLogs": "Audit Logs",
+      "press": "Press",
+      "toSearch": "to search",
+      "signOut": "Sign out",
+      "search": "Search"
+    },
+    "assets": {
+      "title": "Assets",
+      "description": "Review the assets available to the current session.",
+      "newAsset": "New Asset",
+      "searchPlaceholder": "Search by tag, name or serial...",
+      "allStatuses": "All Statuses",
+      "errorTitle": "Unable to load assets",
+      "emptyTitle": "No assets found",
+      "emptyDescriptionFilters": "Try adjusting your filters.",
+      "emptyDescriptionStart": "Create the first asset to start working with the inventory area."
+    },
+    "users": {
+      "title": "Users",
+      "description": "Manage the users that have access to the dashboard.",
+      "newUser": "New User",
+      "searchPlaceholder": "Search users by name or email...",
+      "errorTitle": "Unable to load users",
+      "errorDescription": "Please refresh the page or try again in a moment.",
+      "emptyTitle": "No users found",
+      "emptyDescriptionFilters": "No users match your search query.",
+      "emptyDescriptionStart": "Create the first user when this workspace is ready to grow."
+    },
+    "overview": {
+      "title": "Overview",
+      "description": "Asset inventory status and recent operational activity.",
+      "kpi": {
+        "totalAssets": "Total Assets",
+        "totalAssetsSub": "across all categories",
+        "assigned": "Assigned",
+        "assignedSub": "operational (assigned + in stock)",
+        "users": "Users",
+        "usersSub": "registered in the org",
+        "issues": "Issues",
+        "issuesSub": "lost or in maintenance"
+      },
+      "health": {
+        "title": "Asset Health",
+        "operational": "operational"
+      },
+      "distribution": {
+        "title": "Asset Distribution",
+        "noData": "No data",
+        "total": "total"
+      },
+      "activity": {
+        "title": "Recent Activity",
+        "viewAll": "View all",
+        "noActivity": "No activity yet.",
+        "justNow": "just now",
+        "mAgo": "m ago",
+        "hAgo": "h ago",
+        "dAgo": "d ago"
+      },
+      "status": {
+        "ASSIGNED": "Assigned",
+        "IN_STOCK": "In Stock",
+        "IN_MAINTENANCE": "Maintenance",
+        "RETIRED": "Retired",
+        "LOST": "Lost"
+      },
+      "events": {
+        "LOGIN_SUCCESS": "Successful login",
+        "LOGIN_FAILURE": "Failed login attempt",
+        "USER_CREATED": "User created",
+        "USER_UPDATED": "User updated",
+        "USER_DISABLED": "User disabled",
+        "USER_LOCKED": "User locked",
+        "USER_UNLOCKED": "User unlocked",
+        "USER_REACTIVATED": "User reactivated",
+        "USER_ROLES_UPDATED": "User roles updated",
+        "ASSET_CREATED": "Asset created",
+        "ASSET_UPDATED": "Asset updated",
+        "ASSET_ARCHIVED": "Asset archived",
+        "ASSET_ASSIGNED": "Asset assigned",
+        "ASSET_UNASSIGNED": "Asset unassigned",
+        "CSV_IMPORT_STARTED": "CSV import started",
+        "CSV_IMPORT_COMPLETED": "CSV import completed",
+        "CSV_IMPORT_FAILED": "CSV import failed",
+        "WEB_SESSION_CREATED": "Session started",
+        "WEB_SESSION_LOGGED_OUT": "Session ended",
+        "WEB_SESSION_EXPIRED": "Session expired"
+      }
+    }
+  },
+  "public": {
+    "home": {
+      "kicker": "Asset inventory and access operations",
+      "apiOnline": "API Online",
+      "apiChecking": "Checking API...",
+      "apiOffline": "API Offline",
+      "title": "AssetDock Web",
+      "description": "A sober browser interface for assets, users, imports, and audit activity, built to work directly with the AssetDock API.",
+      "openApp": "Open the app",
+      "viewAuth": "View authenticated area",
+      "mvpTitle": "Current MVP areas",
+      "mvpDescription": "The app already covers the main operational flows without adding visual noise.",
+      "mvpItem1": "Assets, lifecycle actions, and assignments",
+      "mvpItem2": "Users, roles, and status updates",
+      "mvpItem3": "Audit logs and CSV imports"
+    }
+  },
+  "assetForm": {
+    "titleNew": "New Asset",
+    "descriptionNew": "Create a new asset with the core fields currently supported in the app.",
+    "titleEdit": "Edit Asset",
+    "descriptionEdit": "Update the asset information and lifecycle data.",
+    "labels": {
+      "assetTag": "Asset tag",
+      "displayName": "Display name",
+      "serialNumber": "Serial number",
+      "category": "Category",
+      "manufacturer": "Manufacturer",
+      "hostname": "Hostname",
+      "location": "Location",
+      "description": "Description",
+      "status": "Status",
+      "purchaseDate": "Purchase date",
+      "warrantyExpiryDate": "Warranty expiry date"
+    },
+    "placeholders": {
+      "assetTag": "e.g. AST-001",
+      "displayName": "e.g. MacBook Pro 14",
+      "serialNumber": "e.g. C02XXXXXXX",
+      "noCategory": "No category",
+      "noManufacturer": "No manufacturer",
+      "hostname": "e.g. assetdock-mbp-14",
+      "noLocation": "No location",
+      "description": "Any additional information...",
+      "pickDate": "Pick a date"
+    },
+    "submitNew": "Create asset",
+    "submittingNew": "Creating...",
+    "submitEdit": "Save changes",
+    "submittingEdit": "Saving...",
+    "back": "Back to assets",
+    "errorNew": "Unable to create the asset with the provided data.",
+    "errorEdit": "Unable to update the asset with the provided data.",
+    "errorGeneric": "Unable to process the request right now."
+  },
+  "userForm": {
+    "titleNew": "New User",
+    "descriptionNew": "Create a new user. They will receive an email to set their password if configured.",
+    "titleEdit": "Edit User",
+    "descriptionEdit": "Update the user's profile and system roles.",
+    "labels": {
+      "fullName": "Full name",
+      "email": "Email address",
+      "roles": "Roles",
+      "status": "Status"
+    },
+    "placeholders": {
+      "fullName": "e.g. John Doe",
+      "email": "e.g. john.doe@company.com"
+    },
+    "roles": {
+      "admin": "Admin",
+      "manager": "Manager",
+      "viewer": "Viewer"
+    },
+    "status": {
+      "active": "Active",
+      "disabled": "Disabled",
+      "locked": "Locked"
+    },
+    "submitNew": "Create user",
+    "submittingNew": "Creating...",
+    "submitEdit": "Save changes",
+    "submittingEdit": "Saving...",
+    "back": "Back to users",
+    "errorNew": "Unable to create the user with the provided data.",
+    "errorEdit": "Unable to update the user with the provided data.",
+    "errorGeneric": "Unable to process the request right now."
+  },
+  "details": {
+    "actions": {
+      "edit": "Edit",
+      "archive": "Archive",
+      "resetPassword": "Reset Password",
+      "delete": "Delete",
+      "assign": "Assign Asset",
+      "return": "Return Asset"
+    },
+    "badges": {
+      "archived": "Archived",
+      "operational": "Operational",
+      "maintenance": "Maintenance",
+      "lost": "Lost"
+    },
+    "sections": {
+      "hardware": "Hardware Information",
+      "lifecycle": "Lifecycle Data",
+      "assignments": "Current Assignment",
+      "history": "Asset History",
+      "security": "Security",
+      "contact": "Contact Information"
+    },
+    "asset": {
+      "notFound": "Asset not found.",
+      "archiveTitle": "Archive Asset",
+      "archiveDescription": "Are you sure you want to archive this asset? This action will hide the asset from active lists.",
+      "archiveConfirm": "Yes, archive",
+      "archiveCancel": "Cancel",
+      "unassigned": "This asset is currently unassigned.",
+      "assignedTo": "Assigned to",
+      "assignedSince": "Since"
+    },
+    "assignments": {
+      "title": "Assignments",
+      "description": "Assign this asset to a user and review the assignment history.",
+      "user": "User",
+      "selectUser": "Select a user",
+      "location": "Location",
+      "notes": "Notes",
+      "notesPlaceholder": "Optional note",
+      "activeMsg": "There is an active assignment for this asset.",
+      "inactiveMsg": "There is no active assignment for this asset.",
+      "assign": "Assign asset",
+      "assigning": "Assigning...",
+      "remove": "Unassign",
+      "removing": "Removing...",
+      "history": "History",
+      "loading": "Loading assignments...",
+      "error": "Unable to load assignments right now.",
+      "empty": "No assignments yet.",
+      "closed": "Closed",
+      "active": "Active",
+      "assignedDate": "Assigned",
+      "unassignedDate": "Unassigned",
+      "assignedBy": "Assigned by"
+    },
+    "user": {
+      "notFound": "User not found.",
+      "resetPasswordTitle": "Reset Password",
+      "resetPasswordDescription": "Enter a new temporary password for this user. They should change it upon next login.",
+      "newPasswordLabel": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "resetConfirm": "Reset Password",
+      "resetting": "Resetting...",
+      "resetSuccess": "Password reset successfully.",
+      "resetError": "Failed to reset password."
+    }
+  },
+  "audit": {
+    "title": "Audit Logs",
+    "description": "Review system events and operational changes.",
+    "table": {
+      "event": "Event",
+      "actor": "Actor",
+      "target": "Target",
+      "outcome": "Outcome",
+      "date": "Date"
+    },
+    "emptyTitle": "No audit logs found",
+    "emptyDescription": "System activity will appear here.",
+    "errorTitle": "Unable to load audit logs",
+    "errorDescription": "Please refresh the page."
+  },
+  "imports": {
+    "title": "Imports",
+    "description": "Bulk import assets into the inventory.",
+    "newImport": "New Import",
+    "table": {
+      "filename": "Filename",
+      "status": "Status",
+      "progress": "Progress",
+      "date": "Date"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "PROCESSING": "Processing",
+      "COMPLETED": "Completed",
+      "FAILED": "Failed"
+    },
+    "emptyTitle": "No imports found",
+    "emptyDescription": "Start by uploading a CSV file with your assets.",
+    "errorTitle": "Unable to load imports",
+    "dropzone": {
+      "title": "Upload CSV",
+      "description": "Drag and drop a CSV file here, or click to select.",
+      "uploading": "Uploading..."
+    }
+  },
+  "setup": {
+    "title": "Initial Setup",
+    "description": "Configure the root organization and administrator account to bootstrap the environment.",
+    "labels": {
+      "orgName": "Organization Name",
+      "adminName": "Administrator Name",
+      "adminEmail": "Administrator Email",
+      "adminPassword": "Password",
+      "confirmPassword": "Confirm Password"
+    },
+    "placeholders": {
+      "orgName": "e.g. Hebron Farmacêutica",
+      "adminName": "e.g. System Admin",
+      "adminEmail": "admin@company.com"
+    },
+    "submit": "Complete Setup",
+    "submitting": "Setting up...",
+    "errorGeneric": "Unable to complete setup. The environment might already be configured."
+  }
+}

@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { HttpError } from '@/lib/http-client'
 import { useSetup } from '@/features/setup/hooks/use-setup'
@@ -17,6 +18,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordStrengthIndicator } from '@/features/setup/components/password-strength-indicator'
 
 export function SetupWizardForm() {
+  const { t } = useTranslation()
   const setupMutation = useSetup()
 
   const form = useForm<SetupInput>({
@@ -39,8 +41,8 @@ export function SetupWizardForm() {
     } catch (error) {
       const message =
         error instanceof HttpError && error.status === 409
-          ? 'This system is already configured. Please sign in.'
-          : 'Setup failed. Please check your input and try again.'
+          ? t('setup.errorConflict', 'This system is already configured. Please sign in.')
+          : t('setup.errorGeneric', 'Setup failed. Please check your input and try again.')
 
       form.setError('root', { message })
     }
@@ -54,11 +56,11 @@ export function SetupWizardForm() {
           name="organizationName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Organization name</FormLabel>
+              <FormLabel>{t('setup.labels.organizationName', 'Organization name')}</FormLabel>
               <FormControl>
                 <Input
                   autoComplete="organization"
-                  placeholder="Acme Corp"
+                  placeholder={t('setup.placeholders.organizationName', 'Acme Corp')}
                   {...field}
                 />
               </FormControl>
@@ -72,11 +74,11 @@ export function SetupWizardForm() {
           name="adminFullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Administrator full name</FormLabel>
+              <FormLabel>{t('setup.labels.adminFullName', 'Administrator full name')}</FormLabel>
               <FormControl>
                 <Input
                   autoComplete="name"
-                  placeholder="Jane Smith"
+                  placeholder={t('setup.placeholders.adminFullName', 'Jane Smith')}
                   {...field}
                 />
               </FormControl>
@@ -90,12 +92,12 @@ export function SetupWizardForm() {
           name="adminEmail"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Administrator email</FormLabel>
+              <FormLabel>{t('setup.labels.adminEmail', 'Administrator email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
                   autoComplete="email"
-                  placeholder="admin@company.com"
+                  placeholder={t('setup.placeholders.adminEmail', 'admin@company.com')}
                   {...field}
                 />
               </FormControl>
@@ -109,12 +111,12 @@ export function SetupWizardForm() {
           name="adminPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Administrator password</FormLabel>
+              <FormLabel>{t('setup.labels.adminPassword', 'Administrator password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoComplete="new-password"
-                  placeholder="Create a strong password"
+                  placeholder={t('setup.placeholders.adminPassword', 'Create a strong password')}
                   {...field}
                 />
               </FormControl>
@@ -133,7 +135,7 @@ export function SetupWizardForm() {
           type="submit"
           disabled={setupMutation.isPending}
         >
-          {setupMutation.isPending ? 'Configuring system...' : 'Configure and get started'}
+          {setupMutation.isPending ? t('setup.submitting', 'Configuring system...') : t('setup.submit', 'Configure and get started')}
         </Button>
       </form>
     </Form>

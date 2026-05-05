@@ -1,4 +1,5 @@
-import { Link, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,6 +9,8 @@ import { useUserDetailQuery } from '@/features/users/hooks/use-users'
 import { HttpError } from '@/lib/http-client'
 
 export function UserDetailPage() {
+  const navigate = useNavigate()
+  const { t } = useTranslation()
   const { userId = '' } = useParams()
   const userQuery = useUserDetailQuery(userId)
 
@@ -19,17 +22,17 @@ export function UserDetailPage() {
   return (
     <section className="space-y-6">
       <div className="flex items-center gap-2">
-        <Link to="/app/users" className={buttonVariants({ variant: 'outline' })}>
-          Back to users
-        </Link>
+        <button onClick={() => navigate('/app/users')} className={buttonVariants({ variant: 'outline' })}>
+          {t('userForm.back', 'Back to users')}
+        </button>
         {userQuery.isSuccess ? (
           <>
-            <Link
-              to={`/app/users/${userId}/edit`}
+            <button
+              onClick={() => navigate(`/app/users/${userId}/edit`)}
               className={buttonVariants({ variant: 'outline' })}
             >
-              Edit user
-            </Link>
+              {t('details.actions.edit', 'Edit user')}
+            </button>
             <AdminResetPasswordDialog userId={userId} userRoles={userQuery.data.roles} />
           </>
         ) : null}
@@ -49,9 +52,9 @@ export function UserDetailPage() {
       {isNotFound ? (
         <Card className="border-border shadow-none">
           <CardHeader>
-            <CardTitle className="text-base font-medium">User not found</CardTitle>
+            <CardTitle className="text-base font-medium">{t('details.user.notFound', 'User not found')}</CardTitle>
             <CardDescription>
-              The requested user is unavailable for the current session.
+              {t('app.users.emptyDescriptionFilters', 'The requested user is unavailable for the current session.')}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -60,9 +63,9 @@ export function UserDetailPage() {
       {userQuery.isError && !isNotFound ? (
         <Card className="border-border shadow-none">
           <CardHeader>
-            <CardTitle className="text-base font-medium">Unable to load user</CardTitle>
+            <CardTitle className="text-base font-medium">{t('app.users.errorTitle', 'Unable to load user')}</CardTitle>
             <CardDescription>
-              Please refresh the page or try again in a moment.
+              {t('app.users.errorDescription', 'Please refresh the page or try again in a moment.')}
             </CardDescription>
           </CardHeader>
         </Card>

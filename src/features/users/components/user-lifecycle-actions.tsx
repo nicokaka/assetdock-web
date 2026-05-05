@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,6 +14,7 @@ type UserLifecycleActionsProps = {
 }
 
 export function UserLifecycleActions({ user }: UserLifecycleActionsProps) {
+  const { t } = useTranslation()
   const [statusValue, setStatusValue] = useState<UserStatus>(user.status)
   const [roleValues, setRoleValues] = useState<UserRole[]>(user.roles)
 
@@ -21,23 +23,23 @@ export function UserLifecycleActions({ user }: UserLifecycleActionsProps) {
 
   const statusErrorMessage =
     updateStatusMutation.error instanceof HttpError && updateStatusMutation.error.status === 400
-      ? 'Unable to save the selected status.'
+      ? t('userForm.errorGeneric', 'Unable to save the selected status.')
       : updateStatusMutation.isError
-        ? 'Unable to update status right now.'
+        ? t('userForm.errorGeneric', 'Unable to update status right now.')
         : undefined
 
   const rolesErrorMessage =
     updateRolesMutation.error instanceof HttpError && updateRolesMutation.error.status === 400
-      ? 'Unable to save the selected roles.'
+      ? t('userForm.errorGeneric', 'Unable to save the selected roles.')
       : updateRolesMutation.isError
-        ? 'Unable to update roles right now.'
+        ? t('userForm.errorGeneric', 'Unable to update roles right now.')
         : undefined
 
   return (
     <>
       <Card className="border-border shadow-none">
         <CardHeader className="gap-1">
-          <CardTitle className="text-base font-medium">Status</CardTitle>
+          <CardTitle className="text-base font-medium">{t('userForm.labels.status', 'Status')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <select
@@ -47,7 +49,7 @@ export function UserLifecycleActions({ user }: UserLifecycleActionsProps) {
           >
             {userStatusOptions.map((status) => (
               <option key={status} value={status}>
-                {userStatusLabels[status] ?? status}
+                {t(`userForm.status.${status.toLowerCase()}`, userStatusLabels[status] ?? status)}
               </option>
             ))}
           </select>
@@ -62,14 +64,14 @@ export function UserLifecycleActions({ user }: UserLifecycleActionsProps) {
               await updateStatusMutation.mutateAsync(statusValue)
             }}
           >
-            {updateStatusMutation.isPending ? 'Saving status...' : 'Save status'}
+            {updateStatusMutation.isPending ? t('userForm.submittingEdit', 'Saving...') : t('userForm.submitEdit', 'Save status')}
           </Button>
         </CardContent>
       </Card>
 
       <Card className="border-border shadow-none">
         <CardHeader className="gap-1">
-          <CardTitle className="text-base font-medium">Roles</CardTitle>
+          <CardTitle className="text-base font-medium">{t('userForm.labels.roles', 'Roles')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <select
@@ -86,7 +88,7 @@ export function UserLifecycleActions({ user }: UserLifecycleActionsProps) {
           >
             {userRoleOptions.map((role) => (
               <option key={role} value={role}>
-                {userRoleLabels[role] ?? role}
+                {t(`userForm.roles.${role.toLowerCase()}`, userRoleLabels[role] ?? role)}
               </option>
             ))}
           </select>
@@ -104,7 +106,7 @@ export function UserLifecycleActions({ user }: UserLifecycleActionsProps) {
               await updateRolesMutation.mutateAsync(roleValues)
             }}
           >
-            {updateRolesMutation.isPending ? 'Saving roles...' : 'Save roles'}
+            {updateRolesMutation.isPending ? t('userForm.submittingEdit', 'Saving...') : t('userForm.submitEdit', 'Save roles')}
           </Button>
         </CardContent>
       </Card>

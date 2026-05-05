@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useApiHealth } from '@/features/setup/hooks/use-api-health'
+import { useSessionQuery } from '@/features/auth/hooks/use-session'
 
 export function HomePage() {
+  const { t } = useTranslation()
   const healthQuery = useApiHealth()
+  const sessionQuery = useSessionQuery({ enabled: true })
   const isHealthy = healthQuery.data === true
 
   return (
@@ -14,7 +18,7 @@ export function HomePage() {
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <p className="text-sm font-medium tracking-tight text-muted-foreground">
-              Asset inventory and access operations
+              {t('public.home.kicker', 'Asset inventory and access operations')}
             </p>
             <div
               className={`flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium transition-colors ${
@@ -34,45 +38,52 @@ export function HomePage() {
                       : 'bg-destructive'
                 }`}
               />
-              {isHealthy ? 'API Online' : healthQuery.isPending ? 'Checking API...' : 'API Offline'}
+              {isHealthy 
+                ? t('public.home.apiOnline', 'API Online') 
+                : healthQuery.isPending 
+                  ? t('public.home.apiChecking', 'Checking API...') 
+                  : t('public.home.apiOffline', 'API Offline')}
             </div>
           </div>
           <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-            AssetDock Web
+            {t('public.home.title', 'AssetDock Web')}
           </h1>
           <p className="max-w-2xl text-base leading-7 text-muted-foreground">
-            A sober browser interface for assets, users, imports, and audit activity,
-            built to work directly with the AssetDock API.
+            {t('public.home.description', 'A sober browser interface for assets, users, imports, and audit activity, built to work directly with the AssetDock API.')}
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Button asChild>
-            <Link to="/login">Open the app</Link>
+            <Link to={sessionQuery.data ? "/app" : "/login"}>
+              {sessionQuery.data ? t('public.home.openAppAuth', 'Open application') : t('public.home.openApp', 'Open the app')}
+            </Link>
           </Button>
-          <Button asChild variant="outline">
-            <Link to="/app">View authenticated area</Link>
-          </Button>
+          {sessionQuery.data && (
+            <Button asChild variant="outline">
+              <Link to="/app">{t('public.home.viewAuth', 'View authenticated area')}</Link>
+            </Button>
+          )}
         </div>
       </div>
 
       <Card className="border-border/80 bg-card/88 shadow-md backdrop-blur">
         <CardHeader>
           <CardTitle className="text-lg font-semibold tracking-tight">
-            Current MVP areas
+            {t('public.home.mvpTitle', 'Current MVP areas')}
           </CardTitle>
           <CardDescription className="leading-6">
-            The app already covers the main operational flows without adding visual noise.
+            {t('public.home.mvpDescription', 'The app already covers the main operational flows without adding visual noise.')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-muted-foreground">
           <div className="rounded-xl border border-border/70 bg-background/70 px-4 py-3">
-            Assets, lifecycle actions, and assignments
+            {t('public.home.mvpItem1', 'Assets, lifecycle actions, and assignments')}
           </div>
           <div className="rounded-xl border border-border/70 bg-background/70 px-4 py-3">
-            Users, roles, and status updates
+            {t('public.home.mvpItem2', 'Users, roles, and status updates')}
           </div>
           <div className="rounded-xl border border-border/70 bg-background/70 px-4 py-3">
-            Audit logs and CSV imports
+            {t('public.home.mvpItem3', 'Audit logs and CSV imports')}
           </div>
         </CardContent>
       </Card>

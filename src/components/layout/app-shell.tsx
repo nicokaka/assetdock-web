@@ -1,9 +1,13 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { Toaster } from '@/components/ui/sonner'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { LanguageToggle } from '@/components/language-toggle'
+import { useTranslation } from 'react-i18next'
 
 export function AppShell() {
   const location = useLocation()
   const isAuthenticatedArea = location.pathname.startsWith('/app')
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -26,12 +30,16 @@ export function AppShell() {
                 >
                   AssetDock Web
                 </Link>
-                <Link
-                  to="/login"
-                  className="rounded-lg border border-border/80 px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:border-border hover:bg-accent/70 hover:text-foreground"
-                >
-                  Login
-                </Link>
+                <div className="flex items-center gap-2">
+                  <LanguageToggle />
+                  <ThemeToggle />
+                  <Link
+                    to="/login"
+                    className="rounded-lg border border-border/80 px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:border-border hover:bg-accent/70 hover:text-foreground"
+                  >
+                    {t('common.login', 'Login')}
+                  </Link>
+                </div>
               </div>
             </header>
           ) : null}

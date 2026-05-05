@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next'
+
+import React from 'react'
 import { Badge } from '@/components/ui/badge'
 import {
   Table,
@@ -13,8 +16,8 @@ type AuditLogListProps = {
   items: AuditLogItem[]
 }
 
-function formatTimestamp(value: string) {
-  return new Intl.DateTimeFormat('en-US', {
+function formatTimestamp(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(new Date(value))
@@ -64,30 +67,32 @@ function outcomeVariant(value: AuditLogItem['outcome']) {
   return 'muted' as const
 }
 
-export function AuditLogList({ items }: AuditLogListProps) {
+export const AuditLogList = React.memo(function AuditLogList({ items }: AuditLogListProps) {
+  const { t, i18n } = useTranslation()
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Time</TableHead>
-          <TableHead>Event</TableHead>
-          <TableHead>Outcome</TableHead>
-          <TableHead>Actor</TableHead>
-          <TableHead>Target</TableHead>
+          <TableHead>{t('audit.table.date', 'Time')}</TableHead>
+          <TableHead>{t('audit.table.event', 'Event')}</TableHead>
+          <TableHead>{t('audit.table.outcome', 'Outcome')}</TableHead>
+          <TableHead>{t('audit.table.actor', 'Actor')}</TableHead>
+          <TableHead>{t('audit.table.target', 'Target')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {items.map((item) => (
           <TableRow key={item.id}>
             <TableCell className="whitespace-nowrap text-muted-foreground">
-              {formatTimestamp(item.occurredAt)}
+              {formatTimestamp(item.occurredAt, i18n.language)}
             </TableCell>
             <TableCell className="font-medium">
-              {formatEventType(item.eventType)}
+              {t(`app.overview.events.${item.eventType}`, formatEventType(item.eventType))}
             </TableCell>
             <TableCell>
               <Badge variant={outcomeVariant(item.outcome)}>
-                {(item.outcome ?? 'unknown').toLowerCase()}
+                {t(`audit.outcome.${item.outcome?.toLowerCase() ?? 'unknown'}`, (item.outcome ?? 'unknown').toLowerCase())}
               </Badge>
             </TableCell>
             <TableCell className="font-mono text-xs text-muted-foreground">
@@ -101,4 +106,4 @@ export function AuditLogList({ items }: AuditLogListProps) {
       </TableBody>
     </Table>
   )
-}
+})

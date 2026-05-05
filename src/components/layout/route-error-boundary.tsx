@@ -1,4 +1,4 @@
-import { useRouteError } from 'react-router-dom'
+import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 
@@ -13,7 +13,11 @@ export function RouteErrorBoundary() {
           An unexpected error occurred while trying to render this page.
         </p>
         <p className="text-sm font-mono text-destructive">
-          {error instanceof Error ? error.message : 'Unknown error'}
+          {isRouteErrorResponse(error)
+            ? `${error.status} ${error.statusText}`
+            : error instanceof Error
+              ? error.message
+              : 'Unknown error'}
         </p>
         <div className="pt-4">
           <Button onClick={() => window.location.assign('/')}>

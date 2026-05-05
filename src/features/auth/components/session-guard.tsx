@@ -4,10 +4,29 @@ import { Navigate } from 'react-router-dom'
 import { useSessionQuery } from '@/features/auth/hooks/use-session'
 import { useSetupStatus } from '@/features/setup/hooks/use-setup-status'
 
-function SessionLoadingState() {
+import { useTranslation } from 'react-i18next'
+import { useEffect, useState } from 'react'
+
+function SessionLoadingState({ isError }: { isError?: boolean }) {
+  const { t } = useTranslation()
+  const [showTimeout, setShowTimeout] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowTimeout(true)
+    }, 5000)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
-    <div className="py-10 text-sm text-muted-foreground">
-      Loading session...
+    <div className="py-10 text-sm text-muted-foreground flex flex-col items-center justify-center min-h-[50vh]">
+      {isError || showTimeout ? (
+        <span className="text-destructive">
+          {isError ? 'Connection error.' : 'Connection is taking too long.'} Please check your network and refresh.
+        </span>
+      ) : (
+        <span>{t('auth.loadingSession', 'Loading session...')}</span>
+      )}
     </div>
   )
 }
@@ -25,12 +44,24 @@ export function RequireSession({ children }: PropsWithChildren) {
     return <SessionLoadingState />
   }
 
+  if (setupQuery.isError) {
+    return <SessionLoadingState isError={true} />
+  }
+
   if (setupQuery.data && !setupQuery.data.configured) {
     return <Navigate to="/setup" replace />
   }
 
   if (sessionQuery.isPending) {
     return <SessionLoadingState />
+  }
+
+  if (sessionQuery.isError && !sessionQuery.data) {
+    // If it's a 401, data is null, so it will fall through to Navigate /login
+    // If it's a network error, data might be undefined
+    if (sessionQuery.error?.message === 'Network Error') {
+       return <SessionLoadingState isError={true} />
+    }
   }
 
   if (!sessionQuery.data) {
@@ -50,12 +81,20 @@ export function RedirectIfAuthenticated({ children }: PropsWithChildren) {
     return <SessionLoadingState />
   }
 
+  if (setupQuery.isError) {
+    return <SessionLoadingState isError={true} />
+  }
+
   if (setupQuery.data && !setupQuery.data.configured) {
     return <Navigate to="/setup" replace />
   }
 
   if (sessionQuery.isPending) {
     return <SessionLoadingState />
+  }
+
+  if (sessionQuery.isError && sessionQuery.error?.message === 'Network Error') {
+    return <SessionLoadingState isError={true} />
   }
 
   if (sessionQuery.data) {
@@ -70,6 +109,10 @@ export function RedirectIfConfigured({ children }: PropsWithChildren) {
 
   if (setupQuery.isPending) {
     return <SessionLoadingState />
+  }
+
+  if (setupQuery.isError) {
+    return <SessionLoadingState isError={true} />
   }
 
   if (setupQuery.data?.configured) {

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -21,6 +22,7 @@ interface AdminResetPasswordDialogProps {
 }
 
 export function AdminResetPasswordDialog({ userId, userRoles }: AdminResetPasswordDialogProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [newPassword, setNewPassword] = useState('')
   const [success, setSuccess] = useState(false)
@@ -66,32 +68,32 @@ export function AdminResetPasswordDialog({ userId, userRoles }: AdminResetPasswo
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="text-destructive hover:text-destructive">
-          Reset password
+          {t('details.user.resetPasswordTitle', 'Reset password')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Reset user password</DialogTitle>
+            <DialogTitle>{t('details.user.resetPasswordTitle', 'Reset user password')}</DialogTitle>
             <DialogDescription>
-              Set a new temporary password for this user. This will revoke all their active sessions and unlock their account if it is locked.
+              {t('details.user.resetPasswordDescription', 'Set a new temporary password for this user. This will revoke all their active sessions and unlock their account if it is locked.')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="new-password">New password</Label>
+              <Label htmlFor="new-password">{t('details.user.newPasswordLabel', 'New password')}</Label>
               <Input
                 id="new-password"
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Enter new password"
+                placeholder={t('details.user.newPasswordPlaceholder', 'Enter new password')}
                 autoComplete="new-password"
                 required
               />
               {success ? (
                 <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
-                  Password reset successfully. Closing...
+                  {t('details.user.resetSuccess', 'Password reset successfully. Closing...')}
                 </p>
               ) : null}
             </div>
@@ -103,10 +105,10 @@ export function AdminResetPasswordDialog({ userId, userRoles }: AdminResetPasswo
               onClick={() => setOpen(false)}
               disabled={resetPasswordMutation.isPending || success}
             >
-              Cancel
+              {t('details.asset.archiveCancel', 'Cancel')}
             </Button>
             <Button type="submit" disabled={resetPasswordMutation.isPending || newPassword.length === 0 || success}>
-              {resetPasswordMutation.isPending ? 'Resetting...' : 'Reset password'}
+              {resetPasswordMutation.isPending ? t('details.user.resetting', 'Resetting...') : t('details.user.resetConfirm', 'Reset password')}
             </Button>
           </DialogFooter>
         </form>

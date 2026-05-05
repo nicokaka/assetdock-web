@@ -1,8 +1,11 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { Search } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { CommandPalette } from '@/components/ui/command-palette'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { LanguageToggle } from '@/components/language-toggle'
 import { useLogoutMutation, useSessionQuery } from '@/features/auth/hooks/use-session'
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { cn } from '@/lib/utils'
@@ -11,6 +14,7 @@ export function AuthenticatedShell() {
   const sessionQuery = useSessionQuery()
   const logoutMutation = useLogoutMutation()
   const { stats } = useDashboardStats()
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -41,7 +45,7 @@ export function AuthenticatedShell() {
                       )
                     }
                   >
-                    Overview
+                    {t('app.header.overview', 'Overview')}
                   </NavLink>
                   <NavLink
                     to="/app/assets"
@@ -52,7 +56,7 @@ export function AuthenticatedShell() {
                       )
                     }
                   >
-                    Assets {stats.total > 0 && <span className="ml-1 opacity-60">({stats.total})</span>}
+                    {t('app.header.assets', 'Assets')} {stats.total > 0 && <span className="ml-1 opacity-60">({stats.total})</span>}
                   </NavLink>
                   <NavLink
                     to="/app/users"
@@ -63,7 +67,7 @@ export function AuthenticatedShell() {
                       )
                     }
                   >
-                    Users {stats.userCount > 0 && <span className="ml-1 opacity-60">({stats.userCount})</span>}
+                    {t('app.header.users', 'Users')} {stats.userCount > 0 && <span className="ml-1 opacity-60">({stats.userCount})</span>}
                   </NavLink>
                   <NavLink
                     to="/app/imports"
@@ -74,7 +78,7 @@ export function AuthenticatedShell() {
                       )
                     }
                   >
-                    Imports
+                    {t('app.header.imports', 'Imports')}
                   </NavLink>
                   <NavLink
                     to="/app/audit-logs"
@@ -85,21 +89,24 @@ export function AuthenticatedShell() {
                       )
                     }
                   >
-                    Audit Logs
+                    {t('app.header.auditLogs', 'Audit Logs')}
                   </NavLink>
                 </nav>
                 <div className="flex items-center gap-2 self-start lg:self-auto">
                   <div className="hidden lg:flex items-center text-sm text-muted-foreground/60 mr-2">
-                    Press <kbd className="mx-1 rounded border bg-muted px-1.5 font-mono text-[10px]">Cmd K</kbd> to search
+                    {t('app.header.press', 'Press')} <kbd className="mx-1 rounded border bg-muted px-1.5 font-mono text-[10px]">Cmd K</kbd> {t('app.header.toSearch', 'to search')}
                   </div>
+                  <LanguageToggle />
+                  <ThemeToggle />
                   <Button
                     variant="outline"
                     onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
                     className="border-border/80 bg-background/80 hover:bg-accent/80"
                     size="icon"
+                    title={t('app.header.search', 'Search')}
                   >
                     <Search className="h-4 w-4" />
-                    <span className="sr-only">Search</span>
+                    <span className="sr-only">{t('app.header.search', 'Search')}</span>
                   </Button>
                   <Button
                     variant="outline"
@@ -107,7 +114,7 @@ export function AuthenticatedShell() {
                     disabled={logoutMutation.isPending}
                     className="border-border/80 bg-background/80 hover:bg-accent/80"
                   >
-                    {logoutMutation.isPending ? '...' : 'Sign out'}
+                    {logoutMutation.isPending ? '...' : t('app.header.signOut', 'Sign out')}
                   </Button>
                 </div>
               </div>

@@ -76,18 +76,26 @@ export class HttpClient {
       }
     }
 
-    const response = await fetch(`${this.baseUrl}${path}`, {
-      method,
-      signal,
-      credentials: 'include',
-      headers: requestHeaders,
-      body:
-        body === undefined
-          ? undefined
-          : isFormData(body)
-            ? body
-            : JSON.stringify(body),
-    })
+    let response: Response
+    try {
+      response = await fetch(`${this.baseUrl}${path}`, {
+        method,
+        signal,
+        credentials: 'include',
+        headers: requestHeaders,
+        body:
+          body === undefined
+            ? undefined
+            : isFormData(body)
+              ? body
+              : JSON.stringify(body),
+      })
+    } catch (error) {
+      if (error instanceof TypeError) {
+        throw new HttpError(0, { message: 'Network Error', detail: 'A connection to the server could not be established.' })
+      }
+      throw error
+    }
 
     if (!response.ok) {
       let body: unknown = undefined
@@ -110,7 +118,12 @@ export class HttpClient {
       return undefined as TResponse
     }
 
-    return (await response.json()) as TResponse
+    const contentType = response.headers.get('content-type')
+    if (contentType && contentType.includes('application/json')) {
+      return (await response.json()) as TResponse
+    }
+
+    return (await response.text()) as unknown as TResponse
   }
 }
 

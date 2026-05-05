@@ -1,0 +1,340 @@
+{
+  "common": {
+    "welcome": "Bem-vindo ao AssetDock",
+    "login": "Entrar"
+  },
+  "auth": {
+    "login": {
+      "subtitle": "Login da sessão do navegador",
+      "title": "Entrar",
+      "description": "Use suas credenciais do AssetDock para acessar o ambiente seguro de ativos, usuários, importações e auditorias.",
+      "accessApp": "Acessar o aplicativo",
+      "accessAppDescription": "A sessão atual permanece no navegador através do fluxo de autenticação do backend.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "nome@empresa.com.br",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite sua senha",
+      "hidePassword": "Ocultar senha",
+      "showPassword": "Mostrar senha",
+      "submitButton": "Entrar",
+      "submitButtonLoading": "Entrando...",
+      "forgotPassword": "Esqueceu sua senha? Contate o administrador da sua organização.",
+      "errorGeneric": "Não foi possível fazer login neste momento.",
+      "errorInvalid": "E-mail ou senha inválidos.",
+      "errorLocked": "Sua conta foi bloqueada. Contate o administrador."
+    }
+  },
+  "app": {
+    "header": {
+      "overview": "Visão Geral",
+      "assets": "Ativos",
+      "users": "Usuários",
+      "imports": "Importações",
+      "auditLogs": "Logs de Auditoria",
+      "press": "Pressione",
+      "toSearch": "para buscar",
+      "signOut": "Sair",
+      "search": "Buscar"
+    },
+    "assets": {
+      "title": "Ativos",
+      "description": "Analise os ativos disponíveis para a sessão atual.",
+      "newAsset": "Novo Ativo",
+      "searchPlaceholder": "Buscar por tag, nome ou serial...",
+      "allStatuses": "Todos os Status",
+      "errorTitle": "Não foi possível carregar os ativos",
+      "emptyTitle": "Nenhum ativo encontrado",
+      "emptyDescriptionFilters": "Tente ajustar seus filtros.",
+      "emptyDescriptionStart": "Crie o primeiro ativo para começar a trabalhar com a área de inventário."
+    },
+    "users": {
+      "title": "Usuários",
+      "description": "Gerencie os usuários que têm acesso ao painel.",
+      "newUser": "Novo Usuário",
+      "searchPlaceholder": "Buscar usuários por nome ou email...",
+      "errorTitle": "Não foi possível carregar os usuários",
+      "errorDescription": "Por favor, atualize a página ou tente novamente em instantes.",
+      "emptyTitle": "Nenhum usuário encontrado",
+      "emptyDescriptionFilters": "Nenhum usuário corresponde à sua busca.",
+      "emptyDescriptionStart": "Crie o primeiro usuário quando este workspace estiver pronto para crescer."
+    },
+    "overview": {
+      "title": "Visão Geral",
+      "description": "Status do inventário de ativos e atividade operacional recente.",
+      "kpi": {
+        "totalAssets": "Total de Ativos",
+        "totalAssetsSub": "em todas as categorias",
+        "assigned": "Atribuídos",
+        "assignedSub": "operacionais (atribuídos + em estoque)",
+        "users": "Usuários",
+        "usersSub": "registrados na org",
+        "issues": "Problemas",
+        "issuesSub": "perdidos ou em manutenção"
+      },
+      "health": {
+        "title": "Saúde dos Ativos",
+        "operational": "operacional"
+      },
+      "distribution": {
+        "title": "Distribuição de Ativos",
+        "noData": "Sem dados",
+        "total": "total"
+      },
+      "activity": {
+        "title": "Atividade Recente",
+        "viewAll": "Ver tudo",
+        "noActivity": "Nenhuma atividade ainda.",
+        "justNow": "agora mesmo",
+        "mAgo": "m atrás",
+        "hAgo": "h atrás",
+        "dAgo": "d atrás"
+      },
+      "status": {
+        "ASSIGNED": "Atribuído",
+        "IN_STOCK": "Em Estoque",
+        "IN_MAINTENANCE": "Em Manutenção",
+        "RETIRED": "Aposentado",
+        "LOST": "Perdido"
+      },
+      "events": {
+        "LOGIN_SUCCESS": "Login bem-sucedido",
+        "LOGIN_FAILURE": "Tentativa de login falhou",
+        "USER_CREATED": "Usuário criado",
+        "USER_UPDATED": "Usuário atualizado",
+        "USER_DISABLED": "Usuário desativado",
+        "USER_LOCKED": "Usuário bloqueado",
+        "USER_UNLOCKED": "Usuário desbloqueado",
+        "USER_REACTIVATED": "Usuário reativado",
+        "USER_ROLES_UPDATED": "Funções do usuário atualizadas",
+        "ASSET_CREATED": "Ativo criado",
+        "ASSET_UPDATED": "Ativo atualizado",
+        "ASSET_ARCHIVED": "Ativo arquivado",
+        "ASSET_ASSIGNED": "Ativo atribuído",
+        "ASSET_UNASSIGNED": "Ativo desatribuído",
+        "CSV_IMPORT_STARTED": "Importação CSV iniciada",
+        "CSV_IMPORT_COMPLETED": "Importação CSV concluída",
+        "CSV_IMPORT_FAILED": "Importação CSV falhou",
+        "WEB_SESSION_CREATED": "Sessão iniciada",
+        "WEB_SESSION_LOGGED_OUT": "Sessão encerrada",
+        "WEB_SESSION_EXPIRED": "Sessão expirada"
+      }
+    }
+  },
+  "public": {
+    "home": {
+      "kicker": "Inventário de ativos e operações de acesso",
+      "apiOnline": "API Online",
+      "apiChecking": "Verificando API...",
+      "apiOffline": "API Offline",
+      "title": "AssetDock Web",
+      "description": "Uma interface de navegador sóbria para ativos, usuários, importações e auditoria, construída para funcionar com a API do AssetDock.",
+      "openApp": "Abrir o app",
+      "viewAuth": "Ver área autenticada",
+      "mvpTitle": "Áreas atuais do MVP",
+      "mvpDescription": "O aplicativo já cobre os principais fluxos operacionais sem adicionar ruído visual.",
+      "mvpItem1": "Ativos, ciclo de vida e atribuições",
+      "mvpItem2": "Usuários, funções e status",
+      "mvpItem3": "Logs de auditoria e importações CSV"
+    }
+  },
+  "assetForm": {
+    "titleNew": "Novo Ativo",
+    "descriptionNew": "Crie um novo ativo com os campos suportados no aplicativo.",
+    "titleEdit": "Editar Ativo",
+    "descriptionEdit": "Atualize as informações do ativo e os dados do ciclo de vida.",
+    "labels": {
+      "assetTag": "Tag do ativo",
+      "displayName": "Nome de exibição",
+      "serialNumber": "Número de série",
+      "category": "Categoria",
+      "manufacturer": "Fabricante",
+      "hostname": "Hostname",
+      "location": "Localização",
+      "description": "Descrição",
+      "status": "Status",
+      "purchaseDate": "Data de compra",
+      "warrantyExpiryDate": "Validade da garantia"
+    },
+    "placeholders": {
+      "assetTag": "ex. AST-001",
+      "displayName": "ex. MacBook Pro 14",
+      "serialNumber": "ex. C02XXXXXXX",
+      "noCategory": "Sem categoria",
+      "noManufacturer": "Sem fabricante",
+      "hostname": "ex. assetdock-mbp-14",
+      "noLocation": "Sem localização",
+      "description": "Qualquer informação adicional...",
+      "pickDate": "Escolha uma data"
+    },
+    "submitNew": "Criar ativo",
+    "submittingNew": "Criando...",
+    "submitEdit": "Salvar alterações",
+    "submittingEdit": "Salvando...",
+    "back": "Voltar aos ativos",
+    "errorNew": "Não foi possível criar o ativo com os dados fornecidos.",
+    "errorEdit": "Não foi possível atualizar o ativo com os dados fornecidos.",
+    "errorGeneric": "Não foi possível processar a requisição."
+  },
+  "userForm": {
+    "titleNew": "Novo Usuário",
+    "descriptionNew": "Crie um novo usuário. Ele receberá um e-mail para configurar a senha, se configurado.",
+    "titleEdit": "Editar Usuário",
+    "descriptionEdit": "Atualize o perfil do usuário e as funções do sistema.",
+    "labels": {
+      "fullName": "Nome completo",
+      "email": "Endereço de e-mail",
+      "roles": "Funções",
+      "status": "Status"
+    },
+    "placeholders": {
+      "fullName": "ex. João Silva",
+      "email": "ex. joao.silva@empresa.com.br"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "manager": "Gerente",
+      "viewer": "Visualizador"
+    },
+    "status": {
+      "active": "Ativo",
+      "disabled": "Desativado",
+      "locked": "Bloqueado"
+    },
+    "submitNew": "Criar usuário",
+    "submittingNew": "Criando...",
+    "submitEdit": "Salvar alterações",
+    "submittingEdit": "Salvando...",
+    "back": "Voltar aos usuários",
+    "errorNew": "Não foi possível criar o usuário com os dados fornecidos.",
+    "errorEdit": "Não foi possível atualizar o usuário com os dados fornecidos.",
+    "errorGeneric": "Não foi possível processar a requisição."
+  },
+  "details": {
+    "actions": {
+      "edit": "Editar",
+      "archive": "Arquivar",
+      "resetPassword": "Redefinir Senha",
+      "delete": "Excluir",
+      "assign": "Atribuir Ativo",
+      "return": "Devolver Ativo"
+    },
+    "badges": {
+      "archived": "Arquivado",
+      "operational": "Operacional",
+      "maintenance": "Manutenção",
+      "lost": "Perdido"
+    },
+    "sections": {
+      "hardware": "Informações de Hardware",
+      "lifecycle": "Dados do Ciclo de Vida",
+      "assignments": "Atribuição Atual",
+      "history": "Histórico do Ativo",
+      "security": "Segurança",
+      "contact": "Informações de Contato"
+    },
+    "asset": {
+      "notFound": "Ativo não encontrado.",
+      "archiveTitle": "Arquivar Ativo",
+      "archiveDescription": "Tem certeza de que deseja arquivar este ativo? Esta ação ocultará o ativo das listas ativas.",
+      "archiveConfirm": "Sim, arquivar",
+      "archiveCancel": "Cancelar",
+      "unassigned": "Este ativo não está atribuído no momento.",
+      "assignedTo": "Atribuído a",
+      "assignedSince": "Desde"
+    },
+    "assignments": {
+      "title": "Atribuições",
+      "description": "Atribua este ativo a um usuário e revise o histórico de atribuições.",
+      "user": "Usuário",
+      "selectUser": "Selecione um usuário",
+      "location": "Localização",
+      "notes": "Notas",
+      "notesPlaceholder": "Nota opcional",
+      "activeMsg": "Existe uma atribuição ativa para este ativo.",
+      "inactiveMsg": "Não há atribuição ativa para este ativo.",
+      "assign": "Atribuir ativo",
+      "assigning": "Atribuindo...",
+      "remove": "Remover atribuição",
+      "removing": "Removendo...",
+      "history": "Histórico",
+      "loading": "Carregando atribuições...",
+      "error": "Não foi possível carregar as atribuições.",
+      "empty": "Nenhuma atribuição ainda.",
+      "closed": "Fechada",
+      "active": "Ativa",
+      "assignedDate": "Atribuído em",
+      "unassignedDate": "Devolvido em",
+      "assignedBy": "Atribuído por"
+    },
+    "user": {
+      "notFound": "Usuário não encontrado.",
+      "resetPasswordTitle": "Redefinir Senha",
+      "resetPasswordDescription": "Insira uma nova senha temporária para este usuário. Eles devem alterá-la no próximo login.",
+      "newPasswordLabel": "Nova Senha",
+      "newPasswordPlaceholder": "Digite a nova senha",
+      "resetConfirm": "Redefinir Senha",
+      "resetting": "Redefinindo...",
+      "resetSuccess": "Senha redefinida com sucesso.",
+      "resetError": "Falha ao redefinir a senha."
+    }
+  },
+  "audit": {
+    "title": "Logs de Auditoria",
+    "description": "Revise eventos do sistema e mudanças operacionais.",
+    "table": {
+      "event": "Evento",
+      "actor": "Ator",
+      "target": "Alvo",
+      "outcome": "Resultado",
+      "date": "Data"
+    },
+    "emptyTitle": "Nenhum log de auditoria encontrado",
+    "emptyDescription": "A atividade do sistema aparecerá aqui.",
+    "errorTitle": "Não foi possível carregar os logs",
+    "errorDescription": "Por favor, atualize a página."
+  },
+  "imports": {
+    "title": "Importações",
+    "description": "Importação em lote de ativos para o inventário.",
+    "newImport": "Nova Importação",
+    "table": {
+      "filename": "Nome do arquivo",
+      "status": "Status",
+      "progress": "Progresso",
+      "date": "Data"
+    },
+    "status": {
+      "PENDING": "Pendente",
+      "PROCESSING": "Processando",
+      "COMPLETED": "Concluído",
+      "FAILED": "Falhou"
+    },
+    "emptyTitle": "Nenhuma importação encontrada",
+    "emptyDescription": "Comece enviando um arquivo CSV com seus ativos.",
+    "errorTitle": "Não foi possível carregar as importações",
+    "dropzone": {
+      "title": "Enviar CSV",
+      "description": "Arraste e solte um arquivo CSV aqui, ou clique para selecionar.",
+      "uploading": "Enviando..."
+    }
+  },
+  "setup": {
+    "title": "Configuração Inicial",
+    "description": "Configure a organização raiz e a conta do administrador para inicializar o ambiente.",
+    "labels": {
+      "orgName": "Nome da Organização",
+      "adminName": "Nome do Administrador",
+      "adminEmail": "E-mail do Administrador",
+      "adminPassword": "Senha",
+      "confirmPassword": "Confirmar Senha"
+    },
+    "placeholders": {
+      "orgName": "ex. Hebron Farmacêutica",
+      "adminName": "ex. Administrador do Sistema",
+      "adminEmail": "admin@empresa.com.br"
+    },
+    "submit": "Concluir Configuração",
+    "submitting": "Configurando...",
+    "errorGeneric": "Não foi possível concluir a configuração. O ambiente pode já estar configurado."
+  }
+}

@@ -1,11 +1,13 @@
-type Rule = { label: string; test: (pw: string) => boolean }
+import { useTranslation } from 'react-i18next'
+
+type Rule = { labelKey: string; defaultLabel: string; test: (pw: string) => boolean }
 
 const RULES: Rule[] = [
-  { label: '8+ characters', test: (pw) => pw.length >= 8 },
-  { label: 'Uppercase letter', test: (pw) => /[A-Z]/.test(pw) },
-  { label: 'Lowercase letter', test: (pw) => /[a-z]/.test(pw) },
-  { label: 'Number', test: (pw) => /[0-9]/.test(pw) },
-  { label: 'Special character', test: (pw) => /[^A-Za-z0-9]/.test(pw) },
+  { labelKey: 'setup.rules.length', defaultLabel: '8+ characters', test: (pw) => pw.length >= 8 },
+  { labelKey: 'setup.rules.uppercase', defaultLabel: 'Uppercase letter', test: (pw) => /[A-Z]/.test(pw) },
+  { labelKey: 'setup.rules.lowercase', defaultLabel: 'Lowercase letter', test: (pw) => /[a-z]/.test(pw) },
+  { labelKey: 'setup.rules.number', defaultLabel: 'Number', test: (pw) => /[0-9]/.test(pw) },
+  { labelKey: 'setup.rules.special', defaultLabel: 'Special character', test: (pw) => /[^A-Za-z0-9]/.test(pw) },
 ]
 
 type Props = {
@@ -13,6 +15,7 @@ type Props = {
 }
 
 export function PasswordStrengthIndicator({ password }: Props) {
+  const { t } = useTranslation()
   if (!password) return null
 
   const passed = RULES.filter((r) => r.test(password)).length
@@ -42,12 +45,12 @@ export function PasswordStrengthIndicator({ password }: Props) {
           const ok = rule.test(password)
           return (
             <span
-              key={rule.label}
+              key={rule.labelKey}
               className={`text-xs transition-colors duration-150 ${
                 ok ? 'text-green-600' : 'text-muted-foreground'
               }`}
             >
-              {ok ? '✓' : '○'} {rule.label}
+              {ok ? '✓' : '○'} {t(rule.labelKey, rule.defaultLabel)}
             </span>
           )
         })}

@@ -1,4 +1,5 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -26,6 +27,7 @@ function toDefaultValues(
 
 export function UserEditPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { userId = '' } = useParams()
   const userQuery = useUserDetailQuery(userId)
   const updateUserMutation = useUpdateUserMutation(userId)
@@ -48,9 +50,9 @@ export function UserEditPage() {
     (updateStatusMutation.error instanceof HttpError && updateStatusMutation.error.status === 400)
 
   const errorMessage = isValidationError
-    ? 'Unable to save the user with the provided data.'
+    ? t('userForm.errorEdit', 'Unable to save the user with the provided data.')
     : isAnyError
-      ? 'Unable to save the user right now.'
+      ? t('userForm.errorGeneric', 'Unable to save the user right now.')
       : undefined
 
   async function handleSubmit(values: UserEditFormValues) {
@@ -83,9 +85,9 @@ export function UserEditPage() {
   return (
     <section className="space-y-6">
       <div>
-        <Link to={`/app/users/${userId}`} className={buttonVariants({ variant: 'outline' })}>
-          Back to user
-        </Link>
+        <button onClick={() => navigate(`/app/users/${userId}`)} className={buttonVariants({ variant: 'outline' })}>
+          {t('userForm.back', 'Back to user')}
+        </button>
       </div>
 
       {userQuery.isPending ? (
@@ -111,10 +113,10 @@ export function UserEditPage() {
         <Card className="max-w-2xl border-border shadow-none">
           <CardHeader>
             <CardTitle className="text-2xl font-semibold tracking-tight">
-              Edit User
+              {t('userForm.titleEdit', 'Edit User')}
             </CardTitle>
             <CardDescription>
-              Update the user profile, roles, and status. Password changes are not supported here.
+              {t('userForm.descriptionEdit', 'Update the user profile, roles, and status.')}
             </CardDescription>
           </CardHeader>
           <CardContent>

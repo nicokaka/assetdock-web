@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -42,6 +43,7 @@ export function AssetForm({
   errorMessage,
   onSubmit,
 }: AssetFormProps) {
+  const { t } = useTranslation()
   const categoriesQuery = useCategoriesQuery()
   const manufacturersQuery = useManufacturersQuery()
   const locationsQuery = useLocationsQuery()
@@ -62,9 +64,9 @@ export function AssetForm({
           name="assetTag"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Asset tag</FormLabel>
+              <FormLabel>{t('assetForm.labels.assetTag', 'Asset tag')}</FormLabel>
               <FormControl>
-                <Input placeholder="AST-001" {...field} />
+                <Input placeholder={t('assetForm.placeholders.assetTag', 'e.g. AST-001')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -75,9 +77,9 @@ export function AssetForm({
           name="displayName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Display name</FormLabel>
+              <FormLabel>{t('assetForm.labels.displayName', 'Display name')}</FormLabel>
               <FormControl>
-                <Input placeholder="MacBook Pro 14" {...field} />
+                <Input placeholder={t('assetForm.placeholders.displayName', 'e.g. MacBook Pro 14')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -88,9 +90,9 @@ export function AssetForm({
           name="serialNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Serial number</FormLabel>
+              <FormLabel>{t('assetForm.labels.serialNumber', 'Serial number')}</FormLabel>
               <FormControl>
-                <Input placeholder="C02XXXXXXX" {...field} />
+                <Input placeholder={t('assetForm.placeholders.serialNumber', 'e.g. C02XXXXXXX')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -101,7 +103,7 @@ export function AssetForm({
           name="categoryId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>{t('assetForm.labels.category', 'Category')}</FormLabel>
               <FormControl>
                 <select
                   {...field}
@@ -111,7 +113,7 @@ export function AssetForm({
                     {getLookupStateMessage(
                       categoriesQuery.isPending,
                       categoriesQuery.isError,
-                      'No category'
+                      t('assetForm.placeholders.noCategory', 'No category')
                     )}
                   </option>
                   {categories.map((item) => (
@@ -130,7 +132,7 @@ export function AssetForm({
           name="manufacturerId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Manufacturer</FormLabel>
+              <FormLabel>{t('assetForm.labels.manufacturer', 'Manufacturer')}</FormLabel>
               <FormControl>
                 <select
                   {...field}
@@ -140,7 +142,7 @@ export function AssetForm({
                     {getLookupStateMessage(
                       manufacturersQuery.isPending,
                       manufacturersQuery.isError,
-                      'No manufacturer'
+                      t('assetForm.placeholders.noManufacturer', 'No manufacturer')
                     )}
                   </option>
                   {manufacturers.map((item) => (
@@ -159,9 +161,9 @@ export function AssetForm({
           name="hostname"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Hostname</FormLabel>
+              <FormLabel>{t('assetForm.labels.hostname', 'Hostname')}</FormLabel>
               <FormControl>
-                <Input placeholder="assetdock-mbp-14" {...field} />
+                <Input placeholder={t('assetForm.placeholders.hostname', 'e.g. assetdock-mbp-14')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -172,7 +174,7 @@ export function AssetForm({
           name="currentLocationId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Location</FormLabel>
+              <FormLabel>{t('assetForm.labels.location', 'Location')}</FormLabel>
               <FormControl>
                 <select
                   {...field}
@@ -182,7 +184,7 @@ export function AssetForm({
                     {getLookupStateMessage(
                       locationsQuery.isPending,
                       locationsQuery.isError,
-                      'No location'
+                      t('assetForm.placeholders.noLocation', 'No location')
                     )}
                   </option>
                   {locations.map((item) => (
@@ -201,9 +203,9 @@ export function AssetForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t('assetForm.labels.description', 'Description')}</FormLabel>
               <FormControl>
-                <Textarea placeholder="Primary engineering laptop" {...field} />
+                <Textarea placeholder={t('assetForm.placeholders.description', 'Any additional information...')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

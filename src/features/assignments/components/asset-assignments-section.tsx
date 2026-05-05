@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -20,6 +21,7 @@ type AssetAssignmentsSectionProps = {
 
 
 export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProps) {
+  const { t } = useTranslation()
   const [userId, setUserId] = useState('')
   const [locationId, setLocationId] = useState('')
   const [notes, setNotes] = useState('')
@@ -79,16 +81,16 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
   return (
     <Card className="border-border shadow-none">
       <CardHeader className="gap-1">
-        <CardTitle className="text-lg font-semibold tracking-tight">Assignments</CardTitle>
+        <CardTitle className="text-lg font-semibold tracking-tight">{t('details.assignments.title', 'Assignments')}</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Assign this asset to a user and review the assignment history.
+          {t('details.assignments.description', 'Assign this asset to a user and review the assignment history.')}
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
         <form className="space-y-4 rounded-md border border-border p-4" onSubmit={handleAssignSubmit}>
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-2 text-sm">
-              <span className="text-muted-foreground">User</span>
+              <span className="text-muted-foreground">{t('details.assignments.user', 'User')}</span>
               <select
                 value={userId}
                 onChange={(event) => setUserId(event.target.value)}
@@ -97,7 +99,7 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
                 required
               >
                 <option value="">
-                  {getLookupStateMessage(usersQuery.isPending, usersQuery.isError, 'Select a user')}
+                  {getLookupStateMessage(usersQuery.isPending, usersQuery.isError, t('details.assignments.selectUser', 'Select a user'))}
                 </option>
                 {users.map((user) => (
                   <option key={user.id} value={user.id}>
@@ -108,7 +110,7 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
             </label>
 
             <label className="grid gap-2 text-sm">
-              <span className="text-muted-foreground">Location</span>
+              <span className="text-muted-foreground">{t('details.assignments.location', 'Location')}</span>
               <select
                 value={locationId}
                 onChange={(event) => setLocationId(event.target.value)}
@@ -119,7 +121,7 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
                   {getLookupStateMessage(
                     locationsQuery.isPending,
                     locationsQuery.isError,
-                    'No location',
+                    t('assetForm.placeholders.noLocation', 'No location'),
                   )}
                 </option>
                 {locations.map((location) => (
@@ -132,26 +134,26 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
           </div>
 
           <label className="grid gap-2 text-sm">
-            <span className="text-muted-foreground">Notes</span>
+            <span className="text-muted-foreground">{t('details.assignments.notes', 'Notes')}</span>
             <textarea
               value={notes}
               onChange={(event) => setNotes(event.target.value)}
               rows={3}
               disabled={assignMutation.isPending}
               className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-              placeholder="Optional note"
+              placeholder={t('details.assignments.notesPlaceholder', 'Optional note')}
             />
           </label>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">
               {activeAssignment
-                ? 'There is an active assignment for this asset.'
-                : 'There is no active assignment for this asset.'}
+                ? t('details.assignments.activeMsg', 'There is an active assignment for this asset.')
+                : t('details.assignments.inactiveMsg', 'There is no active assignment for this asset.')}
             </p>
             <div className="flex gap-2">
               <Button type="submit" disabled={!userId || assignMutation.isPending}>
-                {assignMutation.isPending ? 'Assigning...' : 'Assign asset'}
+                {assignMutation.isPending ? t('details.assignments.assigning', 'Assigning...') : t('details.assignments.assign', 'Assign asset')}
               </Button>
               <Button
                 type="button"
@@ -159,7 +161,7 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
                 disabled={!activeAssignment || unassignMutation.isPending}
                 onClick={() => void handleUnassign()}
               >
-                {unassignMutation.isPending ? 'Removing...' : 'Unassign'}
+                {unassignMutation.isPending ? t('details.assignments.removing', 'Removing...') : t('details.assignments.remove', 'Unassign')}
               </Button>
             </div>
           </div>
@@ -173,18 +175,18 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
         </form>
 
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-foreground">History</h3>
+          <h3 className="text-sm font-medium text-foreground">{t('details.assignments.history', 'History')}</h3>
 
           {assignmentsQuery.isPending ? (
-            <p className="text-sm text-muted-foreground">Loading assignments...</p>
+            <p className="text-sm text-muted-foreground">{t('details.assignments.loading', 'Loading assignments...')}</p>
           ) : null}
 
           {assignmentsQuery.isError ? (
-            <p className="text-sm text-destructive">Unable to load assignments right now.</p>
+            <p className="text-sm text-destructive">{t('details.assignments.error', 'Unable to load assignments right now.')}</p>
           ) : null}
 
           {assignmentsQuery.isSuccess && assignments.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No assignments yet.</p>
+            <p className="text-sm text-muted-foreground">{t('details.assignments.empty', 'No assignments yet.')}</p>
           ) : null}
 
           {assignmentsQuery.isSuccess && assignments.length > 0 ? (
@@ -205,14 +207,14 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
                         {assigneeName}
                       </p>
                       <Badge variant={assignment.unassignedAt ? 'muted' : 'success'}>
-                        {assignment.unassignedAt ? 'Closed' : 'Active'}
+                        {assignment.unassignedAt ? t('details.assignments.closed', 'Closed') : t('details.assignments.active', 'Active')}
                       </Badge>
                     </div>
                     <div className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-                      <p>Assigned: {formatTimestamp(assignment.assignedAt)}</p>
-                      <p>Unassigned: {formatTimestamp(assignment.unassignedAt)}</p>
-                      <p>Location: {locationName}</p>
-                      <p>Assigned by: {assignerName}</p>
+                      <p>{t('details.assignments.assignedDate', 'Assigned')}: {formatTimestamp(assignment.assignedAt)}</p>
+                      <p>{t('details.assignments.unassignedDate', 'Unassigned')}: {formatTimestamp(assignment.unassignedAt)}</p>
+                      <p>{t('details.assignments.location', 'Location')}: {locationName}</p>
+                      <p>{t('details.assignments.assignedBy', 'Assigned by')}: {assignerName}</p>
                     </div>
                     {assignment.notes ? (
                       <p className="mt-3 text-sm text-foreground">{assignment.notes}</p>

@@ -14,7 +14,7 @@ export function useResetPassword({ userId, onSuccess }: UseResetPasswordOptions)
     mutationFn: (input: ResetPasswordInput) => resetPassword(userId, input),
     onSuccess: () => {
       // Invalidate the user details query to reflect any status changes (like unlocking)
-      void queryClient.invalidateQueries({ queryKey: ['users', userId] })
+      void queryClient.invalidateQueries({ queryKey: ['users'] })
       onSuccess?.()
     },
   })

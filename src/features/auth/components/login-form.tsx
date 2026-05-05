@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { HttpError } from '@/lib/http-client'
 import { useLoginMutation } from '@/features/auth/hooks/use-session'
@@ -22,6 +23,7 @@ export function LoginForm() {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const loginMutation = useLoginMutation()
+  const { t } = useTranslation()
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -37,13 +39,13 @@ export function LoginForm() {
       await loginMutation.mutateAsync(values)
       navigate('/app', { replace: true })
     } catch (error) {
-      let message = 'Unable to sign in right now.'
+      let message = t('auth.login.errorGeneric', 'Unable to sign in right now.')
       
       if (error instanceof HttpError) {
         if (error.status === 401) {
-          message = 'Invalid email or password.'
+          message = t('auth.login.errorInvalid', 'Invalid email or password.')
         } else if (error.status === 423) {
-          message = 'Your account has been locked. Contact your administrator.'
+          message = t('auth.login.errorLocked', 'Your account has been locked. Contact your administrator.')
         }
       }
 
@@ -60,9 +62,9 @@ export function LoginForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t('auth.login.emailLabel', 'Email')}</FormLabel>
                 <FormControl>
-                  <Input autoComplete="email" placeholder="name@company.com" {...field} />
+                  <Input autoComplete="email" placeholder={t('auth.login.emailPlaceholder', 'name@company.com')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -73,13 +75,13 @@ export function LoginForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t('auth.login.passwordLabel', 'Password')}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showPassword ? 'text' : 'password'}
                       autoComplete="current-password"
-                      placeholder="Enter your password"
+                      placeholder={t('auth.login.passwordPlaceholder', 'Enter your password')}
                       {...field}
                     />
                     <Button
@@ -95,7 +97,7 @@ export function LoginForm() {
                         <Eye className="h-4 w-4 text-muted-foreground" />
                       )}
                       <span className="sr-only">
-                        {showPassword ? 'Hide password' : 'Show password'}
+                        {showPassword ? t('auth.login.hidePassword', 'Hide password') : t('auth.login.showPassword', 'Show password')}
                       </span>
                     </Button>
                   </div>
@@ -108,11 +110,13 @@ export function LoginForm() {
             <p className="text-sm font-medium text-destructive">{form.formState.errors.root.message}</p>
           ) : null}
           <Button className="w-full" type="submit" disabled={loginMutation.isPending}>
-            {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
+            {loginMutation.isPending 
+              ? t('auth.login.submitButtonLoading', 'Signing in...') 
+              : t('auth.login.submitButton', 'Sign in')}
           </Button>
           <div className="pt-2 text-center">
             <p className="text-xs text-muted-foreground">
-              Forgot your password? Contact your organization administrator.
+              {t('auth.login.forgotPassword', 'Forgot your password? Contact your organization administrator.')}
             </p>
           </div>
         </form>

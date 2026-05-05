@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -49,6 +50,29 @@
   --radius: 0.75rem;
 }
 
+.dark {
+  /* Softer Dark Slate for B2B interfaces (approx. slate-900) */
+  --background: oklch(0.208 0.042 265.755);
+  --foreground: oklch(0.985 0.002 247.839);
+  /* Cards slightly lighter than background (approx. slate-800) */
+  --card: oklch(0.278 0.046 264.444);
+  --card-foreground: oklch(0.985 0.002 247.839);
+  --popover: oklch(0.278 0.046 264.444);
+  --popover-foreground: oklch(0.985 0.002 247.839);
+  --primary: oklch(0.985 0.002 247.839);
+  --primary-foreground: oklch(0.209 0.011 264.74);
+  --secondary: oklch(0.369 0.054 263.884);
+  --secondary-foreground: oklch(0.985 0.002 247.839);
+  --muted: oklch(0.369 0.054 263.884);
+  --muted-foreground: oklch(0.704 0.04 264.065);
+  --accent: oklch(0.369 0.054 263.884);
+  --accent-foreground: oklch(0.985 0.002 247.839);
+  --destructive: oklch(0.396 0.141 25.723);
+  --border: oklch(0.369 0.054 263.884);
+  --input: oklch(0.369 0.054 263.884);
+  --ring: oklch(0.704 0.04 264.065);
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -60,6 +84,10 @@
 
   body {
     @apply m-0 min-h-screen bg-background text-foreground antialiased;
+  }
+
+  /* Only apply the white gradient in light mode */
+  :root:not(.dark) body {
     background-image:
       linear-gradient(to bottom, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
       linear-gradient(to bottom, rgba(148, 163, 184, 0.04), transparent 32%);

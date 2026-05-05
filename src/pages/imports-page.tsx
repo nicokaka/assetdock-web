@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/components/layout/page-header'
 import { Button } from '@/components/ui/button'
@@ -7,6 +8,7 @@ import { ImportJobSummary } from '@/features/imports/components/import-job-summa
 import { useImportAssetsCsvMutation, useImportJobQuery } from '@/features/imports/hooks/use-imports'
 
 export function ImportsPage() {
+  const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
   const [jobId, setJobId] = useState<string | null>(null)
   const uploadMutation = useImportAssetsCsvMutation()
@@ -28,15 +30,15 @@ export function ImportsPage() {
   return (
     <section className="space-y-6">
       <PageHeader
-        title="Imports"
-        description="Upload a CSV file and review the resulting import job."
+        title={t('imports.title', 'Imports')}
+        description={t('imports.description', 'Upload a CSV file and review the resulting import job.')}
       />
 
       <Card className="max-w-2xl border-border/80 bg-card/78 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-base font-medium">CSV import</CardTitle>
+          <CardTitle className="text-base font-medium">{t('imports.dropzone.title', 'CSV import')}</CardTitle>
           <CardDescription>
-            Select a single CSV file to create an asset import job.
+            {t('imports.dropzone.description', 'Select a single CSV file to create an asset import job.')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -49,7 +51,7 @@ export function ImportsPage() {
             />
             <div className="flex items-center gap-3">
               <Button type="submit" disabled={!file || uploadMutation.isPending}>
-                {uploadMutation.isPending ? 'Uploading...' : 'Upload CSV'}
+                {uploadMutation.isPending ? t('imports.dropzone.uploading', 'Uploading...') : t('imports.newImport', 'Upload CSV')}
               </Button>
               {jobId ? (
                 <Button
@@ -58,27 +60,27 @@ export function ImportsPage() {
                   onClick={() => importJobQuery.refetch()}
                   disabled={importJobQuery.isFetching}
                 >
-                  {importJobQuery.isFetching ? 'Loading job...' : 'Load latest job'}
+                  {importJobQuery.isFetching ? t('imports.errorTitle', 'Loading job...') : t('imports.table.status', 'Load latest job')}
                 </Button>
               ) : null}
             </div>
 
             {file ? (
               <p className="text-sm text-muted-foreground">
-                Selected file: {file.name}
+                {t('imports.table.filename', 'Selected file')}: {file.name}
               </p>
             ) : null}
           </form>
 
           {!file && !uploadMutation.isPending && !uploadMutation.isError && !currentJob ? (
             <p className="text-sm text-muted-foreground">
-              Select a CSV file to start an import.
+              {t('imports.emptyDescription', 'Select a CSV file to start an import.')}
             </p>
           ) : null}
 
           {uploadMutation.isError ? (
             <p className="text-sm text-destructive">
-              Unable to upload the CSV right now.
+              {t('imports.errorTitle', 'Unable to upload the CSV right now.')}
             </p>
           ) : null}
 

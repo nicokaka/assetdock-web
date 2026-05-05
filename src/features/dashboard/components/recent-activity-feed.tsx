@@ -15,6 +15,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuditLogsQuery } from '@/features/audit/hooks/use-audit-logs'
 import type { AuditLogItem } from '@/features/audit/types/audit-log'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 
 function getEventIcon(eventType: string) {
   if (eventType.startsWith('LOGIN')) return <LogIn className="h-3.5 w-3.5" />
@@ -30,44 +32,26 @@ function getEventIcon(eventType: string) {
   return <Activity className="h-3.5 w-3.5" />
 }
 
-function getEventLabel(eventType: string): string {
-  const labels: Record<string, string> = {
-    LOGIN_SUCCESS: 'Successful login',
-    LOGIN_FAILURE: 'Failed login attempt',
-    USER_CREATED: 'User created',
-    USER_UPDATED: 'User updated',
-    USER_DISABLED: 'User disabled',
-    USER_LOCKED: 'User locked',
-    USER_UNLOCKED: 'User unlocked',
-    USER_REACTIVATED: 'User reactivated',
-    USER_ROLES_UPDATED: 'User roles updated',
-    ASSET_CREATED: 'Asset created',
-    ASSET_UPDATED: 'Asset updated',
-    ASSET_ARCHIVED: 'Asset archived',
-    ASSET_ASSIGNED: 'Asset assigned',
-    ASSET_UNASSIGNED: 'Asset unassigned',
-    CSV_IMPORT_STARTED: 'CSV import started',
-    CSV_IMPORT_COMPLETED: 'CSV import completed',
-    CSV_IMPORT_FAILED: 'CSV import failed',
-    WEB_SESSION_CREATED: 'Session started',
-    WEB_SESSION_LOGGED_OUT: 'Session ended',
-    WEB_SESSION_EXPIRED: 'Session expired',
-  }
-  return labels[eventType] ?? eventType.replace(/_/g, ' ').toLowerCase()
+function getEventLabel(eventType: string, t: TFunction): string {
+  const fallback = eventType.replace(/_/g, ' ').toLowerCase()
+  // Translation keys are inside app.overview.events.
+  // We use the eventType directly, e.g. "LOGIN_SUCCESS"
+  const translated = t(`app.overview.events.${eventType}`, { defaultValue: fallback })
+  return translated
 }
 
-function timeAgo(iso: string): string {
+function timeAgo(iso: string, t: TFunction): string {
   const diff = Date.now() - new Date(iso).getTime()
   const minutes = Math.floor(diff / 60_000)
-  if (minutes < 1) return 'just now'
-  if (minutes < 60) return `${minutes}m ago`
+  if (minutes < 1) return t('app.overview.activity.justNow', 'just now')
+  if (minutes < 60) return `${minutes}${t('app.overview.activity.mAgo', 'm ago')}`
   const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
+  if (hours < 24) return `${hours}${t('app.overview.activity.hAgo', 'h ago')}`
   const days = Math.floor(hours / 24)
-  return `${days}d ago`
+  return `${days}${t('app.overview.activity.dAgo', 'd ago')}`
 }
 
-function ActivityItem({ item }: { item: AuditLogItem }) {
+function ActivityItem({ item, t }: { item: AuditLogItem, t: TFunction }) {
   const isSuccess = item.outcome === 'SUCCESS' || item.outcome === null
   return (
     <div className="flex items-start gap-3 py-2.5">
@@ -82,11 +66,11 @@ function ActivityItem({ item }: { item: AuditLogItem }) {
       </div>
       <div className="min-w-0 flex-1">
         <p className="text-xs font-medium text-foreground leading-snug">
-          {getEventLabel(item.eventType)}
+          {getEventLabel(item.eventType, t)}
         </p>
       </div>
       <span className="shrink-0 text-[10px] text-muted-foreground tabular-nums">
-        {timeAgo(item.occurredAt)}
+        {timeAgo(item.occurredAt, t)}
       </span>
     </div>
   )
@@ -95,19 +79,20 @@ function ActivityItem({ item }: { item: AuditLogItem }) {
 export function RecentActivityFeed() {
   const query = useAuditLogsQuery({ size: 7 })
   const items = query.data?.items ?? []
+  const { t } = useTranslation()
 
   return (
     <Card className="border-border/80 bg-card/78 shadow-sm">
       <CardHeader className="pb-0">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Recent Activity
+            {t('app.overview.activity.title', 'Recent Activity')}
           </CardTitle>
           <Link
             to="/app/audit-logs"
             className="flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
           >
-            View all
+            {t('app.overview.activity.viewAll', 'View all')}
             <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -124,11 +109,11 @@ export function RecentActivityFeed() {
             ))}
           </div>
         ) : items.length === 0 ? (
-          <p className="pt-4 text-xs text-muted-foreground">No activity yet.</p>
+          <p className="pt-4 text-xs text-muted-foreground">{t('app.overview.activity.noActivity', 'No activity yet.')}</p>
         ) : (
           <div className="divide-y divide-border/40">
             {items.map((item) => (
-              <ActivityItem key={item.id} item={item} />
+              <ActivityItem key={item.id} item={item} t={t} />
             ))}
           </div>
         )}

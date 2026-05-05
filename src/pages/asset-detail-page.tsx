@@ -1,4 +1,5 @@
-import { Link, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -7,6 +8,8 @@ import { useAssetDetailQuery } from '@/features/assets/hooks/use-asset-detail'
 import { HttpError } from '@/lib/http-client'
 
 export function AssetDetailPage() {
+  const navigate = useNavigate()
+  const { t } = useTranslation()
   const { assetId = '' } = useParams()
   const assetQuery = useAssetDetailQuery(assetId)
 
@@ -18,9 +21,9 @@ export function AssetDetailPage() {
   return (
     <section className="space-y-6">
       <div>
-        <Link to="/app/assets" className={buttonVariants({ variant: 'outline' })}>
-          Back to assets
-        </Link>
+        <button onClick={() => navigate('/app/assets')} className={buttonVariants({ variant: 'outline' })}>
+          {t('assetForm.back', 'Back to assets')}
+        </button>
       </div>
 
       {assetQuery.isPending ? (
@@ -34,9 +37,9 @@ export function AssetDetailPage() {
       {isNotFound ? (
         <Card className="border-border shadow-none">
           <CardHeader>
-            <CardTitle className="text-base font-medium">Asset not found</CardTitle>
+            <CardTitle className="text-base font-medium">{t('details.asset.notFound', 'Asset not found')}</CardTitle>
             <CardDescription>
-              The requested asset could not be loaded for the current session.
+              {t('app.assets.errorTitle', 'The requested asset could not be loaded for the current session.')}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -46,10 +49,10 @@ export function AssetDetailPage() {
         <Card className="border-border shadow-none">
           <CardHeader>
             <CardTitle className="text-base font-medium">
-              Unable to load asset
+              {t('app.assets.errorTitle', 'Unable to load asset')}
             </CardTitle>
             <CardDescription>
-              Please refresh the page or try again in a moment.
+              {t('app.users.errorDescription', 'Please refresh the page or try again in a moment.')}
             </CardDescription>
           </CardHeader>
         </Card>

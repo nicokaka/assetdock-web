@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { getSession, login, logout } from '@/features/auth/api/session'
 import type { LoginInput } from '@/features/auth/schemas/login-schema'
+import { HttpError } from '@/lib/http-client'
 
 const sessionQueryKey = ['session'] as const
 
@@ -11,6 +12,12 @@ export function useSessionQuery(options?: { enabled?: boolean }) {
     queryFn: getSession,
     staleTime: 60_000,
     enabled: options?.enabled,
+    retry: (failureCount, error) => {
+      if (error instanceof HttpError && error.status === 401) {
+        return false
+      }
+      return failureCount < 3
+    },
   })
 }
 

@@ -1,4 +1,5 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
+import { useTranslation } from 'react-i18next'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from 'react-router-dom'
@@ -36,16 +37,18 @@ function CustomTooltip({
 }
 
 export function AssetStatusChart({ data, total }: Props) {
+  const { t } = useTranslation()
+
   if (data.length === 0) {
     return (
       <Card className="border-border/80 bg-card/78 shadow-sm">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
-            Asset Distribution
+            {t('app.overview.distribution.title', 'Asset Distribution')}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex h-48 items-center justify-center">
-          <p className="text-sm text-muted-foreground">No data</p>
+          <p className="text-sm text-muted-foreground">{t('app.overview.distribution.noData', 'No data')}</p>
         </CardContent>
       </Card>
     )
@@ -55,7 +58,7 @@ export function AssetStatusChart({ data, total }: Props) {
     <Card className="border-border/80 bg-card/78 shadow-sm">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">
-          Asset Distribution
+          {t('app.overview.distribution.title', 'Asset Distribution')}
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-[1fr_auto] items-center gap-4">
@@ -89,7 +92,7 @@ export function AssetStatusChart({ data, total }: Props) {
             <span className="text-2xl font-semibold tracking-tight text-foreground">
               {total}
             </span>
-            <span className="text-[10px] text-muted-foreground">total</span>
+            <span className="text-[10px] text-muted-foreground">{t('app.overview.distribution.total', 'total')}</span>
           </div>
         </div>
 
@@ -106,7 +109,7 @@ export function AssetStatusChart({ data, total }: Props) {
                 style={{ backgroundColor: item.fill }}
               />
               <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
-                {item.label}
+                {t(`app.overview.status.${item.status}`, item.label)}
               </span>
               <span className="ml-auto text-xs font-medium tabular-nums text-foreground">
                 {item.count}

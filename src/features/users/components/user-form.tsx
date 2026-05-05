@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -38,6 +39,7 @@ export function UserForm({
   errorMessage,
   onSubmit,
 }: UserFormProps) {
+  const { t } = useTranslation()
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),
     defaultValues,
@@ -51,9 +53,9 @@ export function UserForm({
           name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full name</FormLabel>
+              <FormLabel>{t('userForm.labels.fullName', 'Full name')}</FormLabel>
               <FormControl>
-                <Input placeholder="Jane Smith" {...field} />
+                <Input placeholder={t('userForm.placeholders.fullName', 'e.g. Jane Smith')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -64,9 +66,9 @@ export function UserForm({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('userForm.labels.email', 'Email')}</FormLabel>
               <FormControl>
-                <Input autoComplete="email" placeholder="jane@company.com" {...field} />
+                <Input autoComplete="email" placeholder={t('userForm.placeholders.email', 'jane@company.com')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -77,12 +79,12 @@ export function UserForm({
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{t('userForm.labels.password', 'Password')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoComplete="new-password"
-                  placeholder="Create a password"
+                  placeholder={t('userForm.placeholders.password', 'Create a password')}
                   {...field}
                 />
               </FormControl>
@@ -95,7 +97,7 @@ export function UserForm({
           name="roles"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Roles</FormLabel>
+              <FormLabel>{t('userForm.labels.roles', 'Roles')}</FormLabel>
               <FormControl>
                 <select
                   multiple
@@ -108,7 +110,7 @@ export function UserForm({
                 >
                   {userRoleOptions.map((role) => (
                     <option key={role} value={role}>
-                      {userRoleLabels[role] ?? role}
+                      {t(`userForm.roles.${role.toLowerCase()}`, userRoleLabels[role] ?? role)}
                     </option>
                   ))}
                 </select>
@@ -122,7 +124,7 @@ export function UserForm({
           name="status"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Status</FormLabel>
+              <FormLabel>{t('userForm.labels.status', 'Status')}</FormLabel>
               <FormControl>
                 <select
                   {...field}
@@ -130,7 +132,7 @@ export function UserForm({
                 >
                   {userStatusOptions.map((status) => (
                     <option key={status} value={status}>
-                      {userStatusLabels[status] ?? status}
+                      {t(`userForm.status.${status.toLowerCase()}`, userStatusLabels[status] ?? status)}
                     </option>
                   ))}
                 </select>

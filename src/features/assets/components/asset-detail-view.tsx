@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -41,6 +42,7 @@ const statusOptions = [
 
 
 export function AssetDetailView({ asset }: AssetDetailViewProps) {
+  const { t } = useTranslation()
   const [draftStatus, setDraftStatus] = useState<AssetDetail['status'] | null>(null)
   const updateStatusMutation = useUpdateAssetStatusMutation(asset.id)
   const archiveAssetMutation = useArchiveAssetMutation(asset.id)
@@ -58,16 +60,16 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
 
   const statusErrorMessage =
     updateStatusMutation.error instanceof HttpError && updateStatusMutation.error.status === 400
-      ? 'Unable to update the status with the current asset state.'
+      ? t('assetForm.errorGeneric', 'Unable to update the status with the current asset state.')
       : updateStatusMutation.isError
-        ? 'Unable to update the status right now.'
+        ? t('assetForm.errorGeneric', 'Unable to update the status right now.')
         : undefined
 
   const archiveErrorMessage =
     archiveAssetMutation.error instanceof HttpError && archiveAssetMutation.error.status === 400
-      ? 'Unable to archive this asset in its current state.'
+      ? t('assetForm.errorGeneric', 'Unable to archive this asset in its current state.')
       : archiveAssetMutation.isError
-        ? 'Unable to archive this asset right now.'
+        ? t('assetForm.errorGeneric', 'Unable to archive this asset right now.')
         : undefined
 
   return (
@@ -80,33 +82,33 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
           <p className="text-sm text-muted-foreground">{asset.assetTag}</p>
           <div>
             <Button asChild variant="outline">
-              <Link to={`/app/assets/${asset.id}/edit`}>Edit</Link>
+              <Link to={`/app/assets/${asset.id}/edit`}>{t('details.actions.edit', 'Edit')}</Link>
             </Button>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-1 sm:grid-cols-[160px_1fr] sm:gap-4">
-            <div className="text-sm text-muted-foreground">Status</div>
+            <div className="text-sm text-muted-foreground">{t('assetForm.labels.status', 'Status')}</div>
             <div>
               <span className={cn(
                 'inline-block rounded-full border px-2.5 py-1 text-[11px] font-medium tracking-[0.06em]',
                 assetStatusClassName(asset.status)
               )}>
-                {assetStatusLabels[asset.status] ?? asset.status}
+                {t(`app.overview.status.${asset.status}`, assetStatusLabels[asset.status] ?? asset.status)}
               </span>
             </div>
           </div>
           <div className="space-y-3 rounded-md border border-border p-4">
             <div className="space-y-1">
-              <h2 className="text-sm font-medium text-foreground">Lifecycle</h2>
+              <h2 className="text-sm font-medium text-foreground">{t('details.sections.lifecycle', 'Lifecycle')}</h2>
               <p className="text-sm text-muted-foreground">
-                Update the current status or archive the asset when appropriate.
+                {t('assetForm.descriptionEdit', 'Update the current status or archive the asset when appropriate.')}
               </p>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
               <label className="grid gap-2 text-sm">
-                <span className="text-muted-foreground">Status</span>
+                <span className="text-muted-foreground">{t('assetForm.labels.status', 'Status')}</span>
                 <select
                   value={status}
                   onChange={(event) =>
@@ -117,7 +119,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                 >
                   {statusOptions.map((option) => (
                     <option key={option} value={option}>
-                      {assetStatusLabels[option] ?? option}
+                      {t(`app.overview.status.${option}`, assetStatusLabels[option] ?? option)}
                     </option>
                   ))}
                 </select>
@@ -128,15 +130,15 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                 onClick={() => void handleStatusSubmit()}
                 disabled={isArchived || status === asset.status || updateStatusMutation.isPending}
               >
-                {updateStatusMutation.isPending ? 'Saving...' : 'Save status'}
+                {updateStatusMutation.isPending ? t('assetForm.submittingEdit', 'Saving...') : t('assetForm.submitEdit', 'Save status')}
               </Button>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
                 {isArchived
-                  ? 'This asset has already been archived.'
-                  : 'Archive is intended for retired or lost assets.'}
+                  ? t('details.asset.notFound', 'This asset has already been archived.')
+                  : t('details.asset.archiveDescription', 'Archive is intended for retired or lost assets.')}
               </p>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -145,18 +147,18 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                     variant="destructive"
                     disabled={isArchived || archiveAssetMutation.isPending}
                   >
-                    {archiveAssetMutation.isPending ? 'Archiving...' : 'Archive asset'}
+                    {archiveAssetMutation.isPending ? t('assetForm.submittingEdit', 'Archiving...') : t('details.actions.archive', 'Archive asset')}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Archive this asset?</AlertDialogTitle>
+                    <AlertDialogTitle>{t('details.asset.archiveTitle', 'Archive this asset?')}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action is intended for retired or lost assets. It will mark the asset as archived. Are you sure you want to proceed?
+                      {t('details.asset.archiveDescription', 'This action is intended for retired or lost assets. It will mark the asset as archived. Are you sure you want to proceed?')}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{t('details.asset.archiveCancel', 'Cancel')}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={(e) => {
                         e.preventDefault()
@@ -164,7 +166,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                       }}
                       disabled={archiveAssetMutation.isPending}
                     >
-                      Archive
+                      {t('details.asset.archiveConfirm', 'Archive')}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -178,10 +180,10 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
               <p className="text-sm text-destructive">{archiveErrorMessage}</p>
             ) : null}
           </div>
-          <DetailRow label="Serial number" value={asset.serialNumber} />
-          <DetailRow label="Hostname" value={asset.hostname} />
-          <DetailRow label="Description" value={asset.description} />
-          <DetailRow label="Archived at" value={formatTimestamp(asset.archivedAt)} />
+          <DetailRow label={t('assetForm.labels.serialNumber', 'Serial number')} value={asset.serialNumber} />
+          <DetailRow label={t('assetForm.labels.hostname', 'Hostname')} value={asset.hostname} />
+          <DetailRow label={t('assetForm.labels.description', 'Description')} value={asset.description} />
+          {isArchived ? <DetailRow label={t('details.badges.archived', 'Archived at')} value={formatTimestamp(asset.archivedAt)} /> : null}
         </CardContent>
       </Card>
 

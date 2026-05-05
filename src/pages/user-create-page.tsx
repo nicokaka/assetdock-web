@@ -1,4 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,6 +10,7 @@ import { HttpError } from '@/lib/http-client'
 
 export function UserCreatePage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const createUserMutation = useCreateUserMutation()
 
   async function handleSubmit(values: UserFormValues) {
@@ -18,26 +20,26 @@ export function UserCreatePage() {
 
   const errorMessage =
     createUserMutation.error instanceof HttpError && createUserMutation.error.status === 400
-      ? 'Unable to create the user with the provided data.'
+      ? t('userForm.errorNew', 'Unable to create the user with the provided data.')
       : createUserMutation.isError
-        ? 'Unable to create the user right now.'
+        ? t('userForm.errorGeneric', 'Unable to create the user right now.')
         : undefined
 
   return (
     <section className="space-y-6">
       <div>
-        <Link to="/app/users" className={buttonVariants({ variant: 'outline' })}>
-          Back to users
-        </Link>
+        <button onClick={() => navigate('/app/users')} className={buttonVariants({ variant: 'outline' })}>
+          {t('userForm.back', 'Back to users')}
+        </button>
       </div>
 
       <Card className="max-w-2xl border-border shadow-none">
         <CardHeader>
           <CardTitle className="text-2xl font-semibold tracking-tight">
-            New User
+            {t('userForm.titleNew', 'New User')}
           </CardTitle>
           <CardDescription>
-            Create a new user with the core fields currently supported in the web app.
+            {t('userForm.descriptionNew', 'Create a new user with the core fields currently supported in the web app.')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -49,8 +51,8 @@ export function UserCreatePage() {
               roles: ['VIEWER'],
               status: 'ACTIVE',
             }}
-            submitLabel="Create user"
-            pendingLabel="Creating..."
+            submitLabel={t('userForm.submitNew', 'Create user')}
+            pendingLabel={t('userForm.submittingNew', 'Creating...')}
             isPending={createUserMutation.isPending}
             errorMessage={errorMessage}
             onSubmit={handleSubmit}

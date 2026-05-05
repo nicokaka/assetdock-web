@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/components/layout/page-header'
 import { Button } from '@/components/ui/button'
@@ -13,9 +14,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { assetStatusLabels } from '@/features/assets/constants/labels'
 
 export function AssetsPage() {
+  const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<string>('all')
+  const { t } = useTranslation()
 
   const assetsQuery = useAssetsQuery({
     page,
@@ -27,11 +30,11 @@ export function AssetsPage() {
   return (
     <section className="space-y-6">
       <PageHeader
-        title="Assets"
-        description="Review the assets available to the current session."
+        title={t('app.assets.title', 'Assets')}
+        description={t('app.assets.description', 'Review the assets available to the current session.')}
         action={
-          <Button asChild variant="outline">
-          <Link to="/app/assets/new">New Asset</Link>
+          <Button variant="outline" onClick={() => navigate('/app/assets/new')}>
+            {t('app.assets.newAsset', 'New Asset')}
           </Button>
         }
       />
@@ -43,7 +46,7 @@ export function AssetsPage() {
             setSearch(val)
             setPage(1)
           }}
-          placeholder="Search by tag, name or serial..."
+          placeholder={t('app.assets.searchPlaceholder', 'Search by tag, name or serial...')}
         />
         <Select
           value={status}
@@ -53,13 +56,13 @@ export function AssetsPage() {
           }}
         >
           <SelectTrigger className="w-full sm:w-[180px]">
-            <SelectValue placeholder="All Statuses" />
+            <SelectValue placeholder={t('app.assets.allStatuses', 'All Statuses')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="all">{t('app.assets.allStatuses', 'All Statuses')}</SelectItem>
             {Object.entries(assetStatusLabels).map(([key, label]) => (
               <SelectItem key={key} value={key}>
-                {label}
+                {t(`app.overview.status.${key}`, label)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -73,7 +76,7 @@ export function AssetsPage() {
       {assetsQuery.isError ? (
         <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardContent className="py-6 text-sm text-muted-foreground">
-            Unable to load assets right now.
+            {t('app.assets.errorTitle', 'Unable to load assets right now.')}
           </CardContent>
         </Card>
       ) : null}
@@ -81,13 +84,18 @@ export function AssetsPage() {
       {assetsQuery.isSuccess && assetsQuery.data.items.length === 0 ? (
         <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-base font-medium">No assets found</CardTitle>
+            <CardTitle className="text-base font-medium">{t('app.assets.emptyTitle', 'No assets found')}</CardTitle>
             <CardDescription>
               {search || status !== 'all' 
-                ? 'Try adjusting your filters.' 
-                : 'Create the first asset to start working with the inventory area.'}
+                ? t('app.assets.emptyDescriptionFilters', 'Try adjusting your filters.') 
+                : t('app.assets.emptyDescriptionStart', 'Create the first asset to start working with the inventory area.')}
             </CardDescription>
           </CardHeader>
+          <CardContent>
+            <Button variant="outline" onClick={() => navigate('/app/assets/new')}>
+              {t('app.assets.newAsset', 'New Asset')}
+            </Button>
+          </CardContent>
         </Card>
       ) : null}
 
