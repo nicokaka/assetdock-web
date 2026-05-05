@@ -2,15 +2,41 @@ import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useApiHealth } from '@/features/setup/hooks/use-api-health'
 
 export function HomePage() {
+  const healthQuery = useApiHealth()
+  const isHealthy = healthQuery.data === true
+
   return (
     <section className="grid w-full gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(20rem,28rem)] lg:items-center">
       <div className="space-y-6">
         <div className="space-y-3">
-          <p className="text-sm font-medium tracking-tight text-muted-foreground">
-            Asset inventory and access operations
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium tracking-tight text-muted-foreground">
+              Asset inventory and access operations
+            </p>
+            <div
+              className={`flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium transition-colors ${
+                isHealthy
+                  ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                  : healthQuery.isPending
+                    ? 'border-muted bg-muted/50 text-muted-foreground'
+                    : 'border-destructive/20 bg-destructive/10 text-destructive'
+              }`}
+            >
+              <div
+                className={`h-1.5 w-1.5 rounded-full ${
+                  isHealthy
+                    ? 'bg-emerald-500'
+                    : healthQuery.isPending
+                      ? 'bg-muted-foreground/50'
+                      : 'bg-destructive'
+                }`}
+              />
+              {isHealthy ? 'API Online' : healthQuery.isPending ? 'Checking API...' : 'API Offline'}
+            </div>
+          </div>
           <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
             AssetDock Web
           </h1>

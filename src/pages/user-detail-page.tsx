@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { UserDetailView } from '@/features/users/components/user-detail-view'
+import { AdminResetPasswordDialog } from '@/features/users/components/admin-reset-password-dialog'
 import { useUserDetailQuery } from '@/features/users/hooks/use-users'
 import { HttpError } from '@/lib/http-client'
 
@@ -22,12 +23,15 @@ export function UserDetailPage() {
           Back to users
         </Link>
         {userQuery.isSuccess ? (
-          <Link
-            to={`/app/users/${userId}/edit`}
-            className={buttonVariants({ variant: 'outline' })}
-          >
-            Edit user
-          </Link>
+          <>
+            <Link
+              to={`/app/users/${userId}/edit`}
+              className={buttonVariants({ variant: 'outline' })}
+            >
+              Edit user
+            </Link>
+            <AdminResetPasswordDialog userId={userId} userRoles={userQuery.data.roles} />
+          </>
         ) : null}
       </div>
 
