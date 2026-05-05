@@ -1,25 +1,27 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { httpClient } from '@/lib/http-client'
-
 interface HealthResponse {
   status: string
 }
+
+const MANAGEMENT_URL = import.meta.env.VITE_MANAGEMENT_URL ?? 'http://localhost:8081'
 
 export function useApiHealth() {
   return useQuery({
     queryKey: ['api-health'],
     queryFn: async () => {
-      // Use the generic request method since actuator endpoints might not be under /api/v1
-      // and we just need a simple GET without necessarily requiring auth (public endpoint)
       try {
-        const response = await httpClient.request<HealthResponse>('/actuator/health')
-        return response?.status === 'UP'
+        const response = await fetch(`${MANAGEMENT_URL}/actuator/health`, {
+          credentials: 'omit',
+        })
+        if (!response.ok) return false
+        const data: HealthResponse = await response.json()
+        return data?.status === 'UP'
       } catch {
         return false
       }
     },
     retry: false,
-    refetchInterval: 30000, // Check every 30 seconds
+    refetchInterval: 30000,
   })
 }
