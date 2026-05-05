@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,6 +16,10 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { AssetAssignmentsSection } from '@/features/assignments/components/asset-assignments-section'
+import { QrCodeViewer } from './qr-code-viewer'
+import { CheckoutDialog } from '@/features/checkout/components/checkout-dialog'
+import { CheckinDialog } from '@/features/checkout/components/checkin-dialog'
+import { AssetTimeline } from './asset-timeline'
 import {
   useArchiveAssetMutation,
   useUpdateAssetStatusMutation,
@@ -75,13 +79,22 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
   return (
     <div className="space-y-6">
       <Card className="border-border shadow-none">
-        <CardHeader className="gap-1">
-          <CardTitle className="text-2xl font-semibold tracking-tight">
-            {asset.displayName || asset.assetTag}
-          </CardTitle>
-          <p className="text-sm text-muted-foreground">{asset.assetTag}</p>
-          <div>
-            <Button asChild variant="outline">
+        <CardHeader className="gap-1 flex-row items-start justify-between">
+          <div className="space-y-1">
+            <CardTitle className="text-2xl font-semibold tracking-tight">
+              {asset.displayName || asset.assetTag}
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">{asset.assetTag}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            {asset.status === 'IN_STOCK' && (
+              <CheckoutDialog assetId={asset.id} assetName={asset.displayName || asset.assetTag} />
+            )}
+            {asset.status === 'ASSIGNED' && (
+              <CheckinDialog assetId={asset.id} assetName={asset.displayName || asset.assetTag} />
+            )}
+            <QrCodeViewer assetId={asset.id} assetTag={asset.assetTag} />
+            <Button asChild variant="outline" size="sm">
               <Link to={`/app/assets/${asset.id}/edit`}>{t('details.actions.edit', 'Edit')}</Link>
             </Button>
           </div>
@@ -188,6 +201,18 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
       </Card>
 
       <AssetAssignmentsSection assetId={asset.id} />
+
+      <Card className="border-border shadow-none">
+        <CardHeader>
+          <CardTitle className="text-lg">{t('app.timeline.title', 'Lifecycle Timeline')}</CardTitle>
+          <CardDescription>
+            {t('app.timeline.description', 'History of all events related to this asset')}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <AssetTimeline assetId={asset.id} />
+        </CardContent>
+      </Card>
     </div>
   )
 }

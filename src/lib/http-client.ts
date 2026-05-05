@@ -5,6 +5,7 @@ type RequestOptions = {
   body?: unknown
   headers?: HeadersInit
   signal?: AbortSignal
+  responseType?: 'json' | 'text' | 'blob'
 }
 
 function isFormData(value: unknown): value is FormData {
@@ -116,6 +117,10 @@ export class HttpClient {
 
     if (response.status === 204) {
       return undefined as TResponse
+    }
+
+    if (options.responseType === 'blob') {
+      return (await response.blob()) as unknown as TResponse
     }
 
     const contentType = response.headers.get('content-type')
