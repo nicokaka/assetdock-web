@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AssetsList } from '@/features/assets/components/assets-list'
 import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
+import { useCategoriesQuery, useLocationsQuery } from '@/features/catalog/hooks/use-catalog-lookups'
 import { TableSkeleton } from '@/components/ui/table-skeleton'
 import { PaginationControls } from '@/components/ui/pagination-controls'
 import { SearchInput } from '@/components/ui/search-input'
@@ -18,13 +19,20 @@ export function AssetsPage() {
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<string>('all')
+  const [categoryId, setCategoryId] = useState<string>('all')
+  const [locationId, setLocationId] = useState<string>('all')
   const { t } = useTranslation()
+
+  const categoriesQuery = useCategoriesQuery()
+  const locationsQuery = useLocationsQuery()
 
   const assetsQuery = useAssetsQuery({
     page,
     size: 20,
     search: search || undefined,
     status: status !== 'all' ? status : undefined,
+    categoryId: categoryId !== 'all' ? categoryId : undefined,
+    locationId: locationId !== 'all' ? locationId : undefined,
   })
 
   return (
@@ -55,7 +63,7 @@ export function AssetsPage() {
             setPage(1)
           }}
         >
-          <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectTrigger className="w-full sm:w-[150px]">
             <SelectValue placeholder={t('app.assets.allStatuses', 'All Statuses')} />
           </SelectTrigger>
           <SelectContent>
@@ -63,6 +71,46 @@ export function AssetsPage() {
             {Object.entries(assetStatusLabels).map(([key, label]) => (
               <SelectItem key={key} value={key}>
                 {t(`app.overview.status.${key}`, label)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={categoryId}
+          onValueChange={(val) => {
+            setCategoryId(val)
+            setPage(1)
+          }}
+        >
+          <SelectTrigger className="w-full sm:w-[150px]">
+            <SelectValue placeholder={t('app.assets.allCategories', 'All Categories')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('app.assets.allCategories', 'All Categories')}</SelectItem>
+            {categoriesQuery.data?.map((cat) => (
+              <SelectItem key={cat.id} value={cat.id}>
+                {cat.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={locationId}
+          onValueChange={(val) => {
+            setLocationId(val)
+            setPage(1)
+          }}
+        >
+          <SelectTrigger className="w-full sm:w-[150px]">
+            <SelectValue placeholder={t('app.assets.allLocations', 'All Locations')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('app.assets.allLocations', 'All Locations')}</SelectItem>
+            {locationsQuery.data?.map((loc) => (
+              <SelectItem key={loc.id} value={loc.id}>
+                {loc.name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -86,7 +134,7 @@ export function AssetsPage() {
           <CardHeader>
             <CardTitle className="text-base font-medium">{t('app.assets.emptyTitle', 'No assets found')}</CardTitle>
             <CardDescription>
-              {search || status !== 'all' 
+              {search || status !== 'all' || categoryId !== 'all' || locationId !== 'all'
                 ? t('app.assets.emptyDescriptionFilters', 'Try adjusting your filters.') 
                 : t('app.assets.emptyDescriptionStart', 'Create the first asset to start working with the inventory area.')}
             </CardDescription>
