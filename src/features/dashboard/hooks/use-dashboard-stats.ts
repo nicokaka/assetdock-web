@@ -28,6 +28,7 @@ export function useDashboardStats() {
         healthRate: 0,
         statusChartData: [],
         statusCounts: {},
+        activeCheckouts: 0,
       }
     }
 
@@ -72,6 +73,7 @@ export function useDashboardStats() {
       healthRate,
       statusChartData,
       statusCounts,
+      activeCheckouts: query.data.activeCheckouts,
     }
   }, [query.data])
 

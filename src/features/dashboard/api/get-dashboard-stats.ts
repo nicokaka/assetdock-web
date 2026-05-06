@@ -9,6 +9,7 @@ export type DashboardStatsView = {
   lostAssets: number
   totalUsers: number
   activeUsers: number
+  activeCheckouts: number
 }
 
 export async function getDashboardStats() {

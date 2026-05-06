@@ -1,4 +1,4 @@
-import { Server, CheckCircle2, Users, AlertTriangle, Plus, FileUp } from 'lucide-react'
+import { Server, CheckCircle2, Users, AlertTriangle, ArrowLeftRight, Plus, FileUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -60,7 +60,7 @@ export function AppOverviewPage() {
       </div>
 
       {/* KPI Row */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         <KpiCard
           label={t('app.overview.kpi.totalAssets', 'Total Assets')}
           value={isLoading ? '—' : stats.total}
@@ -76,6 +76,14 @@ export function AppOverviewPage() {
           icon={<CheckCircle2 className="h-4 w-4" />}
           to="/app/assets"
           accent="success"
+        />
+        <KpiCard
+          label={t('app.overview.kpi.activeCheckouts', 'Active Checkouts')}
+          value={isLoading ? '—' : stats.activeCheckouts}
+          sublabel={t('app.overview.kpi.activeCheckoutsSub', 'items currently checked out')}
+          icon={<ArrowLeftRight className="h-4 w-4" />}
+          to="/app/assets"
+          accent={stats.activeCheckouts > 0 ? 'warning' : 'default'}
         />
         <KpiCard
           label={t('app.overview.kpi.users', 'Users')}
