@@ -66,6 +66,7 @@ export const router = createBrowserRouter([
             <AuthenticatedShell />
           </RequireSession>
         ),
+        errorElement: <RouteErrorBoundary />,
         children: [
           {
             index: true,

@@ -13,6 +13,7 @@ import { PaginationControls } from '@/components/ui/pagination-controls'
 import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { assetStatusLabels } from '@/features/assets/constants/labels'
+import { useDebounce } from '@/hooks/use-debounce'
 
 export function AssetsPage() {
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ export function AssetsPage() {
   const [status, setStatus] = useState<string>('all')
   const [categoryId, setCategoryId] = useState<string>('all')
   const [locationId, setLocationId] = useState<string>('all')
+  const debouncedSearch = useDebounce(search, 400)
   const { t } = useTranslation()
 
   const categoriesQuery = useCategoriesQuery()
@@ -29,7 +31,7 @@ export function AssetsPage() {
   const assetsQuery = useAssetsQuery({
     page,
     size: 20,
-    search: search || undefined,
+    search: debouncedSearch || undefined,
     status: status !== 'all' ? status : undefined,
     categoryId: categoryId !== 'all' ? categoryId : undefined,
     locationId: locationId !== 'all' ? locationId : undefined,

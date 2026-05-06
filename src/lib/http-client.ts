@@ -74,6 +74,8 @@ export class HttpClient {
 
       if (csrfToken) {
         requestHeaders.set('X-CSRF-Token', csrfToken)
+      } else {
+        throw new HttpError(403, { message: 'Forbidden', detail: 'Missing CSRF token in client cookies.' })
       }
     }
 

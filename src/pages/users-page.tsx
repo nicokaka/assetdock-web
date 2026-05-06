@@ -12,6 +12,7 @@ import { PaginationControls } from '@/components/ui/pagination-controls'
 import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { userRoleLabels, userStatusLabels } from '@/features/users/constants/labels'
+import { useDebounce } from '@/hooks/use-debounce'
 
 export function UsersPage() {
   const navigate = useNavigate()
@@ -19,12 +20,13 @@ export function UsersPage() {
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<string>('all')
   const [role, setRole] = useState<string>('all')
+  const debouncedSearch = useDebounce(search, 400)
   const { t } = useTranslation()
 
   const usersQuery = useUsersListQuery({
     page,
     size: 20,
-    search: search || undefined,
+    search: debouncedSearch || undefined,
     status: status !== 'all' ? status : undefined,
     role: role !== 'all' ? role : undefined,
   })

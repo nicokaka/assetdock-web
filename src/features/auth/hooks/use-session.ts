@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import { useNavigate } from 'react-router-dom'
 import { getSession, login, logout } from '@/features/auth/api/session'
 import type { LoginInput } from '@/features/auth/schemas/login-schema'
 import { HttpError } from '@/lib/http-client'
@@ -34,12 +35,13 @@ export function useLoginMutation() {
 
 export function useLogoutMutation() {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   return useMutation({
     mutationFn: logout,
-    onSuccess: () => {
-      queryClient.clear()
-      window.location.assign('/login')
+    onSettled: () => {
+      queryClient.removeQueries({ queryKey: sessionQueryKey })
+      navigate('/login', { replace: true })
     },
   })
 }
