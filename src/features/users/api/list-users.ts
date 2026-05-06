@@ -5,6 +5,8 @@ export type UserListFilters = {
   page?: number
   size?: number
   search?: string
+  status?: string
+  role?: string
 }
 
 export async function listUsers(filters?: UserListFilters) {
@@ -12,6 +14,8 @@ export async function listUsers(filters?: UserListFilters) {
   if (filters?.page) searchParams.set('page', String(filters.page))
   if (filters?.size) searchParams.set('size', String(filters.size))
   if (filters?.search) searchParams.set('search', filters.search)
+  if (filters?.status) searchParams.set('status', filters.status)
+  if (filters?.role) searchParams.set('role', filters.role)
   
   const query = searchParams.toString()
   return httpClient.request<UserPageView>(`/users${query ? `?${query}` : ''}`)

@@ -10,17 +10,23 @@ import { UsersList } from '@/features/users/components/users-list'
 import { useUsersListQuery } from '@/features/users/hooks/use-users'
 import { PaginationControls } from '@/components/ui/pagination-controls'
 import { SearchInput } from '@/components/ui/search-input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { userRoleLabels, userStatusLabels } from '@/features/users/constants/labels'
 
 export function UsersPage() {
   const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
+  const [status, setStatus] = useState<string>('all')
+  const [role, setRole] = useState<string>('all')
   const { t } = useTranslation()
 
   const usersQuery = useUsersListQuery({
     page,
     size: 20,
     search: search || undefined,
+    status: status !== 'all' ? status : undefined,
+    role: role !== 'all' ? role : undefined,
   })
 
   return (
@@ -35,7 +41,7 @@ export function UsersPage() {
         }
       />
 
-      <div className="mb-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <SearchInput
           value={search}
           onChange={(val) => {
@@ -44,6 +50,45 @@ export function UsersPage() {
           }}
           placeholder={t('app.users.searchPlaceholder', 'Search users by name or email...')}
         />
+        <Select
+          value={status}
+          onValueChange={(val) => {
+            setStatus(val)
+            setPage(1)
+          }}
+        >
+          <SelectTrigger className="w-full sm:w-[150px]">
+            <SelectValue placeholder={t('app.users.allStatuses', 'All Statuses')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('app.users.allStatuses', 'All Statuses')}</SelectItem>
+            {Object.entries(userStatusLabels).map(([key, label]) => (
+              <SelectItem key={key} value={key}>
+                {t(`app.users.status.${key}`, label)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={role}
+          onValueChange={(val) => {
+            setRole(val)
+            setPage(1)
+          }}
+        >
+          <SelectTrigger className="w-full sm:w-[150px]">
+            <SelectValue placeholder={t('app.users.allRoles', 'All Roles')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('app.users.allRoles', 'All Roles')}</SelectItem>
+            {Object.entries(userRoleLabels).map(([key, label]) => (
+              <SelectItem key={key} value={key}>
+                {t(`app.users.role.${key}`, label)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {usersQuery.isPending ? (
@@ -66,8 +111,8 @@ export function UsersPage() {
           <CardHeader>
             <CardTitle className="text-base font-medium">{t('app.users.emptyTitle', 'No users found')}</CardTitle>
             <CardDescription>
-              {search 
-                ? t('app.users.emptyDescriptionFilters', 'No users match your search query.') 
+              {search || status !== 'all' || role !== 'all'
+                ? t('app.users.emptyDescriptionFilters', 'No users match your filters.') 
                 : t('app.users.emptyDescriptionStart', 'Create the first user when this workspace is ready to grow.')}
             </CardDescription>
           </CardHeader>
