@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
+import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { UserDetailView } from '@/features/users/components/user-detail-view'
 import { AdminResetPasswordDialog } from '@/features/users/components/admin-reset-password-dialog'
@@ -14,6 +15,8 @@ export function UserDetailPage() {
   const { userId = '' } = useParams()
   const userQuery = useUserDetailQuery(userId)
 
+  const userLabel = userQuery.data?.fullName || t('breadcrumb.user', 'User')
+
   const isNotFound =
     userQuery.isError &&
     userQuery.error instanceof HttpError &&
@@ -21,29 +24,37 @@ export function UserDetailPage() {
 
   return (
     <section className="space-y-6">
-      <div className="flex items-center gap-2">
-        <button onClick={() => navigate('/app/users')} className={buttonVariants({ variant: 'outline' })}>
-          {t('userForm.back', 'Back to users')}
-        </button>
-        {userQuery.isSuccess ? (
-          <>
-            <button
-              onClick={() => navigate(`/app/users/${userId}/edit`)}
-              className={buttonVariants({ variant: 'outline' })}
-            >
-              {t('details.actions.edit', 'Edit user')}
-            </button>
-            <AdminResetPasswordDialog userId={userId} userRoles={userQuery.data.roles} />
-          </>
-        ) : null}
+      <div className="flex items-center justify-between">
+        <Breadcrumbs
+          items={[
+            { label: t('app.header.users', 'Users'), href: '/app/users' },
+            { label: userLabel },
+          ]}
+        />
+        <div className="flex items-center gap-2">
+          <button onClick={() => navigate('/app/users')} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
+            {t('userForm.back', 'Back to users')}
+          </button>
+          {userQuery.isSuccess ? (
+            <>
+              <button
+                onClick={() => navigate(`/app/users/${userId}/edit`)}
+                className={buttonVariants({ variant: 'outline', size: 'sm' })}
+              >
+                {t('details.actions.edit', 'Edit user')}
+              </button>
+              <AdminResetPasswordDialog userId={userId} userRoles={userQuery.data.roles} />
+            </>
+          ) : null}
+        </div>
       </div>
 
       {userQuery.isPending ? (
         <Card className="border-border shadow-none">
           <CardHeader>
-            <CardTitle className="text-base font-medium">Loading user</CardTitle>
+            <CardTitle className="text-base font-medium">{t('details.loading', 'Loading...')}</CardTitle>
             <CardDescription>
-              Fetching the latest user details.
+              {t('details.loadingUser', 'Fetching the latest user details.')}
             </CardDescription>
           </CardHeader>
         </Card>

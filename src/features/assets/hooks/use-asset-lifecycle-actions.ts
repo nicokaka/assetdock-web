@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import { archiveAsset } from '@/features/assets/api/archive-asset'
 import { updateAssetStatus } from '@/features/assets/api/update-asset-status'
@@ -7,6 +8,7 @@ import type { AssetDetail, AssetStatus } from '@/features/assets/types/asset'
 
 export function useUpdateAssetStatusMutation(assetId: string) {
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
 
   return useMutation({
     mutationFn: (status: AssetStatus) => updateAssetStatus(assetId, { status }),
@@ -30,12 +32,12 @@ export function useUpdateAssetStatusMutation(assetId: string) {
       if (context?.previousAsset) {
         queryClient.setQueryData(['assets', assetId], context.previousAsset)
       }
-      toast.error('Failed to update status')
+      toast.error(t('toast.asset.statusError', 'Failed to update status'))
     },
 
     onSuccess: (asset) => {
       queryClient.setQueryData(['assets', asset.id], asset)
-      toast.success('Asset status updated')
+      toast.success(t('toast.asset.statusSuccess', 'Asset status updated'))
     },
 
     onSettled: () => {
@@ -46,6 +48,7 @@ export function useUpdateAssetStatusMutation(assetId: string) {
 
 export function useArchiveAssetMutation(assetId: string) {
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
 
   return useMutation({
     mutationFn: () => archiveAsset(assetId),
@@ -69,12 +72,12 @@ export function useArchiveAssetMutation(assetId: string) {
       if (context?.previousAsset) {
         queryClient.setQueryData(['assets', assetId], context.previousAsset)
       }
-      toast.error('Failed to archive asset')
+      toast.error(t('toast.asset.archiveError', 'Failed to archive asset'))
     },
 
     onSuccess: (asset) => {
       queryClient.setQueryData(['assets', asset.id], asset)
-      toast.success('Asset archived')
+      toast.success(t('toast.asset.archiveSuccess', 'Asset archived'))
     },
 
     onSettled: () => {

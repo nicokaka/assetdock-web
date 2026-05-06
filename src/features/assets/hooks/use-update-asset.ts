@@ -1,11 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import { updateAsset } from '@/features/assets/api/update-asset'
 import type { AssetDetail, UpdateAssetInput } from '@/features/assets/types/asset'
 
 export function useUpdateAssetMutation(assetId: string) {
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
 
   return useMutation({
     mutationFn: (input: UpdateAssetInput) => updateAsset(assetId, input),
@@ -33,13 +35,13 @@ export function useUpdateAssetMutation(assetId: string) {
       if (context?.previousAsset) {
         queryClient.setQueryData(['assets', assetId], context.previousAsset)
       }
-      toast.error('Failed to update asset')
+      toast.error(t('toast.asset.updateError', 'Failed to update asset'))
     },
 
     onSuccess: (asset) => {
       // Replace optimistic value with authoritative server response.
       queryClient.setQueryData(['assets', asset.id], asset)
-      toast.success('Asset updated successfully')
+      toast.success(t('toast.asset.updateSuccess', 'Asset updated successfully'))
     },
 
     onSettled: () => {

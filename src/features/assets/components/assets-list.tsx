@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { Badge } from '@/components/ui/badge'
 import {
@@ -23,15 +24,16 @@ function formatAssetName(asset: AssetListItem) {
 
 
 export function AssetsList({ assets }: AssetsListProps) {
+  const { t } = useTranslation()
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Status</TableHead>
-          <TableHead>Tag</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Serial</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead>{t('app.assets.table.status', 'Status')}</TableHead>
+          <TableHead>{t('app.assets.table.tag', 'Tag')}</TableHead>
+          <TableHead>{t('app.assets.table.name', 'Name')}</TableHead>
+          <TableHead>{t('app.assets.table.serial', 'Serial')}</TableHead>
+          <TableHead className="text-right">{t('app.assets.table.actions', 'Actions')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -43,7 +45,7 @@ export function AssetsList({ assets }: AssetsListProps) {
                   {assetStatusLabels[asset.status] ?? asset.status}
                 </Badge>
                 {asset.archivedAt ? (
-                  <Badge variant="muted">Archived</Badge>
+                  <Badge variant="muted">{t('details.badges.archived', 'Archived')}</Badge>
                 ) : null}
               </div>
             </TableCell>
@@ -68,7 +70,7 @@ export function AssetsList({ assets }: AssetsListProps) {
                 to={`/app/assets/${asset.id}`}
                 className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
-                View
+                {t('app.assets.table.view', 'View')}
               </Link>
             </TableCell>
           </TableRow>

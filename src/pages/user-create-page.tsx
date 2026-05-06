@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
+import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { UserForm } from '@/features/users/components/user-form'
 import { useCreateUserMutation } from '@/features/users/hooks/use-create-user'
@@ -27,8 +28,14 @@ export function UserCreatePage() {
 
   return (
     <section className="space-y-6">
-      <div>
-        <button onClick={() => navigate('/app/users')} className={buttonVariants({ variant: 'outline' })}>
+      <div className="flex items-center justify-between">
+        <Breadcrumbs
+          items={[
+            { label: t('app.header.users', 'Users'), href: '/app/users' },
+            { label: t('userForm.titleNew', 'New User') },
+          ]}
+        />
+        <button onClick={() => navigate('/app/users')} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
           {t('userForm.back', 'Back to users')}
         </button>
       </div>

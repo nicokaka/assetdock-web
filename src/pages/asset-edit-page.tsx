@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
+import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   AssetForm,
@@ -34,6 +35,8 @@ export function AssetEditPage() {
   const assetQuery = useAssetDetailQuery(assetId)
   const updateAssetMutation = useUpdateAssetMutation(assetId)
 
+  const assetLabel = assetQuery.data?.displayName || assetQuery.data?.assetTag || t('breadcrumb.asset', 'Asset')
+
   async function handleSubmit(values: AssetFormValues) {
     const asset = await updateAssetMutation.mutateAsync(toAssetInput(values))
     navigate(`/app/assets/${asset.id}`, { replace: true })
@@ -48,8 +51,15 @@ export function AssetEditPage() {
 
   return (
     <section className="space-y-6">
-      <div>
-        <button onClick={() => navigate(`/app/assets/${assetId}`)} className={buttonVariants({ variant: 'outline' })}>
+      <div className="flex items-center justify-between">
+        <Breadcrumbs
+          items={[
+            { label: t('app.header.assets', 'Assets'), href: '/app/assets' },
+            { label: assetLabel, href: `/app/assets/${assetId}` },
+            { label: t('assetForm.titleEdit', 'Edit') },
+          ]}
+        />
+        <button onClick={() => navigate(`/app/assets/${assetId}`)} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
           {t('assetForm.back', 'Back to asset')}
         </button>
       </div>
@@ -57,7 +67,7 @@ export function AssetEditPage() {
       {assetQuery.isPending ? (
         <Card className="border-border shadow-none">
           <CardContent className="py-6 text-sm text-muted-foreground">
-            Loading asset...
+            {t('details.loading', 'Loading...')}
           </CardContent>
         </Card>
       ) : null}
@@ -65,9 +75,9 @@ export function AssetEditPage() {
       {assetQuery.isError ? (
         <Card className="border-border shadow-none">
           <CardHeader>
-            <CardTitle className="text-base font-medium">Unable to load asset</CardTitle>
+            <CardTitle className="text-base font-medium">{t('app.assets.errorTitle', 'Unable to load asset')}</CardTitle>
             <CardDescription>
-              Please refresh the page or try again in a moment.
+              {t('app.users.errorDescription', 'Please refresh the page or try again in a moment.')}
             </CardDescription>
           </CardHeader>
         </Card>

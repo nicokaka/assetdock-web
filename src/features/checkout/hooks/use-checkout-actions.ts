@@ -6,7 +6,7 @@ export function useCheckoutMutation(assetId: string) {
 
   return useMutation({
     mutationFn: async (data: { userId: string; expectedReturnDate?: string; notes?: string }) => {
-      const response = await httpClient.request<any>(`/assets/${assetId}/checkout`, {
+      const response = await httpClient.request<unknown>(`/assets/${assetId}/checkout`, {
         method: 'POST',
         body: data
       })
@@ -26,7 +26,7 @@ export function useCheckinMutation(assetId: string) {
 
   return useMutation({
     mutationFn: async (data: { notes?: string }) => {
-      const response = await httpClient.request<any>(`/assets/${assetId}/checkin`, {
+      const response = await httpClient.request<unknown>(`/assets/${assetId}/checkin`, {
         method: 'POST',
         body: data
       })

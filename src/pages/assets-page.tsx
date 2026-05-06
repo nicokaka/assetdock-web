@@ -30,10 +30,10 @@ export function AssetsPage() {
   return (
     <section className="space-y-6">
       <PageHeader
-        title={t('app.assets.title', 'Assets')}
+        title={assetsQuery.data ? `${t('app.assets.title', 'Assets')} (${assetsQuery.data.totalItems})` : t('app.assets.title', 'Assets')}
         description={t('app.assets.description', 'Review the assets available to the current session.')}
         action={
-          <Button variant="outline" onClick={() => navigate('/app/assets/new')}>
+          <Button variant="default" onClick={() => navigate('/app/assets/new')}>
             {t('app.assets.newAsset', 'New Asset')}
           </Button>
         }

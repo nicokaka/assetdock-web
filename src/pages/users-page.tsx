@@ -26,10 +26,10 @@ export function UsersPage() {
   return (
     <section className="space-y-6">
       <PageHeader
-        title={t('app.users.title', 'Users')}
+        title={usersQuery.data ? `${t('app.users.title', 'Users')} (${usersQuery.data.totalItems})` : t('app.users.title', 'Users')}
         description={t('app.users.description', 'Manage the users that have access to the dashboard.')}
         action={
-          <Button variant="outline" onClick={() => navigate('/app/users/new')}>
+          <Button variant="default" onClick={() => navigate('/app/users/new')}>
             {t('app.users.newUser', 'New User')}
           </Button>
         }

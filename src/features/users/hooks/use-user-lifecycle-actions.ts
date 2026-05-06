@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import { updateUserRoles } from '@/features/users/api/update-user-roles'
 import { updateUserStatus } from '@/features/users/api/update-user-status'
@@ -7,6 +8,7 @@ import type { UserDetail, UserRole, UserStatus } from '@/features/users/types/us
 
 export function useUpdateUserStatus(userId: string) {
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
 
   return useMutation({
     mutationFn: (status: UserStatus) => updateUserStatus(userId, { status }),
@@ -30,12 +32,12 @@ export function useUpdateUserStatus(userId: string) {
       if (context?.previousUser) {
         queryClient.setQueryData(['users', 'detail', userId], context.previousUser)
       }
-      toast.error('Failed to update status')
+      toast.error(t('toast.user.statusError', 'Failed to update status'))
     },
 
     onSuccess: (user) => {
       queryClient.setQueryData(['users', 'detail', user.id], user)
-      toast.success('User status updated')
+      toast.success(t('toast.user.statusSuccess', 'User status updated'))
     },
 
     onSettled: () => {
@@ -47,6 +49,7 @@ export function useUpdateUserStatus(userId: string) {
 
 export function useUpdateUserRoles(userId: string) {
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
 
   return useMutation({
     mutationFn: (roles: UserRole[]) => updateUserRoles(userId, { roles }),
@@ -70,12 +73,12 @@ export function useUpdateUserRoles(userId: string) {
       if (context?.previousUser) {
         queryClient.setQueryData(['users', 'detail', userId], context.previousUser)
       }
-      toast.error('Failed to update privileges')
+      toast.error(t('toast.user.rolesError', 'Failed to update privileges'))
     },
 
     onSuccess: (user) => {
       queryClient.setQueryData(['users', 'detail', user.id], user)
-      toast.success('User privileges updated')
+      toast.success(t('toast.user.rolesSuccess', 'User privileges updated'))
     },
 
     onSettled: () => {

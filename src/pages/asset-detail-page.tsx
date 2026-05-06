@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
+import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AssetDetailView } from '@/features/assets/components/asset-detail-view'
 import { useAssetDetailQuery } from '@/features/assets/hooks/use-asset-detail'
@@ -13,6 +14,8 @@ export function AssetDetailPage() {
   const { assetId = '' } = useParams()
   const assetQuery = useAssetDetailQuery(assetId)
 
+  const assetLabel = assetQuery.data?.displayName || assetQuery.data?.assetTag || t('breadcrumb.asset', 'Asset')
+
   const isNotFound =
     assetQuery.isError &&
     assetQuery.error instanceof HttpError &&
@@ -20,8 +23,14 @@ export function AssetDetailPage() {
 
   return (
     <section className="space-y-6">
-      <div>
-        <button onClick={() => navigate('/app/assets')} className={buttonVariants({ variant: 'outline' })}>
+      <div className="flex items-center justify-between">
+        <Breadcrumbs
+          items={[
+            { label: t('app.header.assets', 'Assets'), href: '/app/assets' },
+            { label: assetLabel },
+          ]}
+        />
+        <button onClick={() => navigate('/app/assets')} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
           {t('assetForm.back', 'Back to assets')}
         </button>
       </div>
@@ -29,7 +38,7 @@ export function AssetDetailPage() {
       {assetQuery.isPending ? (
         <Card className="border-border shadow-none">
           <CardContent className="py-6 text-sm text-muted-foreground">
-            Loading asset...
+            {t('details.loading', 'Loading...')}
           </CardContent>
         </Card>
       ) : null}

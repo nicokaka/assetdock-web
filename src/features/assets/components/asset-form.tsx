@@ -23,6 +23,7 @@ import {
   type AssetFormValues,
 } from '@/features/assets/types/asset-form'
 import { getLookupStateMessage } from '@/lib/format'
+import { CreateCatalogItemDialog } from '@/features/catalog/components/create-catalog-item-dialog'
 
 type AssetFormProps = {
   defaultValues: AssetFormValues
@@ -105,23 +106,26 @@ export function AssetForm({
             <FormItem>
               <FormLabel>{t('assetForm.labels.category', 'Category')}</FormLabel>
               <FormControl>
-                <select
-                  {...field}
-                  className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                >
-                  <option value="">
-                    {getLookupStateMessage(
-                      categoriesQuery.isPending,
-                      categoriesQuery.isError,
-                      t('assetForm.placeholders.noCategory', 'No category')
-                    )}
-                  </option>
-                  {categories.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
+                <div className="flex gap-2">
+                  <select
+                    {...field}
+                    className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                  >
+                    <option value="">
+                      {getLookupStateMessage(
+                        categoriesQuery.isPending,
+                        categoriesQuery.isError,
+                        t('assetForm.placeholders.noCategory', 'No category')
+                      )}
                     </option>
-                  ))}
-                </select>
+                    {categories.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                  <CreateCatalogItemDialog type="category" onSuccess={(id) => form.setValue('categoryId', id)} />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -134,23 +138,26 @@ export function AssetForm({
             <FormItem>
               <FormLabel>{t('assetForm.labels.manufacturer', 'Manufacturer')}</FormLabel>
               <FormControl>
-                <select
-                  {...field}
-                  className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                >
-                  <option value="">
-                    {getLookupStateMessage(
-                      manufacturersQuery.isPending,
-                      manufacturersQuery.isError,
-                      t('assetForm.placeholders.noManufacturer', 'No manufacturer')
-                    )}
-                  </option>
-                  {manufacturers.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
+                <div className="flex gap-2">
+                  <select
+                    {...field}
+                    className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                  >
+                    <option value="">
+                      {getLookupStateMessage(
+                        manufacturersQuery.isPending,
+                        manufacturersQuery.isError,
+                        t('assetForm.placeholders.noManufacturer', 'No manufacturer')
+                      )}
                     </option>
-                  ))}
-                </select>
+                    {manufacturers.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                  <CreateCatalogItemDialog type="manufacturer" onSuccess={(id) => form.setValue('manufacturerId', id)} />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -176,23 +183,26 @@ export function AssetForm({
             <FormItem>
               <FormLabel>{t('assetForm.labels.location', 'Location')}</FormLabel>
               <FormControl>
-                <select
-                  {...field}
-                  className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                >
-                  <option value="">
-                    {getLookupStateMessage(
-                      locationsQuery.isPending,
-                      locationsQuery.isError,
-                      t('assetForm.placeholders.noLocation', 'No location')
-                    )}
-                  </option>
-                  {locations.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
+                <div className="flex gap-2">
+                  <select
+                    {...field}
+                    className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                  >
+                    <option value="">
+                      {getLookupStateMessage(
+                        locationsQuery.isPending,
+                        locationsQuery.isError,
+                        t('assetForm.placeholders.noLocation', 'No location')
+                      )}
                     </option>
-                  ))}
-                </select>
+                    {locations.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                  <CreateCatalogItemDialog type="location" onSuccess={(id) => form.setValue('currentLocationId', id)} />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

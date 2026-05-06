@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import { updateUser } from '@/features/users/api/update-user'
 import type { UserDetail } from '@/features/users/types/user'
@@ -7,6 +8,7 @@ import type { UpdateUserProfileInput } from '@/features/users/types/user-form'
 
 export function useUpdateUserMutation(userId: string) {
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
 
   return useMutation({
     mutationFn: (input: UpdateUserProfileInput) => updateUser(userId, input),
@@ -30,12 +32,12 @@ export function useUpdateUserMutation(userId: string) {
       if (context?.previousUser) {
         queryClient.setQueryData(['users', 'detail', userId], context.previousUser)
       }
-      toast.error('Failed to update user profile')
+      toast.error(t('toast.user.updateError', 'Failed to update user profile'))
     },
 
     onSuccess: (user) => {
       queryClient.setQueryData(['users', 'detail', user.id], user)
-      toast.success('User profile updated')
+      toast.success(t('toast.user.updateSuccess', 'User profile updated'))
     },
 
     onSettled: () => {

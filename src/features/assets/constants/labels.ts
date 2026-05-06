@@ -9,15 +9,15 @@ export const assetStatusLabels: Record<string, string> = {
 export function assetStatusClassName(status: string) {
   switch (status) {
     case 'ASSIGNED':
-      return 'border-emerald-200 bg-emerald-50 text-emerald-700'
+      return 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400'
     case 'IN_STOCK':
-      return 'border-sky-200 bg-sky-50 text-sky-700'
+      return 'border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-400'
     case 'IN_MAINTENANCE':
-      return 'border-amber-200 bg-amber-50 text-amber-700'
+      return 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-400'
     case 'RETIRED':
-      return 'border-zinc-200 bg-zinc-100 text-zinc-700'
+      return 'border-zinc-200 bg-zinc-100 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400'
     case 'LOST':
-      return 'border-rose-200 bg-rose-50 text-rose-700'
+      return 'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-800 dark:bg-rose-950 dark:text-rose-400'
     default:
       return 'border-border/70 bg-background/80 text-muted-foreground'
   }

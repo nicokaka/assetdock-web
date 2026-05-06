@@ -24,13 +24,14 @@ function CustomTooltip({
   active?: boolean
   payload?: Array<{ payload: StatusDataItem }>
 }) {
+  const { t } = useTranslation()
   if (!active || !payload?.length) return null
   const item = payload[0].payload
   return (
     <div className="rounded-lg border border-border/50 bg-background px-3 py-2 text-xs shadow-xl">
       <p className="font-medium text-foreground">{item.label}</p>
       <p className="text-muted-foreground">
-        {item.count} asset{item.count !== 1 ? 's' : ''} · {item.percentage}%
+        {t('app.overview.distribution.assetCount', { count: item.count, defaultValue: '{{count}} asset', defaultValue_plural: '{{count}} assets' })} · {item.percentage}%
       </p>
     </div>
   )

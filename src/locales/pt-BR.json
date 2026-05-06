@@ -1,7 +1,12 @@
 {
   "common": {
     "welcome": "Bem-vindo ao AssetDock",
-    "login": "Entrar"
+    "login": "Entrar",
+    "loading": "Carregando...",
+    "close": "Fechar",
+    "cancel": "Cancelar",
+    "saving": "Salvando...",
+    "optional": "Opcional"
   },
   "auth": {
     "login": {
@@ -22,7 +27,8 @@
       "errorGeneric": "Não foi possível fazer login neste momento.",
       "errorInvalid": "E-mail ou senha inválidos.",
       "errorLocked": "Sua conta foi bloqueada. Contate o administrador."
-    }
+    },
+    "loadingSession": "Carregando sessão..."
   },
   "app": {
     "header": {
@@ -45,7 +51,21 @@
       "errorTitle": "Não foi possível carregar os ativos",
       "emptyTitle": "Nenhum ativo encontrado",
       "emptyDescriptionFilters": "Tente ajustar seus filtros.",
-      "emptyDescriptionStart": "Crie o primeiro ativo para começar a trabalhar com a área de inventário."
+      "emptyDescriptionStart": "Crie o primeiro ativo para começar a trabalhar com a área de inventário.",
+      "qrCode": {
+        "viewButton": "QR Code",
+        "title": "QR Code do Ativo",
+        "description": "Escaneie este código para acessar rapidamente os detalhes do ativo.",
+        "downloadLabel": "Imprimir Etiqueta (PDF)"
+      },
+      "table": {
+        "actions": "Ações",
+        "view": "Visualizar",
+        "status": "Status",
+        "tag": "Tag",
+        "name": "Nome",
+        "serial": "Série"
+      }
     },
     "users": {
       "title": "Usuários",
@@ -78,7 +98,9 @@
       "distribution": {
         "title": "Distribuição de Ativos",
         "noData": "Sem dados",
-        "total": "total"
+        "total": "total",
+        "assetCount": "{{count}} ativo",
+        "assetCount_plural": "{{count}} ativos"
       },
       "activity": {
         "title": "Atividade Recente",
@@ -117,7 +139,50 @@
         "WEB_SESSION_CREATED": "Sessão iniciada",
         "WEB_SESSION_LOGGED_OUT": "Sessão encerrada",
         "WEB_SESSION_EXPIRED": "Sessão expirada"
+      },
+      "greeting": {
+        "morning": "Bom dia, {{name}}",
+        "afternoon": "Boa tarde, {{name}}",
+        "evening": "Boa noite, {{name}}"
+      },
+      "quick": {
+        "newAsset": "Novo Ativo",
+        "newUser": "Novo Usuário",
+        "import": "Importar CSV"
       }
+    },
+    "timeline": {
+      "title": "Linha do Tempo",
+      "description": "Histórico de todos os eventos relacionados a este ativo",
+      "created": "Ativo criado",
+      "updated": "Detalhes do ativo atualizados",
+      "checkedOut": "Ativo em check-out",
+      "checkedIn": "Ativo em check-in",
+      "assigned": "Ativo atribuído a um usuário",
+      "unassigned": "Atribuição removida",
+      "archived": "Ativo arquivado",
+      "error": "Não foi possível carregar a linha do tempo",
+      "empty": "Nenhum evento encontrado"
+    },
+    "checkin": {
+      "button": "Check-in",
+      "title": "Check-in do Ativo",
+      "description": "Devolver este ativo para o estoque.",
+      "asset": "Ativo",
+      "notes": "Notas de Devolução",
+      "notesPlaceholder": "Condição ao devolver, problemas encontrados, etc.",
+      "submit": "Confirmar Check-in"
+    },
+    "checkout": {
+      "button": "Check-out",
+      "title": "Check-out de Ativo",
+      "description": "Atribuir este ativo temporariamente a um usuário.",
+      "asset": "Ativo",
+      "user": "Usuário",
+      "expectedReturn": "Data de Devolução Esperada",
+      "notes": "Notas",
+      "notesPlaceholder": "Motivo do check-out, condição do ativo, etc.",
+      "submit": "Confirmar Check-out"
     }
   },
   "public": {
@@ -134,7 +199,8 @@
       "mvpDescription": "O aplicativo já cobre os principais fluxos operacionais sem adicionar ruído visual.",
       "mvpItem1": "Ativos, ciclo de vida e atribuições",
       "mvpItem2": "Usuários, funções e status",
-      "mvpItem3": "Logs de auditoria e importações CSV"
+      "mvpItem3": "Logs de auditoria e importações CSV",
+      "openAppAuth": "Acessar aplicativo"
     }
   },
   "assetForm": {
@@ -184,11 +250,13 @@
       "fullName": "Nome completo",
       "email": "Endereço de e-mail",
       "roles": "Funções",
-      "status": "Status"
+      "status": "Status",
+      "password": "Senha"
     },
     "placeholders": {
       "fullName": "ex. João Silva",
-      "email": "ex. joao.silva@empresa.com.br"
+      "email": "ex. joao.silva@empresa.com.br",
+      "password": "Crie uma senha"
     },
     "roles": {
       "admin": "Administrador",
@@ -275,8 +343,11 @@
       "resetConfirm": "Redefinir Senha",
       "resetting": "Redefinindo...",
       "resetSuccess": "Senha redefinida com sucesso.",
-      "resetError": "Falha ao redefinir a senha."
-    }
+      "resetError": "Falha ao redefinir a senha.",
+      "noRoles": "Sem funções"
+    },
+    "loading": "Carregando...",
+    "loadingUser": "Buscando os dados mais recentes do usuário."
   },
   "audit": {
     "title": "Logs de Auditoria",
@@ -291,7 +362,10 @@
     "emptyTitle": "Nenhum log de auditoria encontrado",
     "emptyDescription": "A atividade do sistema aparecerá aqui.",
     "errorTitle": "Não foi possível carregar os logs",
-    "errorDescription": "Por favor, atualize a página."
+    "errorDescription": "Por favor, atualize a página.",
+    "searchPlaceholder": "Filtrar por ID do ator...",
+    "allEventTypes": "Todos os tipos de evento",
+    "emptyFilters": "Nenhum registro corresponde aos filtros atuais."
   },
   "imports": {
     "title": "Importações",
@@ -301,7 +375,9 @@
       "filename": "Nome do arquivo",
       "status": "Status",
       "progress": "Progresso",
-      "date": "Data"
+      "date": "Data",
+      "result": "Resultado",
+      "failureReason": "Motivo da Falha"
     },
     "status": {
       "PENDING": "Pendente",
@@ -326,15 +402,75 @@
       "adminName": "Nome do Administrador",
       "adminEmail": "E-mail do Administrador",
       "adminPassword": "Senha",
-      "confirmPassword": "Confirmar Senha"
+      "confirmPassword": "Confirmar Senha",
+      "organizationName": "Nome da organização",
+      "adminFullName": "Nome completo do administrador"
     },
     "placeholders": {
       "orgName": "ex. Hebron Farmacêutica",
       "adminName": "ex. Administrador do Sistema",
-      "adminEmail": "admin@empresa.com.br"
+      "adminEmail": "admin@empresa.com.br",
+      "organizationName": "Acme Corp",
+      "adminFullName": "Ex: João da Silva",
+      "adminPassword": "Crie uma senha forte"
     },
     "submit": "Concluir Configuração",
     "submitting": "Configurando...",
-    "errorGeneric": "Não foi possível concluir a configuração. O ambiente pode já estar configurado."
+    "errorGeneric": "Não foi possível concluir a configuração. O ambiente pode já estar configurado.",
+    "errorConflict": "Este sistema já está configurado. Faça login.",
+    "subtitle": "Configuração inicial do sistema",
+    "cardTitle": "Crie sua organização",
+    "cardDescription": "Configure o nome da organização e as credenciais de administrador que serão usadas para gerenciar a plataforma."
+  },
+  "catalog": {
+    "newCategory": "Nova Categoria",
+    "newManufacturer": "Novo Fabricante",
+    "newLocation": "Nova Localização",
+    "newDescription": "Preencha os detalhes abaixo para adicionar uma nova opção.",
+    "nameLabel": "Nome",
+    "namePlaceholder": "Ex: Equipamento de TI",
+    "descriptionLabel": "Descrição",
+    "createSuccess": "Item criado com sucesso",
+    "createError": "Falha ao criar item"
+  },
+  "search": {
+    "placeholder": "Digite um comando ou busque...",
+    "searching": "Buscando...",
+    "noResults": "Nenhum resultado encontrado."
+  },
+  "toast": {
+    "asset": {
+      "createSuccess": "Ativo criado com sucesso",
+      "createError": "Falha ao criar ativo",
+      "statusSuccess": "Status do ativo atualizado",
+      "statusError": "Falha ao atualizar status",
+      "archiveSuccess": "Ativo arquivado",
+      "archiveError": "Falha ao arquivar ativo",
+      "updateSuccess": "Ativo atualizado com sucesso",
+      "updateError": "Falha ao atualizar ativo"
+    },
+    "user": {
+      "createSuccess": "Usuário criado com sucesso",
+      "createError": "Falha ao criar usuário",
+      "statusSuccess": "Status do usuário atualizado",
+      "statusError": "Falha ao atualizar status",
+      "rolesSuccess": "Permissões do usuário atualizadas",
+      "rolesError": "Falha ao atualizar permissões",
+      "updateSuccess": "Perfil do usuário atualizado",
+      "updateError": "Falha ao atualizar perfil"
+    },
+    "assignment": {
+      "assignSuccess": "Ativo atribuído com sucesso",
+      "assignError": "Falha ao atribuir ativo",
+      "unassignSuccess": "Ativo desatribuído",
+      "unassignError": "Falha ao desatribuir ativo"
+    },
+    "setup": {
+      "success": "Sistema configurado com sucesso. Agora você pode fazer login."
+    }
+  },
+  "breadcrumb": {
+    "asset": "Ativo",
+    "user": "Usuário"
   }
 }

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { buttonVariants } from '@/components/ui/button'
+import { Breadcrumbs } from '@/components/ui/breadcrumbs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   AssetForm,
@@ -30,8 +31,14 @@ export function AssetCreatePage() {
 
   return (
     <section className="space-y-6">
-      <div>
-        <button onClick={() => navigate('/app/assets')} className={buttonVariants({ variant: 'outline' })}>
+      <div className="flex items-center justify-between">
+        <Breadcrumbs
+          items={[
+            { label: t('app.header.assets', 'Assets'), href: '/app/assets' },
+            { label: t('assetForm.titleNew', 'New Asset') },
+          ]}
+        />
+        <button onClick={() => navigate('/app/assets')} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
           {t('assetForm.back', 'Back to assets')}
         </button>
       </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Monitor, User, Loader2 } from 'lucide-react'
@@ -14,6 +15,7 @@ import { useGlobalSearch } from '@/features/search/hooks/use-search'
 import { useDebounce } from '@/hooks/use-debounce'
 
 export function CommandPalette() {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 300)
@@ -41,7 +43,7 @@ export function CommandPalette() {
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput 
-        placeholder="Type a command or search..." 
+        placeholder={t('search.placeholder', 'Type a command or search...')} 
         value={query} 
         onValueChange={setQuery} 
       />
@@ -50,15 +52,15 @@ export function CommandPalette() {
           {isFetching ? (
             <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Searching...
+              {t('search.searching', 'Searching...')}
             </div>
           ) : (
-            'No results found.'
+            t('search.noResults', 'No results found.')
           )}
         </CommandEmpty>
 
         {data?.assets && data.assets.length > 0 && (
-          <CommandGroup heading="Assets">
+          <CommandGroup heading={t('app.header.assets', 'Assets')}>
             {data.assets.map((asset) => (
               <CommandItem
                 key={asset.id}
@@ -76,7 +78,7 @@ export function CommandPalette() {
         )}
 
         {data?.users && data.users.length > 0 && (
-          <CommandGroup heading="Users">
+          <CommandGroup heading={t('app.header.users', 'Users')}>
             {data.users.map((user) => (
               <CommandItem
                 key={user.id}

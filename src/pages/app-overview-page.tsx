@@ -1,23 +1,63 @@
-import { Server, CheckCircle2, Users, AlertTriangle } from 'lucide-react'
+import { Server, CheckCircle2, Users, AlertTriangle, Plus, FileUp } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/components/layout/page-header'
+import { Button } from '@/components/ui/button'
 import { KpiCard } from '@/features/dashboard/components/kpi-card'
 import { AssetStatusChart } from '@/features/dashboard/components/asset-status-chart'
 import { AssetHealthBar } from '@/features/dashboard/components/asset-health-bar'
 import { RecentActivityFeed } from '@/features/dashboard/components/recent-activity-feed'
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
+import { useSessionQuery } from '@/features/auth/hooks/use-session'
 
 export function AppOverviewPage() {
   const { stats, isLoading } = useDashboardStats()
   const { t } = useTranslation()
+  const sessionQuery = useSessionQuery()
+
+  const currentHour = new Date().getHours()
+  let greetingKey = 'app.overview.greeting.evening'
+  let greetingDefault = 'Good evening, {{name}}'
+  if (currentHour < 12) {
+    greetingKey = 'app.overview.greeting.morning'
+    greetingDefault = 'Good morning, {{name}}'
+  } else if (currentHour < 18) {
+    greetingKey = 'app.overview.greeting.afternoon'
+    greetingDefault = 'Good afternoon, {{name}}'
+  }
+
+  const firstName = sessionQuery.data?.user.fullName?.split(' ')[0] ?? ''
 
   return (
     <section className="space-y-6">
-      <PageHeader
-        title={t('app.overview.title', 'Overview')}
-        description={t('app.overview.description', 'Asset inventory status and recent operational activity.')}
-      />
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <PageHeader
+          title={t(greetingKey, { defaultValue: greetingDefault, name: firstName }).replace(/,\s*$/, '')}
+          description={t('app.overview.description', 'Asset inventory status and recent operational activity.')}
+          className="pb-0"
+        />
+        <div className="flex flex-wrap items-center gap-2">
+          <Button asChild variant="outline" size="sm" className="h-8">
+            <Link to="/app/assets/new">
+              <Plus className="mr-1.5 h-3.5 w-3.5" />
+              {t('app.overview.quick.newAsset', 'New Asset')}
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="h-8">
+            <Link to="/app/users/new">
+              <Plus className="mr-1.5 h-3.5 w-3.5" />
+              {t('app.overview.quick.newUser', 'New User')}
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="sm" className="h-8">
+            <Link to="/app/imports">
+              <FileUp className="mr-1.5 h-3.5 w-3.5" />
+              {t('app.overview.quick.import', 'Import CSV')}
+            </Link>
+          </Button>
+        </div>
+      </div>
 
       {/* KPI Row */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

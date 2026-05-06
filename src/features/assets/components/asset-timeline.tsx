@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import { Info, PlusCircle, ArrowUpRight, ArrowDownRight, Edit, Settings } from 'lucide-react'
 import type { TimelineEvent } from '../hooks/use-asset-timeline'
 import { useAssetTimeline } from '../hooks/use-asset-timeline'
@@ -26,7 +27,7 @@ const getEventIcon = (eventType: string) => {
   }
 }
 
-const getEventDescription = (event: TimelineEvent, t: any) => {
+const getEventDescription = (event: TimelineEvent, t: TFunction) => {
   switch (event.eventType) {
     case 'ASSET_CREATED':
       return t('app.timeline.created', 'Asset was created')

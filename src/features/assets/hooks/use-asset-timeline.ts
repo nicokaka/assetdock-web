@@ -6,7 +6,7 @@ export interface TimelineEvent {
   eventType: string
   actorUserId: string
   occurredAt: string
-  details: Record<string, any>
+  details: Record<string, unknown>
 }
 
 export function useAssetTimeline(assetId: string) {

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -11,6 +12,11 @@ import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stat
 import { cn } from '@/lib/utils'
 
 export function AuthenticatedShell() {
+
+  const [modifierKey] = useState<string>(
+    () => /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform) ? 'Cmd' : 'Ctrl'
+  )
+
   const sessionQuery = useSessionQuery()
   const logoutMutation = useLogoutMutation()
   const { stats } = useDashboardStats()
@@ -19,7 +25,7 @@ export function AuthenticatedShell() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="relative isolate min-h-screen overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,rgba(15,23,42,0.08),transparent_60%)]" />
+        <div className="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top,rgba(15,23,42,0.08),transparent_60%)] pointer-events-none" />
         <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-5 sm:px-6 lg:px-8">
           <header className="sticky top-0 z-20 mb-8 rounded-2xl border border-border/80 bg-background/88 px-4 py-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/72 sm:px-5">
             <div className="flex flex-col gap-4">
@@ -93,15 +99,22 @@ export function AuthenticatedShell() {
                   </NavLink>
                 </nav>
                 <div className="flex items-center gap-2 self-start lg:self-auto">
-                  <div className="hidden lg:flex items-center text-sm text-muted-foreground/60 mr-2">
-                    {t('app.header.press', 'Press')} <kbd className="mx-1 rounded border bg-muted px-1.5 font-mono text-[10px]">Cmd K</kbd> {t('app.header.toSearch', 'to search')}
-                  </div>
                   <LanguageToggle />
                   <ThemeToggle />
+                  <button
+                    onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, ctrlKey: true }))}
+                    className="hidden lg:flex items-center gap-2 rounded-md border border-input bg-muted/40 px-3 py-1.5 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  >
+                    <Search className="h-4 w-4" />
+                    <span className="flex-1 text-left">{t('app.header.searchPlaceholder', 'Search...')}</span>
+                    <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                      <span className="text-xs">{modifierKey}</span> K
+                    </kbd>
+                  </button>
                   <Button
                     variant="outline"
-                    onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
-                    className="border-border/80 bg-background/80 hover:bg-accent/80"
+                    onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, ctrlKey: true }))}
+                    className="lg:hidden border-border/80 bg-background/80 hover:bg-accent/80"
                     size="icon"
                     title={t('app.header.search', 'Search')}
                   >
@@ -123,6 +136,12 @@ export function AuthenticatedShell() {
           <main className="flex-1 pb-10">
             <Outlet />
           </main>
+          
+          <footer className="mt-auto border-t border-border/40 py-6 text-center">
+            <p className="text-xs text-muted-foreground">
+              AssetDock v0.1.0 &middot; &copy; {new Date().getFullYear()} &middot; <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> API Online</span>
+            </p>
+          </footer>
         </div>
       </div>
       <CommandPalette />
