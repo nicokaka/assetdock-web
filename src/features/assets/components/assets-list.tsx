@@ -33,6 +33,7 @@ export function AssetsList({ assets }: AssetsListProps) {
           <TableHead>{t('app.assets.table.tag', 'Tag')}</TableHead>
           <TableHead>{t('app.assets.table.name', 'Name')}</TableHead>
           <TableHead>{t('app.assets.table.serial', 'Serial')}</TableHead>
+          <TableHead>{t('app.assets.table.assignedTo', 'Assigned To')}</TableHead>
           <TableHead className="text-right">{t('app.assets.table.actions', 'Actions')}</TableHead>
         </TableRow>
       </TableHeader>
@@ -64,6 +65,9 @@ export function AssetsList({ assets }: AssetsListProps) {
             </TableCell>
             <TableCell className="text-muted-foreground">
               {asset.serialNumber || '—'}
+            </TableCell>
+            <TableCell className="text-muted-foreground">
+              {asset.currentAssignedUserName || '—'}
             </TableCell>
             <TableCell className="text-right">
               <Link

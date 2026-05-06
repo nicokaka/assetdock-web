@@ -11,6 +11,7 @@ export type AssetListItem = {
   displayName: string | null
   serialNumber: string | null
   status: AssetStatus
+  currentAssignedUserName: string | null
   archivedAt: string | null
 }
 
