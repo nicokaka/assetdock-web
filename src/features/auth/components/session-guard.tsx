@@ -59,7 +59,7 @@ export function RequireSession({ children }: PropsWithChildren) {
   if (sessionQuery.isError && !sessionQuery.data) {
     // If it's a 401/403, data is null, so it will fall through to Navigate /login
     // If it's a network error or 500, we should show the error state
-    const err = sessionQuery.error as any
+    const err = sessionQuery.error as { status?: number }
     if (err?.status !== 401 && err?.status !== 403) {
        return <SessionLoadingState isError={true} />
     }
@@ -95,7 +95,7 @@ export function RedirectIfAuthenticated({ children }: PropsWithChildren) {
   }
 
   if (sessionQuery.isError) {
-    const err = sessionQuery.error as any
+    const err = sessionQuery.error as { status?: number }
     if (err?.status !== 401 && err?.status !== 403) {
       return <SessionLoadingState isError={true} />
     }
