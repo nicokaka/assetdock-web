@@ -14,6 +14,7 @@ import {
 import { useAssetDetailQuery } from '@/features/assets/hooks/use-asset-detail'
 import { useUpdateAssetMutation } from '@/features/assets/hooks/use-update-asset'
 import { HttpError } from '@/lib/http-client'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 function toDefaultValues(asset: NonNullable<ReturnType<typeof useAssetDetailQuery>['data']>): AssetFormValues {
   return {
@@ -29,6 +30,7 @@ function toDefaultValues(asset: NonNullable<ReturnType<typeof useAssetDetailQuer
 }
 
 export function AssetEditPage() {
+  usePageTitle(useTranslation().t('assetForm.titleEdit', 'Edit Asset'))
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { assetId = '' } = useParams()

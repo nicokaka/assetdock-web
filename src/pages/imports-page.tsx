@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ImportJobSummary } from '@/features/imports/components/import-job-summary'
 import { useImportAssetsCsvMutation, useImportJobQuery } from '@/features/imports/hooks/use-imports'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function ImportsPage() {
+  usePageTitle(useTranslation().t('imports.title', 'Imports'))
   const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
   const [jobId, setJobId] = useState<string | null>(null)

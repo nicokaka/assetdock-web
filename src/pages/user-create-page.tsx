@@ -8,8 +8,10 @@ import { UserForm } from '@/features/users/components/user-form'
 import { useCreateUserMutation } from '@/features/users/hooks/use-create-user'
 import { toCreateUserInput, type UserFormValues } from '@/features/users/types/user-form'
 import { HttpError } from '@/lib/http-client'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function UserCreatePage() {
+  usePageTitle(useTranslation().t('userForm.titleNew', 'New User'))
   const navigate = useNavigate()
   const { t } = useTranslation()
   const createUserMutation = useCreateUserMutation()

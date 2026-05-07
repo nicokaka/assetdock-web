@@ -10,6 +10,7 @@ import { LanguageToggle } from '@/components/language-toggle'
 import { useLogoutMutation, useSessionQuery } from '@/features/auth/hooks/use-session'
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { cn } from '@/lib/utils'
+import { APP_VERSION } from '@/lib/version'
 
 export function AuthenticatedShell() {
 
@@ -31,7 +32,7 @@ export function AuthenticatedShell() {
             <div className="flex flex-col gap-4">
               <div className="space-y-1">
                 <div className="text-sm font-semibold tracking-tight text-foreground">
-                  AssetDock Web
+                  AssetDock
                 </div>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                   <span>{sessionQuery.data?.user.fullName}</span>
@@ -139,7 +140,7 @@ export function AuthenticatedShell() {
           
           <footer className="mt-auto border-t border-border/40 py-6 text-center">
             <p className="text-xs text-muted-foreground">
-              AssetDock v0.1.0 &middot; &copy; {new Date().getFullYear()} &middot; <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> API Online</span>
+              AssetDock v{APP_VERSION} &middot; &copy; {new Date().getFullYear()} &middot; <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> API Online</span>
             </p>
           </footer>
         </div>

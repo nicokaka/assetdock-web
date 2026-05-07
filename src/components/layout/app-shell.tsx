@@ -28,7 +28,7 @@ export function AppShell() {
                   to="/"
                   className="text-sm font-semibold tracking-tight text-foreground transition-colors duration-200 hover:text-primary"
                 >
-                  AssetDock Web
+                  AssetDock
                 </Link>
                 <div className="flex items-center gap-2">
                   <LanguageToggle />

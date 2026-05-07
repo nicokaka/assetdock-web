@@ -10,8 +10,10 @@ import { AssetHealthBar } from '@/features/dashboard/components/asset-health-bar
 import { RecentActivityFeed } from '@/features/dashboard/components/recent-activity-feed'
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { useSessionQuery } from '@/features/auth/hooks/use-session'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function AppOverviewPage() {
+  usePageTitle(useTranslation().t('app.header.overview', 'Overview'))
   const { stats, isLoading } = useDashboardStats()
   const { t } = useTranslation()
   const sessionQuery = useSessionQuery()

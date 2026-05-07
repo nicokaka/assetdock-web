@@ -11,8 +11,10 @@ import type { AssetFormValues } from '@/features/assets/types/asset-form'
 import { toAssetInput } from '@/features/assets/types/asset-form'
 import { useCreateAssetMutation } from '@/features/assets/hooks/use-create-asset'
 import { HttpError } from '@/lib/http-client'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function AssetCreatePage() {
+  usePageTitle(useTranslation().t('assetForm.titleNew', 'New Asset'))
   const navigate = useNavigate()
   const { t } = useTranslation()
   const createAssetMutation = useCreateAssetMutation()

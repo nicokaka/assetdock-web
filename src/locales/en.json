@@ -187,19 +187,19 @@
   },
   "public": {
     "home": {
-      "kicker": "Asset inventory and access operations",
+      "kicker": "Corporate IT asset management",
       "apiOnline": "API Online",
       "apiChecking": "Checking API...",
       "apiOffline": "API Offline",
-      "title": "AssetDock Web",
-      "description": "A sober browser interface for assets, users, imports, and audit activity, built to work directly with the AssetDock API.",
+      "title": "AssetDock",
+      "description": "A robust and secure interface for enterprise IT asset management, user access control, and comprehensive audit activity logging.",
       "openApp": "Open the app",
       "viewAuth": "View authenticated area",
-      "mvpTitle": "Current MVP areas",
-      "mvpDescription": "The app already covers the main operational flows without adding visual noise.",
-      "mvpItem1": "Assets, lifecycle actions, and assignments",
-      "mvpItem2": "Users, roles, and status updates",
-      "mvpItem3": "Audit logs and CSV imports",
+      "mvpTitle": "Platform Capabilities",
+      "mvpDescription": "The platform provides the essential tools to control hardware inventory, user access, and compliance auditing.",
+      "mvpItem1": "Assets lifecycle tracking and assignments",
+      "mvpItem2": "Role-based user access management",
+      "mvpItem3": "Comprehensive audit logs and bulk imports",
       "openAppAuth": "Open application"
     }
   },

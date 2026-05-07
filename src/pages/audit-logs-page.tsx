@@ -9,6 +9,7 @@ import { useAuditLogsQuery } from '@/features/audit/hooks/use-audit-logs'
 import { PaginationControls } from '@/components/ui/pagination-controls'
 import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 const EVENT_TYPE_OPTIONS = [
   'USER_LOGIN',
@@ -27,6 +28,7 @@ const EVENT_TYPE_OPTIONS = [
 ] as const
 
 export function AuditLogsPage() {
+  usePageTitle(useTranslation().t('audit.title', 'Audit Logs'))
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [eventType, setEventType] = useState<string>('all')

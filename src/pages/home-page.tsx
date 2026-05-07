@@ -6,8 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useSetupStatus } from '@/features/setup/hooks/use-setup-status'
 import { useApiHealth } from '@/features/setup/hooks/use-api-health'
 import { useSessionQuery } from '@/features/auth/hooks/use-session'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function HomePage() {
+  usePageTitle()
   const { t } = useTranslation()
   const healthQuery = useApiHealth()
   const setupQuery = useSetupStatus()
@@ -21,7 +23,7 @@ export function HomePage() {
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <p className="text-sm font-medium tracking-tight text-muted-foreground">
-              {t('public.home.kicker', 'Asset inventory and access operations')}
+              {t('public.home.kicker', 'Corporate IT asset management')}
             </p>
             <div
               className={`flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium transition-colors ${
@@ -49,10 +51,10 @@ export function HomePage() {
             </div>
           </div>
           <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-            {t('public.home.title', 'AssetDock Web')}
+            {t('public.home.title', 'AssetDock')}
           </h1>
           <p className="max-w-2xl text-base leading-7 text-muted-foreground">
-            {t('public.home.description', 'A sober browser interface for assets, users, imports, and audit activity, built to work directly with the AssetDock API.')}
+            {t('public.home.description', 'A robust and secure interface for enterprise IT asset management, user access control, and comprehensive audit activity logging.')}
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -72,21 +74,21 @@ export function HomePage() {
       <Card className="border-border/80 bg-card/88 shadow-md backdrop-blur">
         <CardHeader>
           <CardTitle className="text-lg font-semibold tracking-tight">
-            {t('public.home.mvpTitle', 'Current MVP areas')}
+            {t('public.home.mvpTitle', 'Platform Capabilities')}
           </CardTitle>
           <CardDescription className="leading-6">
-            {t('public.home.mvpDescription', 'The app already covers the main operational flows without adding visual noise.')}
+            {t('public.home.mvpDescription', 'The platform provides the essential tools to control hardware inventory, user access, and compliance auditing.')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-muted-foreground">
           <div className="rounded-xl border border-border/70 bg-background/70 px-4 py-3">
-            {t('public.home.mvpItem1', 'Assets, lifecycle actions, and assignments')}
+            {t('public.home.mvpItem1', 'Assets lifecycle tracking and assignments')}
           </div>
           <div className="rounded-xl border border-border/70 bg-background/70 px-4 py-3">
-            {t('public.home.mvpItem2', 'Users, roles, and status updates')}
+            {t('public.home.mvpItem2', 'Role-based user access management')}
           </div>
           <div className="rounded-xl border border-border/70 bg-background/70 px-4 py-3">
-            {t('public.home.mvpItem3', 'Audit logs and CSV imports')}
+            {t('public.home.mvpItem3', 'Comprehensive audit logs and bulk imports')}
           </div>
         </CardContent>
       </Card>

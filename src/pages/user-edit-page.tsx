@@ -14,6 +14,7 @@ import { useUserDetailQuery } from '@/features/users/hooks/use-users'
 import type { UserEditFormValues } from '@/features/users/types/user-form'
 import { toUpdateUserProfileInput } from '@/features/users/types/user-form'
 import { HttpError } from '@/lib/http-client'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 function toDefaultValues(
   user: NonNullable<ReturnType<typeof useUserDetailQuery>['data']>,
@@ -27,6 +28,7 @@ function toDefaultValues(
 }
 
 export function UserEditPage() {
+  usePageTitle(useTranslation().t('userForm.titleEdit', 'Edit User'))
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { userId = '' } = useParams()

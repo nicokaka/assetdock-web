@@ -2,8 +2,10 @@ import { useTranslation } from 'react-i18next'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { SetupWizardForm } from '@/features/setup/components/setup-wizard-form'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function SetupPage() {
+  usePageTitle(useTranslation().t('setup.title', 'Welcome to AssetDock'))
   const { t } = useTranslation()
 
   return (

@@ -187,19 +187,19 @@
   },
   "public": {
     "home": {
-      "kicker": "Inventário de ativos e operações de acesso",
+      "kicker": "Gestão corporativa de patrimônio de TI",
       "apiOnline": "API Online",
       "apiChecking": "Verificando API...",
       "apiOffline": "API Offline",
-      "title": "AssetDock Web",
-      "description": "Uma interface de navegador sóbria para ativos, usuários, importações e auditoria, construída para funcionar com a API do AssetDock.",
+      "title": "AssetDock",
+      "description": "Uma interface robusta e segura para a gestão de ativos de TI, controle de acesso de usuários e registro abrangente de auditoria.",
       "openApp": "Abrir o app",
       "viewAuth": "Ver área autenticada",
-      "mvpTitle": "Áreas atuais do MVP",
-      "mvpDescription": "O aplicativo já cobre os principais fluxos operacionais sem adicionar ruído visual.",
-      "mvpItem1": "Ativos, ciclo de vida e atribuições",
-      "mvpItem2": "Usuários, funções e status",
-      "mvpItem3": "Logs de auditoria e importações CSV",
+      "mvpTitle": "Recursos da Plataforma",
+      "mvpDescription": "A plataforma fornece as ferramentas essenciais para controlar o inventário de hardware, acessos de usuários e auditoria de conformidade.",
+      "mvpItem1": "Rastreabilidade do ciclo de vida de ativos e atribuições",
+      "mvpItem2": "Gestão de acesso de usuários baseada em funções",
+      "mvpItem3": "Logs de auditoria completos e importações em lote",
       "openAppAuth": "Acessar aplicativo"
     }
   },

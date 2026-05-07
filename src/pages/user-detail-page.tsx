@@ -8,6 +8,7 @@ import { UserDetailView } from '@/features/users/components/user-detail-view'
 import { AdminResetPasswordDialog } from '@/features/users/components/admin-reset-password-dialog'
 import { useUserDetailQuery } from '@/features/users/hooks/use-users'
 import { HttpError } from '@/lib/http-client'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function UserDetailPage() {
   const navigate = useNavigate()
@@ -16,6 +17,7 @@ export function UserDetailPage() {
   const userQuery = useUserDetailQuery(userId)
 
   const userLabel = userQuery.data?.fullName || t('breadcrumb.user', 'User')
+  usePageTitle(userLabel)
 
   const isNotFound =
     userQuery.isError &&

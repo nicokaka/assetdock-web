@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { AssetDetailView } from '@/features/assets/components/asset-detail-view'
 import { useAssetDetailQuery } from '@/features/assets/hooks/use-asset-detail'
 import { HttpError } from '@/lib/http-client'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function AssetDetailPage() {
   const navigate = useNavigate()
@@ -15,6 +16,7 @@ export function AssetDetailPage() {
   const assetQuery = useAssetDetailQuery(assetId)
 
   const assetLabel = assetQuery.data?.displayName || assetQuery.data?.assetTag || t('breadcrumb.asset', 'Asset')
+  usePageTitle(assetLabel)
 
   const isNotFound =
     assetQuery.isError &&

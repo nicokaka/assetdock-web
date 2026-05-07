@@ -13,8 +13,10 @@ import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { userRoleLabels, userStatusLabels } from '@/features/users/constants/labels'
 import { useDebounce } from '@/hooks/use-debounce'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function UsersPage() {
+  usePageTitle(useTranslation().t('app.header.users', 'Users'))
   const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')

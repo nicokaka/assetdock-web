@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Download } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -14,8 +15,10 @@ import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { assetStatusLabels } from '@/features/assets/constants/labels'
 import { useDebounce } from '@/hooks/use-debounce'
+import { usePageTitle } from '@/hooks/use-page-title'
 
 export function AssetsPage() {
+  usePageTitle(useTranslation().t('app.header.assets', 'Assets'))
   const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
@@ -43,9 +46,18 @@ export function AssetsPage() {
         title={assetsQuery.data ? `${t('app.assets.title', 'Assets')} (${assetsQuery.data.totalItems})` : t('app.assets.title', 'Assets')}
         description={t('app.assets.description', 'Review the assets available to the current session.')}
         action={
-          <Button variant="default" onClick={() => navigate('/app/assets/new')}>
-            {t('app.assets.newAsset', 'New Asset')}
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={() => window.location.assign((import.meta.env.VITE_API_URL ?? '/api/v1') + '/assets/export')}
+            >
+              <Download className="mr-1.5 h-3.5 w-3.5" />
+              {t('app.assets.exportCsv', 'Export CSV')}
+            </Button>
+            <Button variant="default" onClick={() => navigate('/app/assets/new')}>
+              {t('app.assets.newAsset', 'New Asset')}
+            </Button>
+          </div>
         }
       />
 
