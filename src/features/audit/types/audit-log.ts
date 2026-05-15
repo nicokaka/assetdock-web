@@ -23,4 +23,6 @@ export type AuditLogFilters = {
   from?: string
   to?: string
   organizationId?: string
+  // M-8: Server-side actor filter — must be a valid UUID.
+  actorUserId?: string
 }

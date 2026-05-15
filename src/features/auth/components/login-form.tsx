@@ -46,6 +46,13 @@ export function LoginForm() {
           message = t('auth.login.errorInvalid', 'Invalid email or password.')
         } else if (error.status === 423) {
           message = t('auth.login.errorLocked', 'Your account has been locked. Contact your administrator.')
+        } else if (error.status === 429) {
+          // M-9: Parse Retry-After from the error body if available.
+          const body = error.body as { retryAfterSeconds?: number } | undefined
+          const retryAfter = body?.retryAfterSeconds
+          message = retryAfter
+            ? t('auth.login.errorRateLimit', 'Too many attempts. Please wait {{seconds}} seconds before trying again.', { seconds: retryAfter })
+            : t('auth.login.errorRateLimitGeneric', 'Too many login attempts. Please wait before trying again.')
         }
       }
 

@@ -11,20 +11,43 @@ import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { usePageTitle } from '@/hooks/use-page-title'
 
+// M-6: Keep in sync with backend AuditEventType enum (all 27 values).
 const EVENT_TYPE_OPTIONS = [
-  'USER_LOGIN',
-  'USER_LOGOUT',
+  // Auth & Session
+  'LOGIN_SUCCESS',
+  'LOGIN_FAILURE',
+  'WEB_SESSION_CREATED',
+  'WEB_SESSION_LOGGED_OUT',
+  'WEB_SESSION_EXPIRED',
+  // Users
   'USER_CREATED',
   'USER_UPDATED',
+  'USER_DISABLED',
+  'USER_LOCKED',
+  'USER_UNLOCKED',
+  'USER_REACTIVATED',
+  'USER_ROLES_UPDATED',
+  'PASSWORD_RESET_BY_ADMIN',
+  // Assets
   'ASSET_CREATED',
   'ASSET_UPDATED',
-  'ASSET_STATUS_CHANGED',
   'ASSET_ARCHIVED',
   'ASSET_ASSIGNED',
   'ASSET_UNASSIGNED',
-  'IMPORT_STARTED',
-  'IMPORT_COMPLETED',
-  'IMPORT_FAILED',
+  'ASSET_CHECKED_OUT',
+  'ASSET_CHECKED_IN',
+  // Catalog
+  'CATEGORY_CREATED',
+  'CATEGORY_UPDATED',
+  'MANUFACTURER_CREATED',
+  'MANUFACTURER_UPDATED',
+  'LOCATION_CREATED',
+  'LOCATION_UPDATED',
+  // Imports & System
+  'CSV_IMPORT_STARTED',
+  'CSV_IMPORT_COMPLETED',
+  'CSV_IMPORT_FAILED',
+  'SYSTEM_SETUP_COMPLETED',
 ] as const
 
 export function AuditLogsPage() {
@@ -32,12 +55,18 @@ export function AuditLogsPage() {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [eventType, setEventType] = useState<string>('all')
+  // M-8: Actor search sends a UUID to the backend — client-side filtering was page-scoped only.
   const [actorSearch, setActorSearch] = useState('')
+
+  // Only send actorUserId if the input looks like a valid UUID to avoid 400 errors.
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  const actorUserId = actorSearch && uuidRegex.test(actorSearch.trim()) ? actorSearch.trim() : undefined
 
   const auditLogsQuery = useAuditLogsQuery({
     page,
     size: 20,
     eventType: eventType !== 'all' ? eventType : undefined,
+    actorUserId,
   })
 
   function handleEventTypeChange(val: string) {
@@ -49,11 +78,6 @@ export function AuditLogsPage() {
     setActorSearch(val)
     setPage(1)
   }
-
-  const filteredItems = auditLogsQuery.data?.items.filter((item) => {
-    if (!actorSearch) return true
-    return item.actorUserId?.toLowerCase().includes(actorSearch.toLowerCase()) ?? false
-  }) ?? []
 
   return (
     <section className="space-y-6">
@@ -103,7 +127,7 @@ export function AuditLogsPage() {
         </Card>
       ) : null}
 
-      {auditLogsQuery.isSuccess && filteredItems.length === 0 ? (
+      {auditLogsQuery.isSuccess && (auditLogsQuery.data?.items ?? []).length === 0 ? (
         <Card className="border-border/80 bg-card/78 shadow-sm">
           <CardHeader>
             <CardTitle className="text-base font-medium">{t('audit.emptyTitle', 'No audit logs found')}</CardTitle>
@@ -116,9 +140,9 @@ export function AuditLogsPage() {
         </Card>
       ) : null}
 
-      {auditLogsQuery.isSuccess && filteredItems.length > 0 ? (
+      {auditLogsQuery.isSuccess && (auditLogsQuery.data?.items ?? []).length > 0 ? (
         <div className="space-y-4">
-          <AuditLogList items={filteredItems} />
+          <AuditLogList items={auditLogsQuery.data.items} />
           {auditLogsQuery.data.totalPages > 1 ? (
             <PaginationControls
               page={auditLogsQuery.data.page}
