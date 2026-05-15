@@ -16,7 +16,7 @@ export function useCheckoutMutation(assetId: string) {
       queryClient.invalidateQueries({ queryKey: ['assets'] })
       queryClient.invalidateQueries({ queryKey: ['asset', assetId] })
       queryClient.invalidateQueries({ queryKey: ['asset-checkouts', assetId] })
-      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard', 'stats'] })
     },
   })
 }
@@ -36,7 +36,7 @@ export function useCheckinMutation(assetId: string) {
       queryClient.invalidateQueries({ queryKey: ['assets'] })
       queryClient.invalidateQueries({ queryKey: ['asset', assetId] })
       queryClient.invalidateQueries({ queryKey: ['asset-checkouts', assetId] })
-      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard', 'stats'] })
     },
   })
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ArrowDownToLine } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -14,6 +15,7 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { HttpError } from '@/lib/http-client'
 import { useCheckinMutation } from '../hooks/use-checkout-actions'
 
 interface CheckinDialogProps {
@@ -25,7 +27,7 @@ export function CheckinDialog({ assetId, assetName }: CheckinDialogProps) {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [notes, setNotes] = useState('')
-  
+
   const checkinMutation = useCheckinMutation(assetId)
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,7 +40,12 @@ export function CheckinDialog({ assetId, assetName }: CheckinDialogProps) {
       setIsOpen(false)
       setNotes('')
     } catch (error) {
-      console.error('Failed to checkin asset', error)
+      // H-4: Show error toast and keep dialog open so the user can retry.
+      const message =
+        error instanceof HttpError
+          ? error.message
+          : t('app.checkin.error', 'Failed to check in asset. Please try again.')
+      toast.error(message)
     }
   }
 
@@ -50,7 +57,7 @@ export function CheckinDialog({ assetId, assetName }: CheckinDialogProps) {
           {t('app.checkin.button', 'Check-in')}
         </Button>
       </DialogTrigger>
-      
+
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>

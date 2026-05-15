@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CheckSquare } from 'lucide-react'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -15,6 +16,14 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { HttpError } from '@/lib/http-client'
 import { useCheckoutMutation } from '../hooks/use-checkout-actions'
 import { useUsersQuery } from '@/features/users/hooks/use-user-lookup'
 
@@ -29,7 +38,7 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
   const [userId, setUserId] = useState<string>('')
   const [expectedReturnDate, setExpectedReturnDate] = useState<string>('')
   const [notes, setNotes] = useState('')
-  
+
   const checkoutMutation = useCheckoutMutation(assetId)
   const usersQuery = useUsersQuery()
   const users = usersQuery.data?.items ?? []
@@ -45,12 +54,16 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
         notes: notes || undefined,
       })
       setIsOpen(false)
-      // Reset form
       setUserId('')
       setExpectedReturnDate('')
       setNotes('')
     } catch (error) {
-      console.error('Failed to checkout asset', error)
+      // H-4: Show error toast and keep dialog open so the user can retry.
+      const message =
+        error instanceof HttpError
+          ? error.message
+          : t('app.checkout.error', 'Failed to check out asset. Please try again.')
+      toast.error(message)
     }
   }
 
@@ -62,7 +75,7 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
           {t('app.checkout.button', 'Check-out')}
         </Button>
       </DialogTrigger>
-      
+
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
@@ -78,24 +91,34 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
               <div className="text-sm font-medium p-2 bg-muted rounded-md">{assetName}</div>
             </div>
 
+            {/* M-1: Use shadcn Select for visual consistency. L-5: Label uses standard styling. */}
             <div className="space-y-2">
-              <Label htmlFor="userId" className="text-destructive">{t('app.checkout.user', 'User')} *</Label>
-              <select
-                id="userId"
+              <Label htmlFor="userId">
+                {t('app.checkout.user', 'User')}{' '}
+                <span className="text-muted-foreground">*</span>
+              </Label>
+              <Select
                 value={userId}
-                onChange={(event) => setUserId(event.target.value)}
-                className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                onValueChange={setUserId}
                 disabled={checkoutMutation.isPending || usersQuery.isPending}
               >
-                <option value="">
-                  {usersQuery.isPending ? t('common.loading', 'Loading...') : t('details.assignments.selectUser', 'Select a user')}
-                </option>
-                {users.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.fullName} ({user.email})
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger id="userId">
+                  <SelectValue
+                    placeholder={
+                      usersQuery.isPending
+                        ? t('common.loading', 'Loading...')
+                        : t('details.assignments.selectUser', 'Select a user')
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {users.map((user) => (
+                    <SelectItem key={user.id} value={user.id}>
+                      {user.fullName} ({user.email})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

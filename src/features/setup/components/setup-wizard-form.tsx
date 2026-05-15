@@ -39,12 +39,38 @@ export function SetupWizardForm() {
     try {
       await setupMutation.mutateAsync(values)
     } catch (error) {
-      const message =
-        error instanceof HttpError && error.status === 409
-          ? t('setup.errorConflict', 'This system is already configured. Please sign in.')
-          : t('setup.errorGeneric', 'Setup failed. Please check your input and try again.')
+      if (error instanceof HttpError && error.status === 409) {
+        form.setError('root', {
+          message: t('setup.errorConflict', 'This system is already configured. Please sign in.'),
+        })
+        return
+      }
 
-      form.setError('root', { message })
+      // M-3: Map backend validation violations to individual fields when available.
+      if (error instanceof HttpError && error.status === 400) {
+        const body = error.body as { violations?: { field: string; message: string }[] } | undefined
+        if (body?.violations?.length) {
+          const fieldMap: Record<string, keyof SetupInput> = {
+            organizationName: 'organizationName',
+            adminFullName: 'adminFullName',
+            adminEmail: 'adminEmail',
+            adminPassword: 'adminPassword',
+          }
+          let mapped = false
+          for (const v of body.violations) {
+            const field = fieldMap[v.field]
+            if (field) {
+              form.setError(field, { message: v.message })
+              mapped = true
+            }
+          }
+          if (mapped) return
+        }
+      }
+
+      form.setError('root', {
+        message: t('setup.errorGeneric', 'Setup failed. Please check your input and try again.'),
+      })
     }
   }
 

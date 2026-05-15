@@ -35,14 +35,17 @@ type AssetDetailViewProps = {
   asset: AssetDetail
 }
 
-const statusOptions = [
-  'ASSIGNED',
-  'IN_STOCK',
-  'IN_MAINTENANCE',
-  'RETIRED',
-  'LOST',
-] as const
+type AssetStatus = 'ASSIGNED' | 'IN_STOCK' | 'IN_MAINTENANCE' | 'RETIRED' | 'LOST'
 
+// M-4: Valid manual status transitions per current status.
+// ASSIGNED and IN_STOCK transitions via checkout/checkin are handled separately.
+const VALID_TRANSITIONS: Record<AssetStatus, AssetStatus[]> = {
+  IN_STOCK:       ['IN_STOCK', 'IN_MAINTENANCE', 'RETIRED', 'LOST'],
+  ASSIGNED:       ['ASSIGNED', 'IN_MAINTENANCE', 'RETIRED', 'LOST'],
+  IN_MAINTENANCE: ['IN_MAINTENANCE', 'IN_STOCK', 'RETIRED', 'LOST'],
+  RETIRED:        ['RETIRED', 'LOST'],
+  LOST:           ['LOST', 'RETIRED'],
+}
 
 
 export function AssetDetailView({ asset }: AssetDetailViewProps) {
@@ -130,7 +133,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                   disabled={isArchived || updateStatusMutation.isPending}
                   className="h-9 min-w-48 rounded-md border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50"
                 >
-                  {statusOptions.map((option) => (
+                  {(VALID_TRANSITIONS[asset.status as AssetStatus] ?? [asset.status as AssetStatus]).map((option) => (
                     <option key={option} value={option}>
                       {t(`app.overview.status.${option}`, assetStatusLabels[option] ?? option)}
                     </option>
