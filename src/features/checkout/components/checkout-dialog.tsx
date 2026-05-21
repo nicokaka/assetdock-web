@@ -67,8 +67,15 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
     }
   }
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open)
+    if (!open) {
+      checkoutMutation.reset()
+    }
+  }
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button size="sm" className="gap-2">
           <CheckSquare className="h-4 w-4" />
@@ -142,6 +149,12 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
               />
             </div>
           </div>
+
+          {checkoutMutation.isError ? (
+            <p className="text-sm text-destructive px-1">
+              {t('app.checkout.error', 'Unable to check out this asset. Please try again.')}
+            </p>
+          ) : null}
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={checkoutMutation.isPending}>

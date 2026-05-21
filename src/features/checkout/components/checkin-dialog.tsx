@@ -49,8 +49,15 @@ export function CheckinDialog({ assetId, assetName }: CheckinDialogProps) {
     }
   }
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open)
+    if (!open) {
+      checkinMutation.reset()
+    }
+  }
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button size="sm" variant="outline" className="gap-2">
           <ArrowDownToLine className="h-4 w-4" />
@@ -83,6 +90,12 @@ export function CheckinDialog({ assetId, assetName }: CheckinDialogProps) {
               />
             </div>
           </div>
+
+          {checkinMutation.isError ? (
+            <p className="text-sm text-destructive px-1">
+              {t('app.checkin.error', 'Unable to check in this asset. Please try again.')}
+            </p>
+          ) : null}
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={checkinMutation.isPending}>

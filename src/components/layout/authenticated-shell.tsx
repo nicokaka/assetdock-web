@@ -15,7 +15,10 @@ import { APP_VERSION } from '@/lib/version'
 export function AuthenticatedShell() {
 
   const [modifierKey] = useState<string>(
-    () => /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform) ? 'Cmd' : 'Ctrl'
+    () => {
+      const platform = (navigator as Navigator & { userAgentData?: { platform: string } }).userAgentData?.platform ?? navigator.userAgent
+      return /mac|iphone|ipod|ipad/i.test(platform) ? 'Cmd' : 'Ctrl'
+    }
   )
 
   const sessionQuery = useSessionQuery()
@@ -138,9 +141,9 @@ export function AuthenticatedShell() {
             <Outlet />
           </main>
           
-          <footer className="mt-auto border-t border-border/40 py-6 text-center">
+            <footer className="mt-auto border-t border-border/40 py-6 text-center">
             <p className="text-xs text-muted-foreground">
-              AssetDock v{APP_VERSION} &middot; &copy; {new Date().getFullYear()} &middot; <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> API Online</span>
+              AssetDock v{APP_VERSION} &middot; &copy; {new Date().getFullYear()}
             </p>
           </footer>
         </div>

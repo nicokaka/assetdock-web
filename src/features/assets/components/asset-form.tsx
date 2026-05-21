@@ -115,7 +115,8 @@ export function AssetForm({
                       {getLookupStateMessage(
                         categoriesQuery.isPending,
                         categoriesQuery.isError,
-                        t('assetForm.placeholders.noCategory', 'No category')
+                        t('assetForm.placeholders.noCategory', 'No category'),
+                        t,
                       )}
                     </option>
                     {categories.map((item) => (
@@ -147,7 +148,8 @@ export function AssetForm({
                       {getLookupStateMessage(
                         manufacturersQuery.isPending,
                         manufacturersQuery.isError,
-                        t('assetForm.placeholders.noManufacturer', 'No manufacturer')
+                        t('assetForm.placeholders.noManufacturer', 'No manufacturer'),
+                        t,
                       )}
                     </option>
                     {manufacturers.map((item) => (
@@ -192,7 +194,8 @@ export function AssetForm({
                       {getLookupStateMessage(
                         locationsQuery.isPending,
                         locationsQuery.isError,
-                        t('assetForm.placeholders.noLocation', 'No location')
+                        t('assetForm.placeholders.noLocation', 'No location'),
+                        t,
                       )}
                     </option>
                     {locations.map((item) => (

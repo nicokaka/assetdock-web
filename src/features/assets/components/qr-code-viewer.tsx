@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { QrCode, Printer } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -47,8 +47,19 @@ export function QrCodeViewer({ assetId, assetTag }: QrCodeViewerProps) {
     setIsOpen(open)
     if (open) {
       fetchQrCode()
+    } else if (qrCodeUrl) {
+      URL.revokeObjectURL(qrCodeUrl)
+      setQrCodeUrl(null)
     }
   }
+
+  useEffect(() => {
+    return () => {
+      if (qrCodeUrl) {
+        URL.revokeObjectURL(qrCodeUrl)
+      }
+    }
+  }, [qrCodeUrl])
 
   const downloadLabel = async () => {
     try {
