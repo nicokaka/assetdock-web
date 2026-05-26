@@ -4,7 +4,7 @@ import { HttpError } from '@/lib/http-client'
 
 function handleGlobalError(error: unknown) {
   if (error instanceof HttpError && error.status === 401) {
-    if (window.location.pathname !== '/login') {
+    if (window.location.pathname.startsWith('/app')) {
       window.location.assign('/login')
     }
   }

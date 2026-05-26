@@ -13,6 +13,8 @@ export const assetFormSchema = z.object({
   categoryId: optionalUuidField,
   manufacturerId: optionalUuidField,
   currentLocationId: optionalUuidField,
+  purchaseDate: z.string().trim().optional(),
+  warrantyExpiryDate: z.string().trim().optional(),
 })
 
 export type AssetFormValues = z.infer<typeof assetFormSchema>
@@ -27,5 +29,7 @@ export function toAssetInput(values: AssetFormValues): CreateAssetInput {
     categoryId: values.categoryId || undefined,
     manufacturerId: values.manufacturerId || undefined,
     currentLocationId: values.currentLocationId || undefined,
+    purchaseDate: values.purchaseDate || undefined,
+    warrantyExpiryDate: values.warrantyExpiryDate || undefined,
   }
 }

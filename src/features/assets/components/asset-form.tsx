@@ -213,6 +213,32 @@ export function AssetForm({
         />
         <FormField
           control={form.control}
+          name="purchaseDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('assetForm.labels.purchaseDate', 'Purchase date')}</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="warrantyExpiryDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t('assetForm.labels.warrantyExpiryDate', 'Warranty expiration')}</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="description"
           render={({ field }) => (
             <FormItem>

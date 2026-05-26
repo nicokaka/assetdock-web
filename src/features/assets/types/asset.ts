@@ -22,11 +22,17 @@ export type AssetDetail = {
   categoryId: string | null
   manufacturerId: string | null
   currentLocationId: string | null
+  currentAssignedUserId: string | null
+  currentAssignedUserName: string | null
   status: AssetStatus
   serialNumber: string | null
   hostname: string | null
   description: string | null
+  purchaseDate: string | null
+  warrantyExpiryDate: string | null
   archivedAt: string | null
+  createdAt: string
+  updatedAt: string
 }
 
 export type CreateAssetInput = {
@@ -38,6 +44,9 @@ export type CreateAssetInput = {
   categoryId?: string
   manufacturerId?: string
   currentLocationId?: string
+  status?: AssetStatus
+  purchaseDate?: string
+  warrantyExpiryDate?: string
 }
 
 export type UpdateAssetInput = Partial<CreateAssetInput>

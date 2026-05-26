@@ -12,8 +12,8 @@ export type AssetListFilters = {
 
 export async function listAssets(filters?: AssetListFilters) {
   const searchParams = new URLSearchParams()
-  if (filters?.page) searchParams.set('page', String(filters.page))
-  if (filters?.size) searchParams.set('size', String(filters.size))
+  if (filters?.page !== undefined) searchParams.set('page', String(filters.page))
+  if (filters?.size !== undefined) searchParams.set('size', String(filters.size))
   if (filters?.status) searchParams.set('status', filters.status)
   if (filters?.search) searchParams.set('search', filters.search)
   if (filters?.categoryId) searchParams.set('categoryId', filters.categoryId)

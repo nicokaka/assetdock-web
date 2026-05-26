@@ -24,7 +24,7 @@ import {
   useArchiveAssetMutation,
   useUpdateAssetStatusMutation,
 } from '@/features/assets/hooks/use-asset-lifecycle-actions'
-import type { AssetDetail } from '@/features/assets/types/asset'
+import type { AssetDetail, AssetStatus } from '@/features/assets/types/asset'
 import { assetStatusClassName, assetStatusLabels } from '@/features/assets/constants/labels'
 import { DetailRow } from '@/components/ui/detail-row'
 import { formatTimestamp } from '@/lib/format'
@@ -35,7 +35,6 @@ type AssetDetailViewProps = {
   asset: AssetDetail
 }
 
-type AssetStatus = 'ASSIGNED' | 'IN_STOCK' | 'IN_MAINTENANCE' | 'RETIRED' | 'LOST'
 
 // M-4: Valid manual status transitions per current status.
 // ASSIGNED and IN_STOCK transitions via checkout/checkin are handled separately.
@@ -51,6 +50,7 @@ const VALID_TRANSITIONS: Record<AssetStatus, AssetStatus[]> = {
 export function AssetDetailView({ asset }: AssetDetailViewProps) {
   const { t } = useTranslation()
   const [draftStatus, setDraftStatus] = useState<AssetDetail['status'] | null>(null)
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false)
   const updateStatusMutation = useUpdateAssetStatusMutation(asset.id)
   const archiveAssetMutation = useArchiveAssetMutation(asset.id)
   const isArchived = Boolean(asset.archivedAt)
@@ -62,7 +62,12 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
   }
 
   async function handleArchive() {
-    await archiveAssetMutation.mutateAsync()
+    try {
+      await archiveAssetMutation.mutateAsync()
+      setIsArchiveOpen(false)
+    } catch {
+      // react-query shows error state
+    }
   }
 
   const statusErrorMessage =
@@ -156,7 +161,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                   ? t('details.asset.notFound', 'This asset has already been archived.')
                   : t('details.asset.archiveDescription', 'Archive is intended for retired or lost assets.')}
               </p>
-              <AlertDialog>
+              <AlertDialog open={isArchiveOpen} onOpenChange={setIsArchiveOpen}>
                 <AlertDialogTrigger asChild>
                   <Button
                     type="button"
@@ -178,7 +183,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                     <AlertDialogAction
                       onClick={(e) => {
                         e.preventDefault()
-                        handleArchive()
+                        void handleArchive()
                       }}
                       disabled={archiveAssetMutation.isPending}
                     >
@@ -199,6 +204,17 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
           <DetailRow label={t('assetForm.labels.serialNumber', 'Serial number')} value={asset.serialNumber} />
           <DetailRow label={t('assetForm.labels.hostname', 'Hostname')} value={asset.hostname} />
           <DetailRow label={t('assetForm.labels.description', 'Description')} value={asset.description} />
+          {asset.status === 'ASSIGNED' && asset.currentAssignedUserName && (
+            <DetailRow label={t('details.labels.assignedTo', 'Assigned to')} value={asset.currentAssignedUserName} />
+          )}
+          {asset.purchaseDate && (
+            <DetailRow label={t('details.labels.purchaseDate', 'Purchase date')} value={formatTimestamp(asset.purchaseDate).split(' ')[0]} />
+          )}
+          {asset.warrantyExpiryDate && (
+            <DetailRow label={t('details.labels.warrantyExpiryDate', 'Warranty expiration')} value={formatTimestamp(asset.warrantyExpiryDate).split(' ')[0]} />
+          )}
+          <DetailRow label={t('details.labels.createdAt', 'Created at')} value={formatTimestamp(asset.createdAt)} />
+          <DetailRow label={t('details.labels.updatedAt', 'Last updated')} value={formatTimestamp(asset.updatedAt)} />
           {isArchived ? <DetailRow label={t('details.badges.archived', 'Archived at')} value={formatTimestamp(asset.archivedAt)} /> : null}
         </CardContent>
       </Card>

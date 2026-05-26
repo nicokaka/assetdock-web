@@ -65,6 +65,8 @@ export function AssetCreatePage() {
               categoryId: '',
               manufacturerId: '',
               currentLocationId: '',
+              purchaseDate: '',
+              warrantyExpiryDate: '',
             }}
             submitLabel={t('assetForm.submitNew', 'Create asset')}
             pendingLabel={t('assetForm.submittingNew', 'Creating...')}

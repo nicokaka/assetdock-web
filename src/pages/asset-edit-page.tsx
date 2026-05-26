@@ -26,6 +26,8 @@ function toDefaultValues(asset: NonNullable<ReturnType<typeof useAssetDetailQuer
     categoryId: asset.categoryId ?? '',
     manufacturerId: asset.manufacturerId ?? '',
     currentLocationId: asset.currentLocationId ?? '',
+    purchaseDate: asset.purchaseDate ?? '',
+    warrantyExpiryDate: asset.warrantyExpiryDate ?? '',
   }
 }
 

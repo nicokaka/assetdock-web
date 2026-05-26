@@ -16,6 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { assetStatusLabels } from '@/features/assets/constants/labels'
 import { useDebounce } from '@/hooks/use-debounce'
 import { usePageTitle } from '@/hooks/use-page-title'
+import { httpClient, HttpError } from '@/lib/http-client'
+import { toast } from 'sonner'
 
 export function AssetsPage() {
   usePageTitle(useTranslation().t('app.header.assets', 'Assets'))
@@ -27,6 +29,33 @@ export function AssetsPage() {
   const [locationId, setLocationId] = useState<string>('all')
   const debouncedSearch = useDebounce(search, 400)
   const { t } = useTranslation()
+  const [isExporting, setIsExporting] = useState(false)
+
+  async function handleExportCsv() {
+    setIsExporting(true)
+    try {
+      const blob = await httpClient.request<Blob>('/assets/export', {
+        responseType: 'blob',
+      })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `assets-export-${new Date().toISOString().split('T')[0]}.csv`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      window.URL.revokeObjectURL(url)
+      toast.success(t('app.assets.exportSuccess', 'CSV exported successfully.'))
+    } catch (error) {
+      const message =
+        error instanceof HttpError
+          ? error.message
+          : t('app.assets.exportError', 'Failed to export CSV. Please try again.')
+      toast.error(message)
+    } finally {
+      setIsExporting(false)
+    }
+  }
 
   const categoriesQuery = useCategoriesQuery()
   const locationsQuery = useLocationsQuery()
@@ -49,10 +78,11 @@ export function AssetsPage() {
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
-              onClick={() => window.location.assign((import.meta.env.VITE_API_URL ?? '/api/v1') + '/assets/export')}
+              disabled={isExporting}
+              onClick={() => void handleExportCsv()}
             >
               <Download className="mr-1.5 h-3.5 w-3.5" />
-              {t('app.assets.exportCsv', 'Export CSV')}
+              {isExporting ? t('app.assets.exporting', 'Exporting...') : t('app.assets.exportCsv', 'Export CSV')}
             </Button>
             <Button variant="default" onClick={() => navigate('/app/assets/new')}>
               {t('app.assets.newAsset', 'New Asset')}
