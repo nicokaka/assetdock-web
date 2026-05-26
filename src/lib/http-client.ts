@@ -23,8 +23,16 @@ function shouldIncludeJsonContentType(body: unknown, headers: Headers) {
   return body !== undefined && !isFormData(body) && !headers.has('Content-Type')
 }
 
-function shouldAttachCsrfToken(method: HttpMethod) {
-  return method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE'
+function shouldAttachCsrfToken(method: HttpMethod, path: string) {
+  const isMutate = method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE'
+  if (!isMutate) return false
+
+  // Public unauthenticated endpoints do not require CSRF cookies (none are set yet)
+  if (path.includes('/login') || path.includes('/setup')) {
+    return false
+  }
+
+  return true
 }
 
 export class HttpError extends Error {
@@ -65,7 +73,7 @@ export class HttpClient {
       requestHeaders.set('Content-Type', 'application/json')
     }
 
-    if (shouldAttachCsrfToken(method)) {
+    if (shouldAttachCsrfToken(method, path)) {
       const csrfToken =
         getCookie('assetdock_csrf') ??
         getCookie('X-CSRF-Token') ??
