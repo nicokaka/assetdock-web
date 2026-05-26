@@ -43,7 +43,7 @@ export function AssetsList({ assets }: AssetsListProps) {
             <TableCell>
               <div className="flex items-center gap-2">
                 <Badge variant={assetStatusVariant(asset.status)}>
-                  {assetStatusLabels[asset.status] ?? asset.status}
+                  {t(`app.overview.status.${asset.status}`, assetStatusLabels[asset.status] ?? asset.status)}
                 </Badge>
                 {asset.archivedAt ? (
                   <Badge variant="muted">{t('details.badges.archived', 'Archived')}</Badge>

@@ -48,6 +48,8 @@
       "newAsset": "New Asset",
       "searchPlaceholder": "Search by tag, name or serial...",
       "allStatuses": "All Statuses",
+      "allCategories": "All Categories",
+      "allLocations": "All Locations",
       "errorTitle": "Unable to load assets",
       "emptyTitle": "No assets found",
       "emptyDescriptionFilters": "Try adjusting your filters.",
@@ -64,7 +66,8 @@
         "status": "Status",
         "tag": "Tag",
         "name": "Name",
-        "serial": "Serial"
+        "serial": "Serial",
+        "assignedTo": "Assigned To"
       }
     },
     "users": {
@@ -278,6 +281,13 @@
     "errorGeneric": "Unable to process the request right now."
   },
   "details": {
+    "labels": {
+      "assignedTo": "Assigned to",
+      "purchaseDate": "Purchase date",
+      "warrantyExpiryDate": "Warranty expiration",
+      "createdAt": "Created at",
+      "updatedAt": "Last updated"
+    },
     "actions": {
       "edit": "Edit",
       "archive": "Archive",

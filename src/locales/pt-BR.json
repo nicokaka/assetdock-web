@@ -48,6 +48,8 @@
       "newAsset": "Novo Ativo",
       "searchPlaceholder": "Buscar por tag, nome ou serial...",
       "allStatuses": "Todos os Status",
+      "allCategories": "Todas as Categorias",
+      "allLocations": "Todas as Localizações",
       "errorTitle": "Não foi possível carregar os ativos",
       "emptyTitle": "Nenhum ativo encontrado",
       "emptyDescriptionFilters": "Tente ajustar seus filtros.",
@@ -56,7 +58,7 @@
         "viewButton": "QR Code",
         "title": "QR Code do Ativo",
         "description": "Escaneie este código para acessar rapidamente os detalhes do ativo.",
-        "downloadLabel": "Imprimir Etiqueta (PDF)"
+        "downloadLabel": "Print Label (PDF)"
       },
       "table": {
         "actions": "Ações",
@@ -64,7 +66,8 @@
         "status": "Status",
         "tag": "Tag",
         "name": "Nome",
-        "serial": "Série"
+        "serial": "Série",
+        "assignedTo": "Atribuído a"
       }
     },
     "users": {
@@ -278,6 +281,13 @@
     "errorGeneric": "Não foi possível processar a requisição."
   },
   "details": {
+    "labels": {
+      "assignedTo": "Atribuído a",
+      "purchaseDate": "Data de compra",
+      "warrantyExpiryDate": "Expiração da garantia",
+      "createdAt": "Criado em",
+      "updatedAt": "Última atualização"
+    },
     "actions": {
       "edit": "Editar",
       "archive": "Arquivar",
