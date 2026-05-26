@@ -87,8 +87,10 @@
       "kpi": {
         "totalAssets": "Total de Ativos",
         "totalAssetsSub": "em todas as categorias",
-        "assigned": "Atribuídos",
+        "assigned": "Operacionais",
         "assignedSub": "operacionais (atribuídos + em estoque)",
+        "activeCheckouts": "Check-outs Ativos",
+        "activeCheckoutsSub": "itens atualmente emprestados",
         "users": "Usuários",
         "usersSub": "registrados na org",
         "issues": "Problemas",

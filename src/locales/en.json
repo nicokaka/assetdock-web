@@ -87,8 +87,10 @@
       "kpi": {
         "totalAssets": "Total Assets",
         "totalAssetsSub": "across all categories",
-        "assigned": "Assigned",
+        "assigned": "Operational",
         "assignedSub": "operational (assigned + in stock)",
+        "activeCheckouts": "Active Checkouts",
+        "activeCheckoutsSub": "items currently checked out",
         "users": "Users",
         "usersSub": "registered in the org",
         "issues": "Issues",

@@ -72,8 +72,8 @@ export function AppOverviewPage() {
           accent="default"
         />
         <KpiCard
-          label={t('app.overview.kpi.assigned', 'Assigned')}
-          value={isLoading ? '—' : stats.assigned}
+          label={t('app.overview.kpi.assigned', 'Operational')}
+          value={isLoading ? '—' : stats.operational}
           sublabel={isLoading ? '' : `${stats.healthRate}% ${t('app.overview.kpi.assignedSub', 'operational (assigned + in stock)')}`}
           icon={<CheckCircle2 className="h-4 w-4" />}
           to="/app/assets"
@@ -85,7 +85,7 @@ export function AppOverviewPage() {
           sublabel={t('app.overview.kpi.activeCheckoutsSub', 'items currently checked out')}
           icon={<ArrowLeftRight className="h-4 w-4" />}
           to="/app/assets"
-          accent={stats.activeCheckouts > 0 ? 'warning' : 'default'}
+          accent="default"
         />
         <KpiCard
           label={t('app.overview.kpi.users', 'Users')}

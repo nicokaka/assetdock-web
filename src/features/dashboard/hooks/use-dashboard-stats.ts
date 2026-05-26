@@ -23,6 +23,8 @@ export function useDashboardStats() {
       return {
         total: 0,
         assigned: 0,
+        inStock: 0,
+        operational: 0,
         userCount: 0,
         issues: 0,
         healthRate: 0,
@@ -68,6 +70,8 @@ export function useDashboardStats() {
     return {
       total: totalAssets,
       assigned: assignedAssets,
+      inStock: inStockAssets,
+      operational,
       userCount: totalUsers,
       issues,
       healthRate,
