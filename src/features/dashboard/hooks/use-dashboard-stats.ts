@@ -9,7 +9,6 @@ const STATUS_COLORS: Record<string, string> = {
   IN_STOCK: 'hsl(200 98% 39%)',
   IN_MAINTENANCE: 'hsl(38 92% 50%)',
   RETIRED: 'hsl(220 9% 56%)',
-  LOST: 'hsl(0 84% 60%)',
 }
 
 export function useDashboardStats() {
@@ -40,12 +39,11 @@ export function useDashboardStats() {
       inStockAssets,
       inMaintenanceAssets,
       retiredAssets,
-      lostAssets,
       totalUsers,
     } = query.data
 
     const operational = assignedAssets + inStockAssets
-    const issues = inMaintenanceAssets + lostAssets
+    const issues = inMaintenanceAssets
     const healthRate = totalAssets > 0 ? Math.round((operational / totalAssets) * 100) : 0
 
     const statusCounts: Record<string, number> = {
@@ -53,7 +51,6 @@ export function useDashboardStats() {
       IN_STOCK: inStockAssets,
       IN_MAINTENANCE: inMaintenanceAssets,
       RETIRED: retiredAssets,
-      LOST: lostAssets,
     }
 
     const statusChartData = Object.entries(statusCounts)

@@ -3,7 +3,6 @@ export type AssetStatus =
   | 'IN_STOCK'
   | 'IN_MAINTENANCE'
   | 'RETIRED'
-  | 'LOST'
 
 export type AssetListItem = {
   id: string

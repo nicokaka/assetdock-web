@@ -36,14 +36,11 @@ type AssetDetailViewProps = {
 }
 
 
-// M-4: Valid manual status transitions per current status.
-// ASSIGNED and IN_STOCK transitions via checkout/checkin are handled separately.
 const VALID_TRANSITIONS: Record<AssetStatus, AssetStatus[]> = {
-  IN_STOCK:       ['IN_STOCK', 'IN_MAINTENANCE', 'RETIRED', 'LOST'],
-  ASSIGNED:       ['ASSIGNED', 'IN_MAINTENANCE', 'RETIRED', 'LOST'],
-  IN_MAINTENANCE: ['IN_MAINTENANCE', 'IN_STOCK', 'RETIRED', 'LOST'],
-  RETIRED:        ['RETIRED', 'LOST'],
-  LOST:           ['LOST', 'RETIRED'],
+  IN_STOCK:       ['IN_STOCK', 'IN_MAINTENANCE', 'RETIRED'],
+  ASSIGNED:       ['ASSIGNED'], // Check-in is required to transition from ASSIGNED
+  IN_MAINTENANCE: ['IN_MAINTENANCE', 'IN_STOCK', 'RETIRED'],
+  RETIRED:        ['RETIRED'], // Terminal state
 }
 
 
@@ -159,7 +156,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
               <p className="text-sm text-muted-foreground">
                 {isArchived
                   ? t('details.asset.notFound', 'This asset has already been archived.')
-                  : t('details.asset.archiveDescription', 'Archive is intended for retired or lost assets.')}
+                  : t('details.asset.archiveDescription', 'Archive is intended for retired assets.')}
               </p>
               <AlertDialog open={isArchiveOpen} onOpenChange={setIsArchiveOpen}>
                 <AlertDialogTrigger asChild>
@@ -175,7 +172,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
                   <AlertDialogHeader>
                     <AlertDialogTitle>{t('details.asset.archiveTitle', 'Archive this asset?')}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      {t('details.asset.archiveDescription', 'This action is intended for retired or lost assets. It will mark the asset as archived. Are you sure you want to proceed?')}
+                      {t('details.asset.archiveDescription', 'This action is intended for retired assets. It will mark the asset as archived. Are you sure you want to proceed?')}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

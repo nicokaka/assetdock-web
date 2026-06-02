@@ -98,7 +98,7 @@ export function AppOverviewPage() {
         <KpiCard
           label={t('app.overview.kpi.issues', 'Issues')}
           value={isLoading ? '—' : stats.issues}
-          sublabel={t('app.overview.kpi.issuesSub', 'lost or in maintenance')}
+          sublabel={t('app.overview.kpi.issuesSub', 'in maintenance')}
           icon={<AlertTriangle className="h-4 w-4" />}
           to="/app/assets"
           accent={stats.issues > 0 ? 'warning' : 'default'}

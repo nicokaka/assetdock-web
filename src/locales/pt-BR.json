@@ -94,7 +94,7 @@
         "users": "Usuários",
         "usersSub": "registrados na org",
         "issues": "Problemas",
-        "issuesSub": "perdidos ou em manutenção"
+        "issuesSub": "em manutenção"
       },
       "health": {
         "title": "Saúde dos Ativos",
@@ -120,8 +120,7 @@
         "ASSIGNED": "Atribuído",
         "IN_STOCK": "Em Estoque",
         "IN_MAINTENANCE": "Em Manutenção",
-        "RETIRED": "Aposentado",
-        "LOST": "Perdido"
+        "RETIRED": "Aposentado"
       },
       "events": {
         "LOGIN_SUCCESS": "Login bem-sucedido",
@@ -301,8 +300,7 @@
     "badges": {
       "archived": "Arquivado",
       "operational": "Operacional",
-      "maintenance": "Manutenção",
-      "lost": "Perdido"
+      "maintenance": "Manutenção"
     },
     "sections": {
       "hardware": "Informações de Hardware",

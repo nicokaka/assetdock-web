@@ -3,7 +3,6 @@ export const assetStatusLabels: Record<string, string> = {
   IN_STOCK: 'In Stock',
   IN_MAINTENANCE: 'Maintenance',
   RETIRED: 'Retired',
-  LOST: 'Lost',
 }
 
 export function assetStatusClassName(status: string) {
@@ -16,8 +15,6 @@ export function assetStatusClassName(status: string) {
       return 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-400'
     case 'RETIRED':
       return 'border-zinc-200 bg-zinc-100 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400'
-    case 'LOST':
-      return 'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-800 dark:bg-rose-950 dark:text-rose-400'
     default:
       return 'border-border/70 bg-background/80 text-muted-foreground'
   }
@@ -33,8 +30,6 @@ export function assetStatusVariant(status: string) {
       return 'warning' as const
     case 'RETIRED':
       return 'muted' as const
-    case 'LOST':
-      return 'danger' as const
     default:
       return 'default' as const
   }

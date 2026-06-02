@@ -94,7 +94,7 @@
         "users": "Users",
         "usersSub": "registered in the org",
         "issues": "Issues",
-        "issuesSub": "lost or in maintenance"
+        "issuesSub": "in maintenance"
       },
       "health": {
         "title": "Asset Health",
@@ -120,8 +120,7 @@
         "ASSIGNED": "Assigned",
         "IN_STOCK": "In Stock",
         "IN_MAINTENANCE": "Maintenance",
-        "RETIRED": "Retired",
-        "LOST": "Lost"
+        "RETIRED": "Retired"
       },
       "events": {
         "LOGIN_SUCCESS": "Successful login",
@@ -301,8 +300,7 @@
     "badges": {
       "archived": "Archived",
       "operational": "Operational",
-      "maintenance": "Maintenance",
-      "lost": "Lost"
+      "maintenance": "Maintenance"
     },
     "sections": {
       "hardware": "Hardware Information",

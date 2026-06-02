@@ -7,7 +7,6 @@ const STATUS_COLORS: Record<string, string> = {
   IN_STOCK: 'hsl(200 98% 39%)',
   IN_MAINTENANCE: 'hsl(38 92% 50%)',
   RETIRED: 'hsl(220 9% 56%)',
-  LOST: 'hsl(0 84% 60%)',
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -15,11 +14,10 @@ const STATUS_LABELS: Record<string, string> = {
   IN_STOCK: 'In Stock',
   IN_MAINTENANCE: 'Maintenance',
   RETIRED: 'Retired',
-  LOST: 'Lost',
 }
 
 // Display order: most positive statuses first
-const STATUS_ORDER = ['ASSIGNED', 'IN_STOCK', 'IN_MAINTENANCE', 'RETIRED', 'LOST']
+const STATUS_ORDER = ['ASSIGNED', 'IN_STOCK', 'IN_MAINTENANCE', 'RETIRED']
 
 type Props = {
   statusCounts: Record<string, number>
