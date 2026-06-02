@@ -6,8 +6,8 @@ export type DashboardStatsView = {
   inStockAssets: number
   inMaintenanceAssets: number
   retiredAssets: number
-  totalUsers: number
-  activeUsers: number
+  totalPeople: number
+  activePeople: number
   activeCheckouts: number
 }
 

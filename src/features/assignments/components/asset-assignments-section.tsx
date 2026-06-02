@@ -11,6 +11,7 @@ import {
 } from '@/features/assignments/hooks/use-asset-assignments'
 import { useLocationsQuery } from '@/features/catalog/hooks/use-catalog-lookups'
 import { useUsersQuery } from '@/features/users/hooks/use-user-lookup'
+import { usePeopleQuery } from '@/features/people/hooks/use-people'
 import { formatTimestamp, getLookupStateMessage } from '@/lib/format'
 import { HttpError } from '@/lib/http-client'
 
@@ -22,19 +23,20 @@ type AssetAssignmentsSectionProps = {
 
 export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProps) {
   const { t } = useTranslation()
-  const [userId, setUserId] = useState('')
+  const [personId, setPersonId] = useState('')
   const [locationId, setLocationId] = useState('')
   const [notes, setNotes] = useState('')
   const assignmentsQuery = useAssetAssignmentsQuery(assetId)
   const usersQuery = useUsersQuery()
+  const peopleQuery = usePeopleQuery()
   const locationsQuery = useLocationsQuery()
   const assignMutation = useAssignAssetMutation(assetId)
   const unassignMutation = useUnassignAssetMutation(assetId)
 
   const assignments = assignmentsQuery.data ?? []
-  const users = useMemo(
-    () => (usersQuery.data?.items ?? []).filter((user) => user.status === 'ACTIVE'),
-    [usersQuery.data],
+  const people = useMemo(
+    () => (peopleQuery.data?.items ?? []).filter((person) => person.active),
+    [peopleQuery.data],
   )
   const locations = useMemo(
     () => (locationsQuery.data ?? []).filter((location) => location.active),
@@ -45,17 +47,17 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
   async function handleAssignSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (!userId) {
+    if (!personId) {
       return
     }
 
     await assignMutation.mutateAsync({
-      userId,
+      personId,
       locationId: locationId || undefined,
       notes: notes || undefined,
     })
 
-    setUserId('')
+    setPersonId('')
     setLocationId('')
     setNotes('')
   }
@@ -90,20 +92,20 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
         <form className="space-y-4 rounded-md border border-border p-4" onSubmit={handleAssignSubmit}>
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-2 text-sm">
-              <span className="text-muted-foreground">{t('details.assignments.user', 'User')}</span>
+              <span className="text-muted-foreground">{t('details.assignments.user', 'Person')}</span>
               <select
-                value={userId}
-                onChange={(event) => setUserId(event.target.value)}
+                value={personId}
+                onChange={(event) => setPersonId(event.target.value)}
                 className="h-9 rounded-md border border-input bg-transparent px-3 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                 disabled={assignMutation.isPending}
                 required
               >
                 <option value="">
-                  {getLookupStateMessage(usersQuery.isPending, usersQuery.isError, t('details.assignments.selectUser', 'Select a user'))}
+                  {getLookupStateMessage(peopleQuery.isPending, peopleQuery.isError, t('details.assignments.selectUser', 'Select a person'))}
                 </option>
-                {users.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.fullName} ({user.email})
+                {people.map((person) => (
+                  <option key={person.id} value={person.id}>
+                    {person.fullName} {person.email ? `(${person.email})` : ''}
                   </option>
                 ))}
               </select>
@@ -152,7 +154,7 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
                 : t('details.assignments.inactiveMsg', 'There is no active assignment for this asset.')}
             </p>
             <div className="flex gap-2">
-              <Button type="submit" disabled={!userId || assignMutation.isPending}>
+              <Button type="submit" disabled={!personId || assignMutation.isPending}>
                 {assignMutation.isPending ? t('details.assignments.assigning', 'Assigning...') : t('details.assignments.assign', 'Assign asset')}
               </Button>
               <Button
@@ -192,9 +194,9 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
           {assignmentsQuery.isSuccess && assignments.length > 0 ? (
             <div className="space-y-3">
               {assignments.map((assignment) => {
-                const assignee = (usersQuery.data?.items ?? []).find(u => u.id === assignment.userId)
+                const assignee = (peopleQuery.data?.items ?? []).find(p => p.id === assignment.personId)
                 const assigner = (usersQuery.data?.items ?? []).find(u => u.id === assignment.assignedBy)
-                const assigneeName = assignee ? assignee.fullName : `User ${assignment.userId.slice(0, 8)}…`
+                const assigneeName = assignee ? assignee.fullName : `Person ${assignment.personId.slice(0, 8)}…`
                 const assignerName = assigner ? assigner.fullName : `${assignment.assignedBy.slice(0, 8)}…`
 
                 const location = locations.find(l => l.id === assignment.locationId)

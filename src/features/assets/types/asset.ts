@@ -10,7 +10,7 @@ export type AssetListItem = {
   displayName: string | null
   serialNumber: string | null
   status: AssetStatus
-  currentAssignedUserName: string | null
+  currentAssignedPersonName: string | null
   archivedAt: string | null
 }
 
@@ -21,8 +21,8 @@ export type AssetDetail = {
   categoryId: string | null
   manufacturerId: string | null
   currentLocationId: string | null
-  currentAssignedUserId: string | null
-  currentAssignedUserName: string | null
+  currentAssignedPersonId: string | null
+  currentAssignedPersonName: string | null
   status: AssetStatus
   serialNumber: string | null
   hostname: string | null

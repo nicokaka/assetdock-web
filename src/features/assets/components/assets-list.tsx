@@ -67,7 +67,7 @@ export function AssetsList({ assets }: AssetsListProps) {
               {asset.serialNumber || '—'}
             </TableCell>
             <TableCell className="text-muted-foreground">
-              {asset.currentAssignedUserName || '—'}
+              {asset.currentAssignedPersonName || '—'}
             </TableCell>
             <TableCell className="text-right">
               <Link

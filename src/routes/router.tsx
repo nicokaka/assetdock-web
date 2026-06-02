@@ -23,6 +23,10 @@ import {
   UserEditPage,
   AuditLogsPage,
   ImportsPage,
+  PeoplePage,
+  PersonCreatePage,
+  PersonDetailPage,
+  PersonEditPage,
 } from '@/routes/lazy-pages'
 
 export const router = createBrowserRouter([
@@ -137,6 +141,38 @@ export const router = createBrowserRouter([
             element: (
               <PageSuspense>
                 <UserEditPage />
+              </PageSuspense>
+            ),
+          },
+          {
+            path: 'people',
+            element: (
+              <PageSuspense>
+                <PeoplePage />
+              </PageSuspense>
+            ),
+          },
+          {
+            path: 'people/new',
+            element: (
+              <PageSuspense>
+                <PersonCreatePage />
+              </PageSuspense>
+            ),
+          },
+          {
+            path: 'people/:personId',
+            element: (
+              <PageSuspense>
+                <PersonDetailPage />
+              </PageSuspense>
+            ),
+          },
+          {
+            path: 'people/:personId/edit',
+            element: (
+              <PageSuspense>
+                <PersonEditPage />
               </PageSuspense>
             ),
           },

@@ -1,7 +1,7 @@
 export type AssetAssignment = {
   id: string
   assetId: string
-  userId: string
+  personId: string
   locationId: string | null
   assignedAt: string
   unassignedAt: string | null
@@ -11,7 +11,7 @@ export type AssetAssignment = {
 }
 
 export type AssignAssetInput = {
-  userId: string
+  personId: string
   locationId?: string
   notes?: string
 }

@@ -69,6 +69,17 @@ export function AuthenticatedShell() {
                     {t('app.header.assets', 'Assets')} {stats.total > 0 && <span className="ml-1 opacity-60">({stats.total})</span>}
                   </NavLink>
                   <NavLink
+                    to="/app/people"
+                    className={({ isActive }) =>
+                      cn(
+                        'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
+                        isActive && 'bg-secondary text-foreground shadow-sm'
+                      )
+                    }
+                  >
+                    {t('app.header.people', 'People')} {stats.peopleCount > 0 && <span className="ml-1 opacity-60">({stats.peopleCount})</span>}
+                  </NavLink>
+                  <NavLink
                     to="/app/users"
                     className={({ isActive }) =>
                       cn(
@@ -77,7 +88,7 @@ export function AuthenticatedShell() {
                       )
                     }
                   >
-                    {t('app.header.users', 'Users')} {stats.userCount > 0 && <span className="ml-1 opacity-60">({stats.userCount})</span>}
+                    {t('app.header.users', 'Users')}
                   </NavLink>
                   <NavLink
                     to="/app/imports"

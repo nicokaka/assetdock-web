@@ -24,7 +24,7 @@ export function useDashboardStats() {
         assigned: 0,
         inStock: 0,
         operational: 0,
-        userCount: 0,
+        peopleCount: 0,
         issues: 0,
         healthRate: 0,
         statusChartData: [],
@@ -39,7 +39,7 @@ export function useDashboardStats() {
       inStockAssets,
       inMaintenanceAssets,
       retiredAssets,
-      totalUsers,
+      totalPeople,
     } = query.data
 
     const operational = assignedAssets + inStockAssets
@@ -69,7 +69,7 @@ export function useDashboardStats() {
       assigned: assignedAssets,
       inStock: inStockAssets,
       operational,
-      userCount: totalUsers,
+      peopleCount: totalPeople,
       issues,
       healthRate,
       statusChartData,

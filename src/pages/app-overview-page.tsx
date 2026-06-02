@@ -88,11 +88,11 @@ export function AppOverviewPage() {
           accent="default"
         />
         <KpiCard
-          label={t('app.overview.kpi.users', 'Users')}
-          value={isLoading ? '—' : stats.userCount}
-          sublabel={t('app.overview.kpi.usersSub', 'registered in the org')}
+          label={t('app.overview.kpi.people', 'People')}
+          value={isLoading ? '—' : stats.peopleCount}
+          sublabel={t('app.overview.kpi.peopleSub', 'registered in the org')}
           icon={<Users className="h-4 w-4" />}
-          to="/app/users"
+          to="/app/people"
           accent="default"
         />
         <KpiCard

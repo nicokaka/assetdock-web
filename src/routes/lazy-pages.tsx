@@ -59,3 +59,20 @@ export const AuditLogsPage = lazy(() =>
 export const ImportsPage = lazy(() =>
   import('@/pages/imports-page').then((m) => ({ default: m.ImportsPage })),
 )
+
+export const PeoplePage = lazy(() =>
+  import('@/pages/people-page').then((m) => ({ default: m.PeoplePage })),
+)
+
+export const PersonCreatePage = lazy(() =>
+  import('@/pages/person-create-page').then((m) => ({ default: m.PersonCreatePage })),
+)
+
+export const PersonDetailPage = lazy(() =>
+  import('@/pages/person-detail-page').then((m) => ({ default: m.PersonDetailPage })),
+)
+
+export const PersonEditPage = lazy(() =>
+  import('@/pages/person-edit-page').then((m) => ({ default: m.PersonEditPage })),
+)
+

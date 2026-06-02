@@ -34,6 +34,7 @@
     "header": {
       "overview": "Visão Geral",
       "assets": "Ativos",
+      "people": "Pessoas",
       "users": "Usuários",
       "imports": "Importações",
       "auditLogs": "Logs de Auditoria",
@@ -81,6 +82,17 @@
       "emptyDescriptionFilters": "Nenhum usuário corresponde à sua busca.",
       "emptyDescriptionStart": "Crie o primeiro usuário quando este workspace estiver pronto para crescer."
     },
+    "people": {
+      "title": "Pessoas",
+      "description": "Gerencie as pessoas/colaboradores para quem você atribui ativos.",
+      "newPerson": "Nova Pessoa",
+      "searchPlaceholder": "Buscar pessoas por nome ou email...",
+      "errorTitle": "Não foi possível carregar as pessoas",
+      "errorDescription": "Por favor, atualize a página ou tente novamente em instantes.",
+      "emptyTitle": "Nenhuma pessoa encontrada",
+      "emptyDescriptionFilters": "Nenhuma pessoa corresponde aos seus filtros de busca.",
+      "emptyDescriptionStart": "Cadastre a primeira pessoa para começar a atribuir computadores."
+    },
     "overview": {
       "title": "Visão Geral",
       "description": "Status do inventário de ativos e atividade operacional recente.",
@@ -91,8 +103,8 @@
         "assignedSub": "operacionais (atribuídos + em estoque)",
         "activeCheckouts": "Check-outs Ativos",
         "activeCheckoutsSub": "itens atualmente emprestados",
-        "users": "Usuários",
-        "usersSub": "registrados na org",
+        "people": "Pessoas",
+        "peopleSub": "colaboradores registrados na org",
         "issues": "Problemas",
         "issuesSub": "em manutenção"
       },
@@ -470,6 +482,14 @@
       "updateSuccess": "Perfil do usuário atualizado",
       "updateError": "Falha ao atualizar perfil"
     },
+    "person": {
+      "createSuccess": "Pessoa cadastrada com sucesso",
+      "createError": "Falha ao cadastrar pessoa",
+      "updateSuccess": "Dados da pessoa atualizados com sucesso",
+      "updateError": "Falha ao atualizar dados da pessoa",
+      "deleteSuccess": "Pessoa desativada com sucesso",
+      "deleteError": "Falha ao desativar pessoa"
+    },
     "assignment": {
       "assignSuccess": "Ativo atribuído com sucesso",
       "assignError": "Falha ao atribuir ativo",
@@ -480,8 +500,40 @@
       "success": "Sistema configurado com sucesso. Agora você pode fazer login."
     }
   },
+  "personForm": {
+    "titleNew": "Nova Pessoa",
+    "descriptionNew": "Cadastre uma nova pessoa/colaborador para permitir a atribuição de ativos.",
+    "titleEdit": "Editar Pessoa",
+    "descriptionEdit": "Atualize as informações desta pessoa/colaborador.",
+    "labels": {
+      "fullName": "Nome completo",
+      "email": "E-mail (Opcional)",
+      "department": "Departamento (Opcional)",
+      "status": "Status"
+    },
+    "placeholders": {
+      "fullName": "ex. Maria Silva",
+      "email": "ex. maria@empresa.com",
+      "department": "ex. Engenharia"
+    },
+    "status": {
+      "active": "Ativo",
+      "inactive": "Inativo"
+    },
+    "submitNew": "Cadastrar pessoa",
+    "submittingNew": "Cadastrando...",
+    "submitEdit": "Salvar alterações",
+    "submittingEdit": "Salvando...",
+    "back": "Voltar para pessoas",
+    "errorNew": "Não foi possível cadastrar a pessoa com os dados fornecidos.",
+    "errorEdit": "Não foi possível atualizar os dados da pessoa.",
+    "errorGeneric": "Não foi possível processar a requisição.",
+    "errorTitle": "Não foi possível carregar os dados",
+    "errorDescription": "Por favor, atualize a página ou tente novamente em instantes."
+  },
   "breadcrumb": {
     "asset": "Ativo",
-    "user": "Usuário"
+    "user": "Usuário",
+    "person": "Pessoa"
   }
 }

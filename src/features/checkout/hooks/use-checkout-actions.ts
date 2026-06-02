@@ -8,7 +8,7 @@ export function useCheckoutMutation(assetId: string) {
   const { t } = useTranslation()
 
   return useMutation({
-    mutationFn: async (data: { userId: string; expectedReturnDate?: string; notes?: string }) => {
+    mutationFn: async (data: { personId: string; expectedReturnDate?: string; notes?: string }) => {
       const response = await httpClient.request<unknown>(`/assets/${assetId}/checkout`, {
         method: 'POST',
         body: data

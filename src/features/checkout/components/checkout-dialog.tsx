@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/select'
 import { HttpError } from '@/lib/http-client'
 import { useCheckoutMutation } from '../hooks/use-checkout-actions'
-import { useUsersQuery } from '@/features/users/hooks/use-user-lookup'
+import { usePeopleQuery } from '@/features/people/hooks/use-people'
 
 interface CheckoutDialogProps {
   assetId: string
@@ -35,26 +35,26 @@ interface CheckoutDialogProps {
 export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
-  const [userId, setUserId] = useState<string>('')
+  const [personId, setPersonId] = useState<string>('')
   const [expectedReturnDate, setExpectedReturnDate] = useState<string>('')
   const [notes, setNotes] = useState('')
 
   const checkoutMutation = useCheckoutMutation(assetId)
-  const usersQuery = useUsersQuery()
-  const users = usersQuery.data?.items ?? []
+  const peopleQuery = usePeopleQuery()
+  const people = peopleQuery.data?.items ?? []
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!userId) return
+    if (!personId) return
 
     try {
       await checkoutMutation.mutateAsync({
-        userId,
+        personId,
         expectedReturnDate: expectedReturnDate ? new Date(expectedReturnDate).toISOString() : undefined,
         notes: notes || undefined,
       })
       setIsOpen(false)
-      setUserId('')
+      setPersonId('')
       setExpectedReturnDate('')
       setNotes('')
     } catch (error) {
@@ -100,28 +100,28 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
 
             {/* M-1: Use shadcn Select for visual consistency. L-5: Label uses standard styling. */}
             <div className="space-y-2">
-              <Label htmlFor="userId">
-                {t('app.checkout.user', 'User')}{' '}
+              <Label htmlFor="personId">
+                {t('app.checkout.user', 'Person')}{' '}
                 <span className="text-muted-foreground">*</span>
               </Label>
               <Select
-                value={userId}
-                onValueChange={setUserId}
-                disabled={checkoutMutation.isPending || usersQuery.isPending}
+                value={personId}
+                onValueChange={setPersonId}
+                disabled={checkoutMutation.isPending || peopleQuery.isPending}
               >
-                <SelectTrigger id="userId">
+                <SelectTrigger id="personId">
                   <SelectValue
                     placeholder={
-                      usersQuery.isPending
+                      peopleQuery.isPending
                         ? t('common.loading', 'Loading...')
-                        : t('details.assignments.selectUser', 'Select a user')
+                        : t('details.assignments.selectUser', 'Select a person')
                     }
                   />
                 </SelectTrigger>
                 <SelectContent>
-                  {users.map((user) => (
-                    <SelectItem key={user.id} value={user.id}>
-                      {user.fullName} ({user.email})
+                  {people.map((person) => (
+                    <SelectItem key={person.id} value={person.id}>
+                      {person.fullName} {person.email ? `(${person.email})` : ''}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -160,7 +160,7 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={checkoutMutation.isPending}>
               {t('common.cancel', 'Cancel')}
             </Button>
-            <Button type="submit" disabled={!userId || checkoutMutation.isPending}>
+            <Button type="submit" disabled={!personId || checkoutMutation.isPending}>
               {checkoutMutation.isPending ? t('common.saving', 'Saving...') : t('app.checkout.submit', 'Confirm Check-out')}
             </Button>
           </DialogFooter>

@@ -201,8 +201,8 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
           <DetailRow label={t('assetForm.labels.serialNumber', 'Serial number')} value={asset.serialNumber} />
           <DetailRow label={t('assetForm.labels.hostname', 'Hostname')} value={asset.hostname} />
           <DetailRow label={t('assetForm.labels.description', 'Description')} value={asset.description} />
-          {asset.status === 'ASSIGNED' && asset.currentAssignedUserName && (
-            <DetailRow label={t('details.labels.assignedTo', 'Assigned to')} value={asset.currentAssignedUserName} />
+          {asset.status === 'ASSIGNED' && asset.currentAssignedPersonName && (
+            <DetailRow label={t('details.labels.assignedTo', 'Assigned to')} value={asset.currentAssignedPersonName} />
           )}
           {asset.purchaseDate && (
             <DetailRow label={t('details.labels.purchaseDate', 'Purchase date')} value={formatTimestamp(asset.purchaseDate).split(' ')[0]} />

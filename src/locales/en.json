@@ -34,6 +34,7 @@
     "header": {
       "overview": "Overview",
       "assets": "Assets",
+      "people": "People",
       "users": "Users",
       "imports": "Imports",
       "auditLogs": "Audit Logs",
@@ -81,6 +82,17 @@
       "emptyDescriptionFilters": "No users match your search query.",
       "emptyDescriptionStart": "Create the first user when this workspace is ready to grow."
     },
+    "people": {
+      "title": "People",
+      "description": "Manage the people/employees to whom you assign assets.",
+      "newPerson": "New Person",
+      "searchPlaceholder": "Search people by name or email...",
+      "errorTitle": "Unable to load people",
+      "errorDescription": "Please refresh the page or try again in a moment.",
+      "emptyTitle": "No people found",
+      "emptyDescriptionFilters": "No people match your filters.",
+      "emptyDescriptionStart": "Create the first person to begin assigning computers."
+    },
     "overview": {
       "title": "Overview",
       "description": "Asset inventory status and recent operational activity.",
@@ -91,8 +103,8 @@
         "assignedSub": "operational (assigned + in stock)",
         "activeCheckouts": "Active Checkouts",
         "activeCheckoutsSub": "items currently checked out",
-        "users": "Users",
-        "usersSub": "registered in the org",
+        "people": "People",
+        "peopleSub": "employees registered in the org",
         "issues": "Issues",
         "issuesSub": "in maintenance"
       },
@@ -470,6 +482,14 @@
       "updateSuccess": "User profile updated",
       "updateError": "Failed to update user profile"
     },
+    "person": {
+      "createSuccess": "Person created successfully",
+      "createError": "Failed to create person",
+      "updateSuccess": "Person updated successfully",
+      "updateError": "Failed to update person",
+      "deleteSuccess": "Person deactivated successfully",
+      "deleteError": "Failed to deactivate person"
+    },
     "assignment": {
       "assignSuccess": "Asset assigned successfully",
       "assignError": "Failed to assign asset",
@@ -480,8 +500,40 @@
       "success": "System configured successfully. You can now sign in."
     }
   },
+  "personForm": {
+    "titleNew": "New Person",
+    "descriptionNew": "Create a new employee/person to allow assigning assets to them.",
+    "titleEdit": "Edit Person",
+    "descriptionEdit": "Update the employee/person details.",
+    "labels": {
+      "fullName": "Full name",
+      "email": "Email (Optional)",
+      "department": "Department (Optional)",
+      "status": "Status"
+    },
+    "placeholders": {
+      "fullName": "e.g. Jane Smith",
+      "email": "e.g. jane@company.com",
+      "department": "e.g. Engineering"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "submitNew": "Create person",
+    "submittingNew": "Creating...",
+    "submitEdit": "Save changes",
+    "submittingEdit": "Saving...",
+    "back": "Back to people",
+    "errorNew": "Unable to create the person with the provided data.",
+    "errorEdit": "Unable to save the person with the provided data.",
+    "errorGeneric": "Unable to save the person right now.",
+    "errorTitle": "Unable to load person",
+    "errorDescription": "Please refresh the page or try again in a moment."
+  },
   "breadcrumb": {
     "asset": "Asset",
-    "user": "User"
+    "user": "User",
+    "person": "Person"
   }
 }
