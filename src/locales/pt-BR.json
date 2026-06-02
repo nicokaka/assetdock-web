@@ -120,7 +120,8 @@
         "ASSIGNED": "Atribuído",
         "IN_STOCK": "Em Estoque",
         "IN_MAINTENANCE": "Em Manutenção",
-        "RETIRED": "Aposentado"
+        "RETIRED": "Aposentado",
+        "OPERATIONAL": "Operacionais"
       },
       "events": {
         "LOGIN_SUCCESS": "Login bem-sucedido",

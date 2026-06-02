@@ -76,7 +76,7 @@ export function AppOverviewPage() {
           value={isLoading ? '—' : stats.operational}
           sublabel={isLoading ? '' : `${stats.healthRate}% ${t('app.overview.kpi.assignedSub', 'operational (assigned + in stock)')}`}
           icon={<CheckCircle2 className="h-4 w-4" />}
-          to="/app/assets"
+          to="/app/assets?status=OPERATIONAL"
           accent="success"
         />
         <KpiCard

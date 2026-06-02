@@ -151,6 +151,7 @@ export function AssetsPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">{t('app.assets.allStatuses', 'All Statuses')}</SelectItem>
+            <SelectItem value="OPERATIONAL">{t('app.overview.status.OPERATIONAL', 'Operational')}</SelectItem>
             {Object.entries(assetStatusLabels).map(([key, label]) => (
               <SelectItem key={key} value={key}>
                 {t(`app.overview.status.${key}`, label)}

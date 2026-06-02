@@ -120,7 +120,8 @@
         "ASSIGNED": "Assigned",
         "IN_STOCK": "In Stock",
         "IN_MAINTENANCE": "Maintenance",
-        "RETIRED": "Retired"
+        "RETIRED": "Retired",
+        "OPERATIONAL": "Operational"
       },
       "events": {
         "LOGIN_SUCCESS": "Successful login",
