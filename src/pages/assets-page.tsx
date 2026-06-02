@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Download } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { PageHeader } from '@/components/layout/page-header'
@@ -22,12 +22,53 @@ import { toast } from 'sonner'
 export function AssetsPage() {
   usePageTitle(useTranslation().t('app.header.assets', 'Assets'))
   const navigate = useNavigate()
-  const [page, setPage] = useState(1)
-  const [search, setSearch] = useState('')
-  const [status, setStatus] = useState<string>('all')
-  const [categoryId, setCategoryId] = useState<string>('all')
-  const [locationId, setLocationId] = useState<string>('all')
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const [page, setPage] = useState(() => {
+    const p = searchParams.get('page')
+    return p ? parseInt(p, 10) : 1
+  })
+  const [search, setSearch] = useState(() => searchParams.get('search') ?? '')
+  const [status, setStatus] = useState(() => searchParams.get('status') ?? 'all')
+  const [categoryId, setCategoryId] = useState(() => searchParams.get('categoryId') ?? 'all')
+  const [locationId, setLocationId] = useState(() => searchParams.get('locationId') ?? 'all')
   const debouncedSearch = useDebounce(search, 400)
+
+  // Sync state with URL when browser navigation occurs (back/forward or external link)
+  useEffect(() => {
+    const p = searchParams.get('page')
+    setPage(p ? parseInt(p, 10) : 1)
+    setSearch(searchParams.get('search') ?? '')
+    setStatus(searchParams.get('status') ?? 'all')
+    setCategoryId(searchParams.get('categoryId') ?? 'all')
+    setLocationId(searchParams.get('locationId') ?? 'all')
+  }, [searchParams])
+
+  // Helper to update searchParams
+  const updateUrlParam = useCallback((key: string, value: string, resetPage = true) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev)
+      if (value === 'all' || !value) {
+        next.delete(key)
+      } else {
+        next.set(key, value)
+      }
+      if (resetPage) {
+        next.set('page', '1')
+      }
+      return next
+    })
+  }, [setSearchParams])
+
+  // Update URL search parameter when debounced search changes
+  useEffect(() => {
+    // Only update if search has actually debounced to a different value than the URL param
+    const currentUrlSearch = searchParams.get('search') ?? ''
+    if (debouncedSearch !== currentUrlSearch) {
+      updateUrlParam('search', debouncedSearch, true)
+    }
+  }, [debouncedSearch, searchParams, updateUrlParam])
+
   const { t } = useTranslation()
   const [isExporting, setIsExporting] = useState(false)
 
@@ -96,15 +137,13 @@ export function AssetsPage() {
           value={search}
           onChange={(val) => {
             setSearch(val)
-            setPage(1)
           }}
           placeholder={t('app.assets.searchPlaceholder', 'Search by tag, name or serial...')}
         />
         <Select
           value={status}
           onValueChange={(val) => {
-            setStatus(val)
-            setPage(1)
+            updateUrlParam('status', val)
           }}
         >
           <SelectTrigger className="w-full sm:w-[150px]">
@@ -123,8 +162,7 @@ export function AssetsPage() {
         <Select
           value={categoryId}
           onValueChange={(val) => {
-            setCategoryId(val)
-            setPage(1)
+            updateUrlParam('categoryId', val)
           }}
         >
           <SelectTrigger className="w-full sm:w-[150px]">
@@ -143,8 +181,7 @@ export function AssetsPage() {
         <Select
           value={locationId}
           onValueChange={(val) => {
-            setLocationId(val)
-            setPage(1)
+            updateUrlParam('locationId', val)
           }}
         >
           <SelectTrigger className="w-full sm:w-[150px]">
@@ -197,7 +234,7 @@ export function AssetsPage() {
           <PaginationControls
             page={assetsQuery.data.page}
             totalPages={assetsQuery.data.totalPages}
-            onPageChange={setPage}
+            onPageChange={(newPage) => updateUrlParam('page', String(newPage), false)}
           />
         </div>
       ) : null}

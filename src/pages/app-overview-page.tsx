@@ -84,7 +84,7 @@ export function AppOverviewPage() {
           value={isLoading ? '—' : stats.activeCheckouts}
           sublabel={t('app.overview.kpi.activeCheckoutsSub', 'items currently checked out')}
           icon={<ArrowLeftRight className="h-4 w-4" />}
-          to="/app/assets"
+          to="/app/assets?status=ASSIGNED"
           accent="default"
         />
         <KpiCard
@@ -100,7 +100,7 @@ export function AppOverviewPage() {
           value={isLoading ? '—' : stats.issues}
           sublabel={t('app.overview.kpi.issuesSub', 'in maintenance')}
           icon={<AlertTriangle className="h-4 w-4" />}
-          to="/app/assets"
+          to="/app/assets?status=IN_MAINTENANCE"
           accent={stats.issues > 0 ? 'warning' : 'default'}
         />
       </div>
