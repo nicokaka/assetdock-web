@@ -59,7 +59,7 @@ export function PersonDetailPage() {
               className={buttonVariants({ variant: 'outline', size: 'sm' })}
             >
               <Edit2 className="mr-2 h-4 w-4" />
-              {t('details.actions.edit', 'Edit person')}
+              {t('details.actions.editPerson', 'Edit Person')}
             </Link>
           ) : null}
         </div>
@@ -68,7 +68,7 @@ export function PersonDetailPage() {
       {personQuery.isPending ? (
         <Card className="border-border shadow-none">
           <CardHeader>
-            <CardTitle className="text-base font-medium">{t('details.loading', 'Loading...')}</CardTitle>
+            <CardTitle className="text-base font-medium">{t('common.loading', 'Loading...')}</CardTitle>
             <CardDescription>
               {t('details.loadingPerson', 'Fetching the latest person details.')}
             </CardDescription>
@@ -111,7 +111,7 @@ export function PersonDetailPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid gap-1 sm:grid-cols-[100px_1fr] sm:gap-4">
-                  <div className="text-sm text-muted-foreground">{t('personForm.labels.status', 'Status')}</div>
+                  <div className="text-sm text-muted-foreground">{t('details.labels.status', 'Status')}</div>
                   <div>
                     <Badge variant={personQuery.data.active ? 'success' : 'muted'}>
                       {personQuery.data.active ? t('personForm.status.active', 'Active') : t('personForm.status.inactive', 'Inactive')}
@@ -120,7 +120,7 @@ export function PersonDetailPage() {
                 </div>
 
                 <div className="grid gap-1 sm:grid-cols-[100px_1fr] sm:gap-4">
-                  <div className="text-sm text-muted-foreground">{t('personForm.labels.department', 'Department')}</div>
+                  <div className="text-sm text-muted-foreground">{t('details.labels.department', 'Department')}</div>
                   <div className="text-sm font-medium">{personQuery.data.department || t('common.na', 'N/A')}</div>
                 </div>
 
@@ -154,13 +154,13 @@ export function PersonDetailPage() {
                 ) : null}
 
                 {historyQuery.isError ? (
-                  <p className="text-sm text-destructive">{t('details.assignments.error', 'Unable to load history right now.')}</p>
+                  <p className="text-sm text-destructive">{t('details.assignments.historyError', 'Unable to load checkout history right now.')}</p>
                 ) : null}
 
                 {historyQuery.isSuccess && historyQuery.data.length === 0 ? (
                   <div className="py-8 text-center text-sm text-muted-foreground">
                     <Laptop className="mx-auto h-8 w-8 text-muted-foreground/50 mb-2" />
-                    {t('details.assignments.empty', 'No checkout history found for this person.')}
+                    {t('details.assignments.historyEmpty', 'No checkout history found for this person.')}
                   </div>
                 ) : null}
 

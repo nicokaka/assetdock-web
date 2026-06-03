@@ -6,7 +6,8 @@
     "close": "Close",
     "cancel": "Cancel",
     "saving": "Saving...",
-    "optional": "Optional"
+    "optional": "Optional",
+    "na": "N/A"
   },
   "auth": {
     "login": {
@@ -176,7 +177,7 @@
       "updated": "Asset details were updated",
       "checkedOut": "Asset was checked out",
       "checkedIn": "Asset was checked in",
-      "assigned": "Asset was assigned to a user",
+      "assigned": "Asset was assigned to a person",
       "unassigned": "Asset was unassigned",
       "archived": "Asset was archived",
       "error": "Unable to load timeline",
@@ -194,9 +195,9 @@
     "checkout": {
       "button": "Check-out",
       "title": "Check-out Asset",
-      "description": "Assign this asset temporarily to a user.",
+      "description": "Assign this asset temporarily to a person.",
       "asset": "Asset",
-      "user": "User",
+      "user": "Person",
       "expectedReturn": "Expected Return Date",
       "notes": "Notes",
       "notesPlaceholder": "Reason for checkout, condition, etc.",
@@ -296,15 +297,21 @@
     "errorGeneric": "Unable to process the request right now."
   },
   "details": {
+    "loadingPerson": "Fetching the latest person details.",
     "labels": {
       "assignedTo": "Assigned to",
       "purchaseDate": "Purchase date",
       "warrantyExpiryDate": "Warranty expiration",
+      "fullName": "Full name",
+      "email": "Email",
+      "department": "Department",
+      "status": "Status",
       "createdAt": "Created at",
       "updatedAt": "Last updated"
     },
     "actions": {
       "edit": "Edit",
+      "editPerson": "Edit Person",
       "archive": "Archive",
       "resetPassword": "Reset Password",
       "delete": "Delete",
@@ -349,6 +356,9 @@
       "remove": "Unassign",
       "removing": "Removing...",
       "history": "History",
+      "historyDescription": "Timeline of computers and physical items checked out to this person.",
+      "historyEmpty": "No checkout history found for this person.",
+      "historyError": "Unable to load checkout history right now.",
       "loading": "Loading assignments...",
       "error": "Unable to load assignments right now.",
       "empty": "No assignments yet.",

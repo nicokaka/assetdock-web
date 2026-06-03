@@ -88,7 +88,7 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
           <DialogHeader>
             <DialogTitle>{t('app.checkout.title', 'Check-out Asset')}</DialogTitle>
             <DialogDescription>
-              {t('app.checkout.description', 'Assign this asset temporarily to a user.')}
+              {t('app.checkout.description', 'Assign this asset temporarily to a person.')}
             </DialogDescription>
           </DialogHeader>
 

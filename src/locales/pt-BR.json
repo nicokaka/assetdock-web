@@ -6,7 +6,8 @@
     "close": "Fechar",
     "cancel": "Cancelar",
     "saving": "Salvando...",
-    "optional": "Opcional"
+    "optional": "Opcional",
+    "na": "N/A"
   },
   "auth": {
     "login": {
@@ -176,7 +177,7 @@
       "updated": "Detalhes do ativo atualizados",
       "checkedOut": "Ativo em check-out",
       "checkedIn": "Ativo em check-in",
-      "assigned": "Ativo atribuído a um usuário",
+      "assigned": "Ativo atribuído a uma pessoa",
       "unassigned": "Atribuição removida",
       "archived": "Ativo arquivado",
       "error": "Não foi possível carregar a linha do tempo",
@@ -194,9 +195,9 @@
     "checkout": {
       "button": "Check-out",
       "title": "Check-out de Ativo",
-      "description": "Atribuir este ativo temporariamente a um usuário.",
+      "description": "Atribuir este ativo temporariamente a uma pessoa.",
       "asset": "Ativo",
-      "user": "Usuário",
+      "user": "Pessoa",
       "expectedReturn": "Data de Devolução Esperada",
       "notes": "Notas",
       "notesPlaceholder": "Motivo do check-out, condição do ativo, etc.",
@@ -296,15 +297,21 @@
     "errorGeneric": "Não foi possível processar a requisição."
   },
   "details": {
+    "loadingPerson": "Carregando os detalhes mais recentes da pessoa.",
     "labels": {
       "assignedTo": "Atribuído a",
       "purchaseDate": "Data de compra",
       "warrantyExpiryDate": "Expiração da garantia",
+      "fullName": "Nome completo",
+      "email": "E-mail",
+      "department": "Departamento",
+      "status": "Status",
       "createdAt": "Criado em",
       "updatedAt": "Última atualização"
     },
     "actions": {
       "edit": "Editar",
+      "editPerson": "Editar Pessoa",
       "archive": "Arquivar",
       "resetPassword": "Redefinir Senha",
       "delete": "Excluir",
@@ -349,6 +356,9 @@
       "remove": "Remover atribuição",
       "removing": "Removendo...",
       "history": "Histórico",
+      "historyDescription": "Histórico de computadores e itens físicos sob responsabilidade desta pessoa.",
+      "historyEmpty": "Nenhum histórico de atribuição encontrado para esta pessoa.",
+      "historyError": "Não foi possível carregar o histórico de atribuição neste momento.",
       "loading": "Carregando atribuições...",
       "error": "Não foi possível carregar as atribuições.",
       "empty": "Nenhuma atribuição ainda.",

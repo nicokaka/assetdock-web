@@ -38,7 +38,7 @@ const getEventDescription = (event: TimelineEvent, t: TFunction) => {
     case 'ASSET_CHECKED_IN':
       return t('app.timeline.checkedIn', 'Asset was checked in')
     case 'ASSET_ASSIGNED':
-      return t('app.timeline.assigned', 'Asset was assigned to a user')
+      return t('app.timeline.assigned', 'Asset was assigned to a person')
     case 'ASSET_UNASSIGNED':
       return t('app.timeline.unassigned', 'Asset was unassigned')
     case 'ASSET_ARCHIVED':
