@@ -98,6 +98,11 @@
     "overview": {
       "title": "Visão Geral",
       "description": "Status do inventário de ativos e atividade operacional recente.",
+      "categories": {
+        "title": "Filtros Rápidos de Categoria",
+        "description": "Acesso direto ao seu inventário categorizado por tipo de ativo.",
+        "empty": "Nenhuma categoria cadastrada ainda. Vá ao formulário de Ativos para cadastrar novas."
+      },
       "kpi": {
         "totalAssets": "Total de Ativos",
         "totalAssetsSub": "em todas as categorias",

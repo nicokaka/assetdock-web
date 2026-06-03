@@ -1,4 +1,22 @@
-import { Server, CheckCircle2, Users, AlertTriangle, ArrowLeftRight, Plus, FileUp } from 'lucide-react'
+import {
+  Server,
+  CheckCircle2,
+  Users,
+  AlertTriangle,
+  ArrowLeftRight,
+  Plus,
+  FileUp,
+  Laptop,
+  Tv,
+  Tablet,
+  Keyboard,
+  Mouse,
+  Smartphone,
+  Headphones,
+  Printer,
+  Package,
+  ChevronRight,
+} from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -11,12 +29,62 @@ import { RecentActivityFeed } from '@/features/dashboard/components/recent-activ
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { useSessionQuery } from '@/features/auth/hooks/use-session'
 import { usePageTitle } from '@/hooks/use-page-title'
+import { useCategoriesQuery } from '@/features/catalog/hooks/use-catalog-lookups'
+
+function getCategoryIcon(name: string) {
+  const normalized = name.toLowerCase()
+  if (
+    normalized.includes('mac') ||
+    normalized.includes('laptop') ||
+    normalized.includes('notebook') ||
+    normalized.includes('computador')
+  ) {
+    return <Laptop className="h-5 w-5" />
+  }
+  if (
+    normalized.includes('monitor') ||
+    normalized.includes('tela') ||
+    normalized.includes('display')
+  ) {
+    return <Tv className="h-5 w-5" />
+  }
+  if (normalized.includes('tablet') || normalized.includes('ipad')) {
+    return <Tablet className="h-5 w-5" />
+  }
+  if (normalized.includes('teclado') || normalized.includes('keyboard')) {
+    return <Keyboard className="h-5 w-5" />
+  }
+  if (normalized.includes('mouse')) {
+    return <Mouse className="h-5 w-5" />
+  }
+  if (
+    normalized.includes('phone') ||
+    normalized.includes('celular') ||
+    normalized.includes('smartphone') ||
+    normalized.includes('telefone')
+  ) {
+    return <Smartphone className="h-5 w-5" />
+  }
+  if (
+    normalized.includes('headset') ||
+    normalized.includes('fone') ||
+    normalized.includes('audio')
+  ) {
+    return <Headphones className="h-5 w-5" />
+  }
+  if (normalized.includes('impressora') || normalized.includes('printer')) {
+    return <Printer className="h-5 w-5" />
+  }
+  return <Package className="h-5 w-5" />
+}
 
 export function AppOverviewPage() {
   usePageTitle(useTranslation().t('app.header.overview', 'Overview'))
   const { stats, isLoading } = useDashboardStats()
   const { t } = useTranslation()
   const sessionQuery = useSessionQuery()
+  const { data: categories = [], isPending: categoriesLoading } = useCategoriesQuery()
+  const activeCategories = categories.filter((c) => c.active)
 
   const currentHour = new Date().getHours()
   let greetingKey = 'app.overview.greeting.evening'
@@ -60,6 +128,62 @@ export function AppOverviewPage() {
           </Button>
         </div>
       </div>
+
+      {categoriesLoading ? (
+        <div className="space-y-3">
+          <div className="h-4 w-48 rounded bg-muted/40 animate-pulse" />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="flex h-[74px] items-center gap-3 rounded-xl border border-border/40 bg-card/25 p-4 animate-pulse"
+              >
+                <div className="h-9 w-9 rounded-xl bg-muted/40" />
+                <div className="flex-1 space-y-1.5">
+                  <div className="h-3 w-16 rounded bg-muted/40" />
+                  <div className="h-2 w-8 rounded bg-muted/40" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : activeCategories.length > 0 ? (
+        <div className="space-y-3">
+          <div className="flex flex-col gap-0.5">
+            <h3 className="text-sm font-semibold tracking-tight text-foreground/90">
+              {t('app.overview.categories.title', 'Quick Category Filters')}
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              {t('app.overview.categories.description', 'Direct access to your inventory categorized by asset type.')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {activeCategories.map((category) => (
+              <Link
+                key={category.id}
+                to={`/app/assets?categoryId=${category.id}`}
+                className="group relative flex items-center justify-between rounded-xl border border-border/50 bg-card/35 p-4 transition-all duration-300 hover:scale-[1.02] hover:border-primary/30 hover:bg-accent/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.15)]"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
+                    {getCategoryIcon(category.name)}
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="truncate text-sm font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
+                      {category.name}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground font-medium tracking-[0.05em] uppercase">
+                      {t('app.assets.table.view', 'View')}
+                    </span>
+                  </div>
+                </div>
+                <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-primary" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {/* KPI Row */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
