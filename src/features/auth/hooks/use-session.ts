@@ -40,7 +40,7 @@ export function useLogoutMutation() {
   return useMutation({
     mutationFn: logout,
     onSettled: () => {
-      queryClient.removeQueries({ queryKey: sessionQueryKey })
+      queryClient.clear()
       navigate('/login', { replace: true })
     },
   })
