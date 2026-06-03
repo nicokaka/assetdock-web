@@ -99,9 +99,9 @@
       "title": "Visão Geral",
       "description": "Status do inventário de ativos e atividade operacional recente.",
       "categories": {
-        "title": "Filtros Rápidos de Categoria",
-        "description": "Acesso direto ao seu inventário categorizado por tipo de ativo.",
-        "empty": "Nenhuma categoria cadastrada ainda. Vá ao formulário de Ativos para cadastrar novas."
+        "all": "Todas as Categorias",
+        "laptops": "Laptops",
+        "peopleAssigned": "colaboradores com itens atribuídos"
       },
       "kpi": {
         "totalAssets": "Total de Ativos",

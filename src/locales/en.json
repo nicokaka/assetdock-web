@@ -99,9 +99,9 @@
       "title": "Overview",
       "description": "Asset inventory status and recent operational activity.",
       "categories": {
-        "title": "Quick Category Filters",
-        "description": "Direct access to your inventory categorized by asset type.",
-        "empty": "No categories registered yet. Go to Assets form to add new ones."
+        "all": "All Categories",
+        "laptops": "Laptops",
+        "peopleAssigned": "people with items assigned"
       },
       "kpi": {
         "totalAssets": "Total Assets",

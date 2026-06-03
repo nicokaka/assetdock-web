@@ -12,6 +12,8 @@ export type AssetListItem = {
   status: AssetStatus
   currentAssignedPersonName: string | null
   archivedAt: string | null
+  categoryId?: string | null
+  currentAssignedPersonId?: string | null
 }
 
 export type AssetDetail = {

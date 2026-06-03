@@ -15,10 +15,10 @@ import {
   Headphones,
   Printer,
   Package,
-  ChevronRight,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useState, useMemo } from 'react'
 
 import { PageHeader } from '@/components/layout/page-header'
 import { Button } from '@/components/ui/button'
@@ -30,6 +30,9 @@ import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stat
 import { useSessionQuery } from '@/features/auth/hooks/use-session'
 import { usePageTitle } from '@/hooks/use-page-title'
 import { useCategoriesQuery } from '@/features/catalog/hooks/use-catalog-lookups'
+import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
+import { cn } from '@/lib/utils'
+import { assetStatusLabels } from '@/features/assets/constants/labels'
 
 function getCategoryIcon(name: string) {
   const normalized = name.toLowerCase()
@@ -80,11 +83,156 @@ function getCategoryIcon(name: string) {
 
 export function AppOverviewPage() {
   usePageTitle(useTranslation().t('app.header.overview', 'Overview'))
-  const { stats, isLoading } = useDashboardStats()
   const { t } = useTranslation()
   const sessionQuery = useSessionQuery()
-  const { data: categories = [], isPending: categoriesLoading } = useCategoriesQuery()
-  const activeCategories = categories.filter((c) => c.active)
+  const { stats, isLoading: statsLoading } = useDashboardStats()
+  const { data: categories = [] } = useCategoriesQuery()
+  const assetsQuery = useAssetsQuery({ size: 1000 })
+  const allAssets = useMemo(() => assetsQuery.data?.items ?? [], [assetsQuery.data?.items])
+  const isAssetsLoading = assetsQuery.isPending
+
+  const [selectedOptionId, setSelectedOptionId] = useState<string>('all')
+
+  const filterOptions = useMemo(() => {
+    const options = [
+      {
+        id: 'all',
+        name: t('app.overview.categories.all', 'All Categories'),
+        categoryIds: [] as string[],
+        icon: <Server className="h-3.5 w-3.5" />,
+        count: allAssets.length,
+      },
+    ]
+
+    if (!categories.length) return options
+
+    // Group Laptop (Mac) and Laptop (PC) category IDs under a single "Laptops" filter
+    const laptopCategoryIds = categories
+      .filter((c) => {
+        const nameLower = c.name.toLowerCase()
+        return (
+          nameLower.includes('laptop') ||
+          nameLower.includes('notebook') ||
+          nameLower.includes('macbook') ||
+          nameLower.includes('computador')
+        )
+      })
+      .map((c) => c.id)
+
+    if (laptopCategoryIds.length > 0) {
+      const laptopCount = allAssets.filter(
+        (a) => a.categoryId && laptopCategoryIds.includes(a.categoryId)
+      ).length
+      options.push({
+        id: 'laptops',
+        name: t('app.overview.categories.laptops', 'Laptops'),
+        categoryIds: laptopCategoryIds,
+        icon: <Laptop className="h-3.5 w-3.5" />,
+        count: laptopCount,
+      })
+    }
+
+    // Other categories list
+    categories.forEach((c) => {
+      if (laptopCategoryIds.includes(c.id)) return
+      if (!c.active) return
+
+      const count = allAssets.filter((a) => a.categoryId === c.id).length
+      options.push({
+        id: c.id,
+        name: c.name,
+        categoryIds: [c.id],
+        icon: getCategoryIcon(c.name),
+        count,
+      })
+    })
+
+    return options
+  }, [categories, allAssets, t])
+
+  const selectedOption = useMemo(() => {
+    return filterOptions.find((o) => o.id === selectedOptionId) ?? filterOptions[0]
+  }, [filterOptions, selectedOptionId])
+
+  const isCurrentLoading = selectedOptionId === 'all' ? statsLoading : isAssetsLoading
+
+  const displayStats = useMemo(() => {
+    if (selectedOptionId === 'all') {
+      return stats
+    }
+
+    const filteredAssets = allAssets.filter(
+      (a) => a.categoryId && selectedOption.categoryIds.includes(a.categoryId)
+    )
+
+    const total = filteredAssets.length
+    const assigned = filteredAssets.filter((a) => a.status === 'ASSIGNED').length
+    const inStock = filteredAssets.filter((a) => a.status === 'IN_STOCK').length
+    const inMaintenance = filteredAssets.filter((a) => a.status === 'IN_MAINTENANCE').length
+    const retired = filteredAssets.filter((a) => a.status === 'RETIRED').length
+
+    const operational = assigned + inStock
+    const issues = inMaintenance
+    const healthRate = total > 0 ? Math.round((operational / total) * 100) : 0
+
+    // Compute people count having assets in this category group assigned
+    const assignedPersonIds = new Set(
+      filteredAssets
+        .filter((a) => a.status === 'ASSIGNED' && a.currentAssignedPersonId)
+        .map((a) => a.currentAssignedPersonId)
+    )
+    const peopleCount = assignedPersonIds.size
+
+    const statusCounts = {
+      ASSIGNED: assigned,
+      IN_STOCK: inStock,
+      IN_MAINTENANCE: inMaintenance,
+      RETIRED: retired,
+    }
+
+    const STATUS_COLORS: Record<string, string> = {
+      ASSIGNED: 'hsl(142 71% 45%)',
+      IN_STOCK: 'hsl(200 98% 39%)',
+      IN_MAINTENANCE: 'hsl(38 92% 50%)',
+      RETIRED: 'hsl(220 9% 56%)',
+    }
+
+    const statusChartData = Object.entries(statusCounts)
+      .filter((entry) => entry[1] > 0)
+      .map(([status, count]) => ({
+        status,
+        label: assetStatusLabels[status] ?? status,
+        count,
+        fill: STATUS_COLORS[status] ?? 'hsl(220 9% 56%)',
+        percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+      }))
+      .sort((a, b) => b.count - a.count)
+
+    return {
+      total,
+      assigned,
+      inStock,
+      operational,
+      peopleCount,
+      issues,
+      healthRate,
+      statusChartData,
+      statusCounts,
+      activeCheckouts: assigned,
+    }
+  }, [selectedOptionId, selectedOption, allAssets, stats])
+
+  const getFilterUrl = (basePath: string, status?: string) => {
+    const params = new URLSearchParams()
+    if (status) params.set('status', status)
+    
+    if (selectedOptionId !== 'all' && selectedOption.categoryIds.length === 1) {
+      params.set('categoryId', selectedOption.categoryIds[0])
+    }
+    
+    const query = params.toString()
+    return query ? `${basePath}?${query}` : basePath
+  }
 
   const currentHour = new Date().getHours()
   let greetingKey = 'app.overview.greeting.evening'
@@ -129,113 +277,100 @@ export function AppOverviewPage() {
         </div>
       </div>
 
-      {categoriesLoading ? (
-        <div className="space-y-3">
-          <div className="h-4 w-48 rounded bg-muted/40 animate-pulse" />
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="flex h-[74px] items-center gap-3 rounded-xl border border-border/40 bg-card/25 p-4 animate-pulse"
-              >
-                <div className="h-9 w-9 rounded-xl bg-muted/40" />
-                <div className="flex-1 space-y-1.5">
-                  <div className="h-3 w-16 rounded bg-muted/40" />
-                  <div className="h-2 w-8 rounded bg-muted/40" />
-                </div>
-              </div>
-            ))}
+      {/* Category Segmented Switcher */}
+      {filterOptions.length > 1 && (
+        <div className="flex flex-col gap-1.5 border-b border-border/30 pb-4">
+          <div className="flex flex-wrap items-center gap-1 bg-muted/20 backdrop-blur-md p-1 border border-border/50 rounded-xl max-w-fit animate-fade-in">
+            {filterOptions.map((option) => {
+              const isActive = selectedOptionId === option.id
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => setSelectedOptionId(option.id)}
+                  disabled={isCurrentLoading}
+                  className={cn(
+                    'group flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 cursor-pointer disabled:pointer-events-none disabled:opacity-55',
+                    isActive
+                      ? 'bg-card text-foreground shadow-sm scale-100 border border-border/40'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/30'
+                  )}
+                >
+                  <span className={cn('transition-transform duration-200', isActive && 'scale-110 text-primary')}>
+                    {option.icon}
+                  </span>
+                  <span>{option.name}</span>
+                  <span
+                    className={cn(
+                      'ml-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md transition-colors duration-200',
+                      isActive
+                        ? 'bg-primary/10 text-primary'
+                        : 'bg-muted-foreground/15 text-muted-foreground group-hover:text-foreground'
+                    )}
+                  >
+                    {option.count}
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </div>
-      ) : activeCategories.length > 0 ? (
-        <div className="space-y-3">
-          <div className="flex flex-col gap-0.5">
-            <h3 className="text-sm font-semibold tracking-tight text-foreground/90">
-              {t('app.overview.categories.title', 'Quick Category Filters')}
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              {t('app.overview.categories.description', 'Direct access to your inventory categorized by asset type.')}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {activeCategories.map((category) => (
-              <Link
-                key={category.id}
-                to={`/app/assets?categoryId=${category.id}`}
-                className="group relative flex items-center justify-between rounded-xl border border-border/50 bg-card/35 p-4 transition-all duration-300 hover:scale-[1.02] hover:border-primary/30 hover:bg-accent/20 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.15)]"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
-                    {getCategoryIcon(category.name)}
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="truncate text-sm font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
-                      {category.name}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground font-medium tracking-[0.05em] uppercase">
-                      {t('app.assets.table.view', 'View')}
-                    </span>
-                  </div>
-                </div>
-                <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-primary" />
-              </Link>
-            ))}
-          </div>
-        </div>
-      ) : null}
+      )}
 
       {/* KPI Row */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         <KpiCard
           label={t('app.overview.kpi.totalAssets', 'Total Assets')}
-          value={isLoading ? '—' : stats.total}
+          value={isCurrentLoading ? '—' : displayStats.total}
           sublabel={t('app.overview.kpi.totalAssetsSub', 'across all categories')}
           icon={<Server className="h-4 w-4" />}
-          to="/app/assets"
+          to={getFilterUrl('/app/assets')}
           accent="default"
         />
         <KpiCard
           label={t('app.overview.kpi.assigned', 'Operational')}
-          value={isLoading ? '—' : stats.operational}
-          sublabel={isLoading ? '' : `${stats.healthRate}% ${t('app.overview.kpi.assignedSub', 'operational (assigned + in stock)')}`}
+          value={isCurrentLoading ? '—' : displayStats.operational}
+          sublabel={isCurrentLoading ? '' : `${displayStats.healthRate}% ${t('app.overview.kpi.assignedSub', 'operational (assigned + in stock)')}`}
           icon={<CheckCircle2 className="h-4 w-4" />}
-          to="/app/assets?status=OPERATIONAL"
+          to={getFilterUrl('/app/assets', 'OPERATIONAL')}
           accent="success"
         />
         <KpiCard
           label={t('app.overview.kpi.activeCheckouts', 'Active Checkouts')}
-          value={isLoading ? '—' : stats.activeCheckouts}
+          value={isCurrentLoading ? '—' : displayStats.activeCheckouts}
           sublabel={t('app.overview.kpi.activeCheckoutsSub', 'items currently checked out')}
           icon={<ArrowLeftRight className="h-4 w-4" />}
-          to="/app/assets?status=ASSIGNED"
+          to={getFilterUrl('/app/assets', 'ASSIGNED')}
           accent="default"
         />
         <KpiCard
           label={t('app.overview.kpi.people', 'People')}
-          value={isLoading ? '—' : stats.peopleCount}
-          sublabel={t('app.overview.kpi.peopleSub', 'registered in the org')}
+          value={isCurrentLoading ? '—' : displayStats.peopleCount}
+          sublabel={
+            selectedOptionId === 'all'
+              ? t('app.overview.kpi.peopleSub', 'employees registered in the org')
+              : t('app.overview.categories.peopleAssigned', 'people with items assigned')
+          }
           icon={<Users className="h-4 w-4" />}
           to="/app/people"
           accent="default"
         />
         <KpiCard
           label={t('app.overview.kpi.issues', 'Issues')}
-          value={isLoading ? '—' : stats.issues}
+          value={isCurrentLoading ? '—' : displayStats.issues}
           sublabel={t('app.overview.kpi.issuesSub', 'in maintenance')}
           icon={<AlertTriangle className="h-4 w-4" />}
-          to="/app/assets?status=IN_MAINTENANCE"
-          accent={stats.issues > 0 ? 'warning' : 'default'}
+          to={getFilterUrl('/app/assets', 'IN_MAINTENANCE')}
+          accent={displayStats.issues > 0 ? 'warning' : 'default'}
         />
       </div>
 
       {/* Charts Row */}
       <div className="grid gap-4 lg:grid-cols-2">
-        <AssetStatusChart data={stats.statusChartData} total={stats.total} />
+        <AssetStatusChart data={displayStats.statusChartData} total={displayStats.total} />
         <AssetHealthBar
-          statusCounts={stats.statusCounts}
-          total={stats.total}
-          healthRate={stats.healthRate}
+          statusCounts={displayStats.statusCounts}
+          total={displayStats.total}
+          healthRate={displayStats.healthRate}
         />
       </div>
 
