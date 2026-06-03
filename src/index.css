@@ -51,6 +51,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   /* Softer Dark Slate for B2B interfaces (approx. slate-900) */
   --background: oklch(0.208 0.042 265.755);
   --foreground: oklch(0.985 0.002 247.839);
@@ -99,6 +100,17 @@
 
   ::selection {
     background: color-mix(in oklch, var(--primary) 18%, white);
+  }
+
+  /* Fix browser native select styling in dark mode on Windows/Chrome */
+  select option {
+    background-color: #ffffff;
+    color: #0f172a;
+  }
+
+  .dark select option {
+    background-color: #1e293b;
+    color: #f8fafc;
   }
 }
 
