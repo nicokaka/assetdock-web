@@ -303,108 +303,6 @@ export function AppOverviewPage() {
           <div className="flex flex-wrap items-center gap-1 bg-muted/20 backdrop-blur-md p-1 border border-border/50 rounded-xl max-w-fit animate-fade-in">
             {filterOptions.map((option) => {
               const isActive = selectedOptionId === option.id
-
-              if (option.id === 'all') {
-                return (
-                  <div
-                    key={option.id}
-                    className="relative"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <div
-                      className={cn(
-                        'flex items-center rounded-lg transition-all duration-200 border border-transparent',
-                        isActive
-                          ? 'bg-card text-foreground shadow-sm scale-100 border-border/40'
-                          : 'text-muted-foreground hover:bg-accent/20'
-                      )}
-                    >
-                      <button
-                        onClick={() => {
-                          setSelectedOptionId('all')
-                          setIsDropdownOpen(false)
-                        }}
-                        disabled={isCurrentLoading}
-                        className={cn(
-                          'flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-l-lg transition-all duration-200 cursor-pointer disabled:pointer-events-none disabled:opacity-55',
-                          isActive ? 'text-foreground' : 'hover:text-foreground'
-                        )}
-                      >
-                        <span className={cn('transition-transform duration-200', isActive && 'scale-110 text-primary')}>
-                          {option.icon}
-                        </span>
-                        <span>{option.name}</span>
-                        <span
-                          className={cn(
-                            'ml-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md transition-colors duration-200',
-                            isActive
-                              ? 'bg-primary/10 text-primary'
-                              : 'bg-muted-foreground/15 text-muted-foreground hover:text-foreground'
-                          )}
-                        >
-                          {option.count}
-                        </span>
-                      </button>
-                      <div className="h-4 w-px bg-border/40 self-center" />
-                      <button
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        disabled={isCurrentLoading}
-                        className="flex items-center justify-center px-2 py-1.5 rounded-r-lg hover:bg-accent/40 text-muted-foreground hover:text-foreground transition-all duration-200 cursor-pointer disabled:pointer-events-none disabled:opacity-55"
-                      >
-                        <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', isDropdownOpen && 'rotate-180')} />
-                      </button>
-                    </div>
-
-                    {/* Dropdown Menu */}
-                    {isDropdownOpen && (
-                      <div className="absolute top-full left-0 mt-1.5 w-64 bg-card border border-border/60 rounded-xl shadow-xl backdrop-blur-md p-1.5 z-50 animate-in fade-in-0 zoom-in-95 duration-150">
-                        <div className="px-2 py-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider border-b border-border/30 pb-1.5 mb-1">
-                          {t('app.overview.categories.title', 'Quick Category Filters')}
-                        </div>
-                        <div className="max-h-60 overflow-y-auto space-y-0.5">
-                          {filterOptions.filter((o) => o.id !== 'all').map((opt) => {
-                            const isOptActive = selectedOptionId === opt.id
-                            return (
-                              <button
-                                key={opt.id}
-                                onClick={() => {
-                                  setSelectedOptionId(opt.id)
-                                  setIsDropdownOpen(false)
-                                }}
-                                className={cn(
-                                  'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-150 cursor-pointer',
-                                  isOptActive
-                                    ? 'bg-primary/10 text-primary'
-                                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/40'
-                                )}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <span className={cn(isOptActive ? 'text-primary' : 'text-muted-foreground')}>
-                                    {opt.icon}
-                                  </span>
-                                  <span>{opt.name}</span>
-                                </div>
-                                <span
-                                  className={cn(
-                                    'px-1.5 py-0.5 text-[9px] font-bold rounded-md',
-                                    isOptActive
-                                      ? 'bg-primary/20 text-primary'
-                                      : 'bg-muted-foreground/10 text-muted-foreground'
-                                  )}
-                                >
-                                  {opt.count}
-                                </span>
-                              </button>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )
-              }
-
               return (
                 <button
                   key={option.id}
@@ -434,6 +332,69 @@ export function AppOverviewPage() {
                 </button>
               )
             })}
+
+            {/* Dropdown Menu on the side */}
+            <div
+              className="relative"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                disabled={isCurrentLoading}
+                className={cn(
+                  'flex items-center justify-center px-2 py-1.5 rounded-lg hover:bg-accent/30 text-muted-foreground hover:text-foreground transition-all duration-200 cursor-pointer border border-transparent',
+                  isDropdownOpen && 'bg-accent/30 text-foreground border-border/40'
+                )}
+              >
+                <ChevronDown className={cn('h-3.5 w-3.5 transition-transform duration-200', isDropdownOpen && 'rotate-180')} />
+              </button>
+
+              {isDropdownOpen && (
+                <div className="absolute top-full right-0 mt-1.5 w-64 bg-card border border-border/60 rounded-xl shadow-xl backdrop-blur-md p-1.5 z-50 animate-in fade-in-0 zoom-in-95 duration-150">
+                  <div className="px-2 py-1 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider border-b border-border/30 pb-1.5 mb-1">
+                    {t('app.overview.categories.title', 'Quick Category Filters')}
+                  </div>
+                  <div className="max-h-60 overflow-y-auto space-y-0.5">
+                    {filterOptions.map((opt) => {
+                      const isOptActive = selectedOptionId === opt.id
+                      return (
+                        <button
+                          key={opt.id}
+                          onClick={() => {
+                            setSelectedOptionId(opt.id)
+                            setIsDropdownOpen(false)
+                          }}
+                          className={cn(
+                            'w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-150 cursor-pointer',
+                            isOptActive
+                              ? 'bg-primary/10 text-primary'
+                              : 'text-muted-foreground hover:text-foreground hover:bg-accent/40'
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className={cn(isOptActive ? 'text-primary' : 'text-muted-foreground')}>
+                              {opt.icon}
+                            </span>
+                            <span>{opt.name}</span>
+                          </div>
+                          <span
+                            className={cn(
+                              'px-1.5 py-0.5 text-[9px] font-bold rounded-md',
+                              isOptActive
+                                ? 'bg-primary/20 text-primary'
+                                : 'bg-muted-foreground/10 text-muted-foreground'
+                            )}
+                          >
+                            {opt.count}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
