@@ -125,12 +125,12 @@ export function PersonDetailPage() {
                 </div>
 
                 <div className="grid gap-1 sm:grid-cols-[100px_1fr] sm:gap-4">
-                  <div className="text-sm text-muted-foreground">{t('audit.table.date', 'Created')}</div>
+                  <div className="text-sm text-muted-foreground">{t('details.labels.createdAt', 'Created')}</div>
                   <div className="text-sm text-muted-foreground">{formatTimestamp(personQuery.data.createdAt)}</div>
                 </div>
 
                 <div className="grid gap-1 sm:grid-cols-[100px_1fr] sm:gap-4">
-                  <div className="text-sm text-muted-foreground">{t('audit.table.date', 'Updated')}</div>
+                  <div className="text-sm text-muted-foreground">{t('details.labels.updatedAt', 'Updated')}</div>
                   <div className="text-sm text-muted-foreground">{formatTimestamp(personQuery.data.updatedAt)}</div>
                 </div>
               </CardContent>

@@ -87,6 +87,7 @@
       "description": "Gerencie as pessoas/colaboradores para quem você atribui ativos.",
       "newPerson": "Nova Pessoa",
       "searchPlaceholder": "Buscar pessoas por nome ou email...",
+      "allStatuses": "Todos os Status",
       "errorTitle": "Não foi possível carregar as pessoas",
       "errorDescription": "Por favor, atualize a página ou tente novamente em instantes.",
       "emptyTitle": "Nenhuma pessoa encontrada",
@@ -335,9 +336,9 @@
     },
     "assignments": {
       "title": "Atribuições",
-      "description": "Atribua este ativo a um usuário e revise o histórico de atribuições.",
-      "user": "Usuário",
-      "selectUser": "Selecione um usuário",
+      "description": "Atribua este ativo a uma pessoa e revise o histórico de atribuições.",
+      "user": "Pessoa",
+      "selectUser": "Selecione uma pessoa",
       "location": "Localização",
       "notes": "Notas",
       "notesPlaceholder": "Nota opcional",
@@ -355,7 +356,11 @@
       "active": "Ativa",
       "assignedDate": "Atribuído em",
       "unassignedDate": "Devolvido em",
-      "assignedBy": "Atribuído por"
+      "assignedBy": "Atribuído por",
+      "assignErrorData": "Não foi possível atribuir o ativo com os dados fornecidos.",
+      "assignErrorGeneric": "Não foi possível atribuir o ativo neste momento.",
+      "unassignErrorData": "Não foi possível remover a atribuição deste ativo no estado atual.",
+      "unassignErrorGeneric": "Não foi possível remover a atribuição neste momento."
     },
     "user": {
       "notFound": "Usuário não encontrado.",

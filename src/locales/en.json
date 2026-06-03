@@ -87,6 +87,7 @@
       "description": "Manage the people/employees to whom you assign assets.",
       "newPerson": "New Person",
       "searchPlaceholder": "Search people by name or email...",
+      "allStatuses": "All Statuses",
       "errorTitle": "Unable to load people",
       "errorDescription": "Please refresh the page or try again in a moment.",
       "emptyTitle": "No people found",
@@ -335,9 +336,9 @@
     },
     "assignments": {
       "title": "Assignments",
-      "description": "Assign this asset to a user and review the assignment history.",
-      "user": "User",
-      "selectUser": "Select a user",
+      "description": "Assign this asset to a person and review the assignment history.",
+      "user": "Person",
+      "selectUser": "Select a person",
       "location": "Location",
       "notes": "Notes",
       "notesPlaceholder": "Optional note",
@@ -355,7 +356,11 @@
       "active": "Active",
       "assignedDate": "Assigned",
       "unassignedDate": "Unassigned",
-      "assignedBy": "Assigned by"
+      "assignedBy": "Assigned by",
+      "assignErrorData": "Unable to assign the asset with the provided data.",
+      "assignErrorGeneric": "Unable to assign the asset right now.",
+      "unassignErrorData": "Unable to unassign this asset in its current state.",
+      "unassignErrorGeneric": "Unable to unassign this asset right now."
     },
     "user": {
       "notFound": "User not found.",

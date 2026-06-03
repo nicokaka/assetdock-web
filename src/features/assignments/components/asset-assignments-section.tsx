@@ -68,16 +68,16 @@ export function AssetAssignmentsSection({ assetId }: AssetAssignmentsSectionProp
 
   const assignErrorMessage =
     assignMutation.error instanceof HttpError && assignMutation.error.status === 400
-      ? 'Unable to assign the asset with the provided data.'
+      ? t('details.assignments.assignErrorData', 'Unable to assign the asset with the provided data.')
       : assignMutation.isError
-        ? 'Unable to assign the asset right now.'
+        ? t('details.assignments.assignErrorGeneric', 'Unable to assign the asset right now.')
         : undefined
 
   const unassignErrorMessage =
     unassignMutation.error instanceof HttpError && unassignMutation.error.status === 400
-      ? 'Unable to unassign this asset in its current state.'
+      ? t('details.assignments.unassignErrorData', 'Unable to unassign this asset in its current state.')
       : unassignMutation.isError
-        ? 'Unable to unassign this asset right now.'
+        ? t('details.assignments.unassignErrorGeneric', 'Unable to unassign this asset right now.')
         : undefined
 
   return (
