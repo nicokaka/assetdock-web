@@ -463,7 +463,14 @@
     "errorConflict": "This system is already configured. Please sign in.",
     "subtitle": "Initial system configuration",
     "cardTitle": "Create your organization",
-    "cardDescription": "Set up the organization name and the administrator credentials that will be used to manage the platform."
+    "cardDescription": "Set up the organization name and the administrator credentials that will be used to manage the platform.",
+    "rules": {
+      "length": "8+ characters",
+      "uppercase": "Uppercase letter",
+      "lowercase": "Lowercase letter",
+      "number": "Number",
+      "special": "Special character"
+    }
   },
   "catalog": {
     "newCategory": "New Category",

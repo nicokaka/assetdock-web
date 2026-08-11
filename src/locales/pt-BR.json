@@ -463,7 +463,14 @@
     "errorConflict": "Este sistema já está configurado. Faça login.",
     "subtitle": "Configuração inicial do sistema",
     "cardTitle": "Crie sua organização",
-    "cardDescription": "Configure o nome da organização e as credenciais de administrador que serão usadas para gerenciar a plataforma."
+    "cardDescription": "Configure o nome da organização e as credenciais de administrador que serão usadas para gerenciar a plataforma.",
+    "rules": {
+      "length": "8+ caracteres",
+      "uppercase": "Letra maiúscula",
+      "lowercase": "Letra minúscula",
+      "number": "Número",
+      "special": "Caractere especial"
+    }
   },
   "catalog": {
     "newCategory": "Nova Categoria",
