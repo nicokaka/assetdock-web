@@ -61,7 +61,7 @@ export class HttpError extends Error {
 export class HttpClient {
   private readonly baseUrl: string
 
-  constructor(baseUrl = import.meta.env.VITE_API_URL ?? '') {
+  constructor(baseUrl = import.meta.env.VITE_API_URL || '/api/v1') {
     this.baseUrl = baseUrl
   }
 
