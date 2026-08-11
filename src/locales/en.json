@@ -27,7 +27,9 @@
       "forgotPassword": "Forgot your password? Contact your organization administrator.",
       "errorGeneric": "Unable to sign in right now.",
       "errorInvalid": "Invalid email or password.",
-      "errorLocked": "Your account has been locked. Contact your administrator."
+      "errorLocked": "Your account has been locked. Contact your administrator.",
+      "errorRateLimit": "Too many attempts. Please wait {{seconds}} seconds before trying again.",
+      "errorRateLimitGeneric": "Too many login attempts. Please wait before trying again."
     },
     "loadingSession": "Loading session..."
   },

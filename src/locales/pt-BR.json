@@ -27,7 +27,9 @@
       "forgotPassword": "Esqueceu sua senha? Contate o administrador da sua organização.",
       "errorGeneric": "Não foi possível fazer login neste momento.",
       "errorInvalid": "E-mail ou senha inválidos.",
-      "errorLocked": "Sua conta foi bloqueada. Contate o administrador."
+      "errorLocked": "Sua conta foi bloqueada. Contate o administrador.",
+      "errorRateLimit": "Muitas tentativas de login. Por favor, aguarde {{seconds}} segundos e tente novamente.",
+      "errorRateLimitGeneric": "Muitas tentativas de login. Por favor, aguarde 1 minuto e tente novamente."
     },
     "loadingSession": "Carregando sessão..."
   },
