@@ -180,6 +180,9 @@ export function UserForm({
                     </span>
                   </Button>
                 </div>
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  {t('userForm.passwordRequirements', 'A senha deve ter no mínimo 8 caracteres, contendo letra maiúscula, letra minúscula, número e caractere especial (ex: Senha123!).')}
+                </p>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -209,9 +212,29 @@ export function UserForm({
 
                     const toggleRole = () => {
                       const current = field.value || []
-                      const updated = isSelected
-                        ? current.filter((r) => r !== role)
-                        : [...current, role]
+                      let updated: UserRole[]
+
+                      if (role === 'ORG_ADMIN') {
+                        if (isSelected) {
+                          // Unchecking ORG_ADMIN
+                          updated = current.filter((r) => r !== 'ORG_ADMIN')
+                        } else {
+                          // Checking ORG_ADMIN: automatically select ALL organization roles!
+                          updated = Array.from(new Set([...current, 'ORG_ADMIN', 'ASSET_MANAGER', 'AUDITOR', 'VIEWER'])) as UserRole[]
+                        }
+                      } else {
+                        if (isSelected) {
+                          // Unchecking a child role: also uncheck ORG_ADMIN if it was checked
+                          updated = current.filter((r) => r !== role && r !== 'ORG_ADMIN')
+                        } else {
+                          updated = [...current, role]
+                          // If all child roles are checked, auto-select ORG_ADMIN too!
+                          const hasAllSubRoles = (['ASSET_MANAGER', 'AUDITOR', 'VIEWER'] as UserRole[]).every((r) => updated.includes(r))
+                          if (hasAllSubRoles) {
+                            updated = Array.from(new Set([...updated, 'ORG_ADMIN'])) as UserRole[]
+                          }
+                        }
+                      }
                       field.onChange(updated)
                     }
 

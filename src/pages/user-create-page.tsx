@@ -21,14 +21,28 @@ export function UserCreatePage() {
     navigate(`/app/users/${user.id}`, { replace: true })
   }
 
-  const errorMessage =
-    createUserMutation.error instanceof HttpError && createUserMutation.error.status === 409
-      ? t('userForm.errorDuplicateEmail', 'Este endereço de e-mail já está cadastrado para outro usuário na sua organização.')
-      : createUserMutation.error instanceof HttpError && createUserMutation.error.status === 400
-        ? createUserMutation.error.message || t('userForm.errorNew', 'Unable to create the user with the provided data.')
-        : createUserMutation.isError
-          ? t('userForm.errorGeneric', 'Unable to create the user right now.')
-          : undefined
+  let errorMessage: string | undefined = undefined
+
+  if (createUserMutation.error instanceof HttpError) {
+    const err = createUserMutation.error
+    if (err.status === 409) {
+      errorMessage = t('userForm.errorDuplicateEmail', 'Este endereço de e-mail já está cadastrado para outro usuário na sua organização.')
+    } else if (err.status === 400) {
+      const body = err.body as { detail?: string; violations?: Array<{ message?: string }> } | undefined
+      const violationMsg = body?.violations?.[0]?.message
+      if (violationMsg) {
+        errorMessage = violationMsg
+      } else if (body?.detail) {
+        errorMessage = t('userForm.errorValidationDetail', 'Dados inválidos: {{detail}}', { detail: body.detail })
+      } else {
+        errorMessage = t('userForm.errorPasswordRequirements', 'A senha deve ter no mínimo 8 caracteres, contendo letra maiúscula, letra minúscula, número e caractere especial (ex: Senha123!).')
+      }
+    } else {
+      errorMessage = t('userForm.errorGeneric', 'Não foi possível processar a requisição no momento.')
+    }
+  } else if (createUserMutation.isError) {
+    errorMessage = t('userForm.errorGeneric', 'Não foi possível processar a requisição no momento.')
+  }
 
   return (
     <section className="space-y-6">
