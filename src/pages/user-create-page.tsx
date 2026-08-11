@@ -22,11 +22,13 @@ export function UserCreatePage() {
   }
 
   const errorMessage =
-    createUserMutation.error instanceof HttpError && createUserMutation.error.status === 400
-      ? t('userForm.errorNew', 'Unable to create the user with the provided data.')
-      : createUserMutation.isError
-        ? t('userForm.errorGeneric', 'Unable to create the user right now.')
-        : undefined
+    createUserMutation.error instanceof HttpError && createUserMutation.error.status === 409
+      ? t('userForm.errorDuplicateEmail', 'Este endereço de e-mail já está cadastrado para outro usuário na sua organização.')
+      : createUserMutation.error instanceof HttpError && createUserMutation.error.status === 400
+        ? createUserMutation.error.message || t('userForm.errorNew', 'Unable to create the user with the provided data.')
+        : createUserMutation.isError
+          ? t('userForm.errorGeneric', 'Unable to create the user right now.')
+          : undefined
 
   return (
     <section className="space-y-6">

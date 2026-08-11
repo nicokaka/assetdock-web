@@ -285,13 +285,20 @@
       "password": "Crie uma senha"
     },
     "roles": {
-      "admin": "Administrador",
-      "manager": "Gerente",
-      "viewer": "Visualizador"
+      "org_admin": "Administrador da Organização",
+      "asset_manager": "Gestor de Ativos",
+      "auditor": "Auditor do Sistema",
+      "viewer": "Visualizador (Apenas Leitura)"
+    },
+    "rolesDescriptions": {
+      "org_admin": "Acesso total ao sistema, gestão de usuários, auditoria e configurações.",
+      "asset_manager": "Criar, editar, atribuir e gerenciar o inventário completo de ativos.",
+      "auditor": "Acesso a relatórios de auditoria e visualização detalhada do sistema.",
+      "viewer": "Acesso restrito apenas para visualização e consulta de ativos."
     },
     "status": {
       "active": "Ativo",
-      "disabled": "Desativado",
+      "inactive": "Inativo",
       "locked": "Bloqueado"
     },
     "submitNew": "Criar usuário",
@@ -300,6 +307,7 @@
     "submittingEdit": "Salvando...",
     "back": "Voltar aos usuários",
     "errorNew": "Não foi possível criar o usuário com os dados fornecidos.",
+    "errorDuplicateEmail": "Este endereço de e-mail já está cadastrado para outro usuário na sua organização.",
     "errorEdit": "Não foi possível atualizar o usuário com os dados fornecidos.",
     "errorGeneric": "Não foi possível processar a requisição."
   },

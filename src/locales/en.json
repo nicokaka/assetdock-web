@@ -285,13 +285,20 @@
       "password": "Create a password"
     },
     "roles": {
-      "admin": "Admin",
-      "manager": "Manager",
-      "viewer": "Viewer"
+      "org_admin": "Organization Admin",
+      "asset_manager": "Asset Manager",
+      "auditor": "System Auditor",
+      "viewer": "Viewer (Read Only)"
+    },
+    "rolesDescriptions": {
+      "org_admin": "Full system access, user management, audit logs, and organization settings.",
+      "asset_manager": "Create, edit, assign, and manage complete asset inventory.",
+      "auditor": "Access to audit reports and detailed system inspection views.",
+      "viewer": "Restricted read-only access to browse assets and information."
     },
     "status": {
       "active": "Active",
-      "disabled": "Disabled",
+      "inactive": "Inactive",
       "locked": "Locked"
     },
     "submitNew": "Create user",
@@ -300,6 +307,7 @@
     "submittingEdit": "Saving...",
     "back": "Back to users",
     "errorNew": "Unable to create the user with the provided data.",
+    "errorDuplicateEmail": "This email address is already registered to another user in your organization.",
     "errorEdit": "Unable to update the user with the provided data.",
     "errorGeneric": "Unable to process the request right now."
   },
