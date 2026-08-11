@@ -15,7 +15,8 @@ export function useSetup() {
   return useMutation({
     mutationFn: (data: SetupInput) => postSetup(data),
     onSuccess: () => {
-      // Invalidate the setup status so any subsequent guard check reflects the new state.
+      // Synchronously update the setup status cache so route guards immediately see configured: true
+      queryClient.setQueryData(setupStatusQueryKey, { configured: true })
       void queryClient.invalidateQueries({ queryKey: setupStatusQueryKey })
       toast.success(t('toast.setup.success', 'System configured successfully. You can now sign in.'))
       navigate('/login', { replace: true })
