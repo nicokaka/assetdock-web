@@ -39,17 +39,24 @@ export function SetupWizardForm() {
     try {
       await setupMutation.mutateAsync(values)
     } catch (error) {
-      if (error instanceof HttpError && error.status === 409) {
-        form.setError('root', {
-          message: t('setup.errorConflict', 'This system is already configured. Please sign in.'),
-        })
-        return
-      }
+      if (error instanceof HttpError) {
+        if (error.status === 409) {
+          form.setError('root', {
+            message: t('setup.errorConflict', 'Este sistema já está configurado. Faça login.'),
+          })
+          return
+        }
 
-      // M-3: Map backend validation violations to individual fields when available.
-      if (error instanceof HttpError && error.status === 400) {
-        const body = error.body as { violations?: { field: string; message: string }[] } | undefined
-        if (body?.violations?.length) {
+        if (error.status === 429) {
+          form.setError('root', {
+            message: t('setup.errorThrottle', 'Muitas tentativas em pouco tempo. Por favor, aguarde 1 minuto e tente novamente.'),
+          })
+          return
+        }
+
+        const body = error.body as { detail?: string; title?: string; violations?: { field: string; message: string }[] } | undefined
+
+        if (error.status === 400 && body?.violations?.length) {
           const fieldMap: Record<string, keyof SetupInput> = {
             organizationName: 'organizationName',
             adminFullName: 'adminFullName',
@@ -66,10 +73,15 @@ export function SetupWizardForm() {
           }
           if (mapped) return
         }
+
+        if (body?.detail) {
+          form.setError('root', { message: body.detail })
+          return
+        }
       }
 
       form.setError('root', {
-        message: t('setup.errorGeneric', 'Setup failed. Please check your input and try again.'),
+        message: t('setup.errorGeneric', 'Não foi possível concluir a configuração. Verifique os dados digitados e tente novamente.'),
       })
     }
   }
