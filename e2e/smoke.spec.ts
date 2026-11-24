@@ -33,11 +33,11 @@ test.describe('mvp smoke', () => {
   test('assets list and detail are available, and a new asset can be created', async ({ page }) => {
     await login(page)
 
-    await page.locator('header nav').getByRole('link', { name: 'Assets', exact: true }).click()
+    await page.locator('header nav').getByRole('link', { name: /^Assets/ }).click()
     await expect(page).toHaveURL(/\/app\/assets$/)
-    await expect(page.locator('section').getByText('Assets', { exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /^Assets/ })).toBeVisible()
 
-    await page.getByRole('link', { name: 'New Asset' }).click()
+    await page.getByRole('button', { name: 'New Asset' }).click()
     await expect(page).toHaveURL(/\/app\/assets\/new$/)
     await expect(page.locator('section').getByText('New Asset', { exact: true })).toBeVisible()
 
@@ -53,7 +53,7 @@ test.describe('mvp smoke', () => {
     await expect(page.locator('section').getByText('Playwright Asset', { exact: true })).toBeVisible()
     await expect(page.locator('section').getByText(assetTag, { exact: true })).toBeVisible()
 
-    await page.getByRole('link', { name: 'Back to assets' }).click()
+    await page.getByRole('button', { name: 'Back to assets' }).click()
     await expect(page).toHaveURL(/\/app\/assets$/)
     await expect(page.locator('section').getByText(assetTag, { exact: true })).toBeVisible()
   })
@@ -63,7 +63,7 @@ test.describe('mvp smoke', () => {
 
     await page.locator('header nav').getByRole('link', { name: 'Users', exact: true }).click()
     await expect(page).toHaveURL(/\/app\/users$/)
-    await expect(page.locator('section').getByText('Users', { exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { name: /^Users/ })).toBeVisible()
 
     const firstUserLink = page.locator('a[href^="/app/users/"]').first()
     await expect(firstUserLink).toBeVisible()
@@ -95,7 +95,7 @@ test.describe('mvp smoke', () => {
     await firstUserLink.click()
     await expect(page).toHaveURL(/\/app\/users\/[^/]+$/)
 
-    await page.getByRole('link', { name: 'Edit' }).click()
+    await page.getByRole('button', { name: 'Edit' }).click()
     await expect(page).toHaveURL(/\/app\/users\/[^/]+\/edit$/)
 
     const editedName = `PW User ${Date.now()}`

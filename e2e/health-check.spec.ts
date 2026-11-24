@@ -10,8 +10,8 @@ test.describe('Health Check Status', () => {
   })
 
   test('home page shows API Offline when backend is down', async ({ page }) => {
-    // Mock the actuator health check to abort the connection (simulate offline)
-    await page.route('**/actuator/health', route => route.abort())
+    // Mock the backend info endpoint to abort the connection (simulate offline)
+    await page.route('**/api/v1/info', route => route.abort())
     
     await page.goto('/')
     

@@ -11,11 +11,12 @@ import { listUsers } from '@/features/users/api/list-users'
  * Note: This is intentionally separate from the paginated `useUsersListQuery`
  * used on the Users list page.
  */
-export function useUsersQuery() {
+export function useUsersQuery(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['users', 'lookup'],
     // L-12: Aligned with backend cap — sending 500 had no effect, backend returned max 100.
     queryFn: () => listUsers({ size: 100 }),
     staleTime: 5 * 60 * 1000, // 5 minutes — lookup data changes infrequently
+    enabled: options?.enabled ?? true,
   })
 }

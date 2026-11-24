@@ -6,6 +6,7 @@ import { AppShell } from '@/components/layout/app-shell'
 import { RouteErrorBoundary } from '@/components/layout/route-error-boundary'
 import { PageSuspense } from '@/components/layout/page-suspense'
 import { RedirectIfAuthenticated, RequireSession, RedirectIfConfigured } from '@/features/auth/components/session-guard'
+import { NotFoundPage } from '@/pages/not-found-page'
 
 // Lazy page components — each loaded on demand as a separate JS chunk.
 import {
@@ -192,7 +193,15 @@ export const router = createBrowserRouter([
               </PageSuspense>
             ),
           },
+          {
+            path: '*',
+            element: <NotFoundPage />,
+          },
         ],
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
       },
     ],
   },

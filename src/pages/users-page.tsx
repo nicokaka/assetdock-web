@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { TableSkeleton } from '@/components/ui/table-skeleton'
 import { UsersList } from '@/features/users/components/users-list'
 import { useUsersListQuery } from '@/features/users/hooks/use-users'
+import { useSessionQuery } from '@/features/auth/hooks/use-session'
+import { canManageUsers } from '@/features/auth/utils/permissions'
 import { PaginationControls } from '@/components/ui/pagination-controls'
 import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -24,6 +26,8 @@ export function UsersPage() {
   const [role, setRole] = useState<string>('all')
   const debouncedSearch = useDebounce(search, 400)
   const { t } = useTranslation()
+  const sessionQuery = useSessionQuery()
+  const canEditUsers = canManageUsers(sessionQuery.data?.user.role)
 
   const usersQuery = useUsersListQuery({
     page,
@@ -39,9 +43,11 @@ export function UsersPage() {
         title={usersQuery.data ? `${t('app.users.title', 'Users')} (${usersQuery.data.totalItems})` : t('app.users.title', 'Users')}
         description={t('app.users.description', 'Manage the users that have access to the dashboard.')}
         action={
-          <Button variant="default" onClick={() => navigate('/app/users/new')}>
-            {t('app.users.newUser', 'New User')}
-          </Button>
+          canEditUsers ? (
+            <Button variant="default" onClick={() => navigate('/app/users/new')}>
+              {t('app.users.newUser', 'New User')}
+            </Button>
+          ) : undefined
         }
       />
 
@@ -120,11 +126,13 @@ export function UsersPage() {
                 : t('app.users.emptyDescriptionStart', 'Create the first user when this workspace is ready to grow.')}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button variant="outline" onClick={() => navigate('/app/users/new')}>
-              {t('app.users.newUser', 'New User')}
-            </Button>
-          </CardContent>
+          {canEditUsers ? (
+            <CardContent>
+              <Button variant="outline" onClick={() => navigate('/app/users/new')}>
+                {t('app.users.newUser', 'New User')}
+              </Button>
+            </CardContent>
+          ) : null}
         </Card>
       ) : null}
 

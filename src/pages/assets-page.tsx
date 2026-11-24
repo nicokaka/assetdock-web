@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AssetsList } from '@/features/assets/components/assets-list'
 import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
+import { useSessionQuery } from '@/features/auth/hooks/use-session'
+import { canManageAssets } from '@/features/auth/utils/permissions'
 import { useCategoriesQuery, useLocationsQuery } from '@/features/catalog/hooks/use-catalog-lookups'
 import { TableSkeleton } from '@/components/ui/table-skeleton'
 import { PaginationControls } from '@/components/ui/pagination-controls'
@@ -70,6 +72,8 @@ export function AssetsPage() {
   }, [debouncedSearch, searchParams, updateUrlParam])
 
   const { t } = useTranslation()
+  const sessionQuery = useSessionQuery()
+  const canEditAssets = canManageAssets(sessionQuery.data?.user.role)
   const [isExporting, setIsExporting] = useState(false)
 
   async function handleExportCsv() {
@@ -125,9 +129,11 @@ export function AssetsPage() {
               <Download className="mr-1.5 h-3.5 w-3.5" />
               {isExporting ? t('app.assets.exporting', 'Exporting...') : t('app.assets.exportCsv', 'Export CSV')}
             </Button>
-            <Button variant="default" onClick={() => navigate('/app/assets/new')}>
-              {t('app.assets.newAsset', 'New Asset')}
-            </Button>
+            {canEditAssets ? (
+              <Button variant="default" onClick={() => navigate('/app/assets/new')}>
+                {t('app.assets.newAsset', 'New Asset')}
+              </Button>
+            ) : null}
           </div>
         }
       />
@@ -221,11 +227,13 @@ export function AssetsPage() {
                 : t('app.assets.emptyDescriptionStart', 'Create the first asset to start working with the inventory area.')}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button variant="outline" onClick={() => navigate('/app/assets/new')}>
-              {t('app.assets.newAsset', 'New Asset')}
-            </Button>
-          </CardContent>
+          {canEditAssets ? (
+            <CardContent>
+              <Button variant="outline" onClick={() => navigate('/app/assets/new')}>
+                {t('app.assets.newAsset', 'New Asset')}
+              </Button>
+            </CardContent>
+          ) : null}
         </Card>
       ) : null}
 

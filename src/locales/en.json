@@ -290,12 +290,14 @@
       "auditor": "System Auditor",
       "viewer": "Viewer (Read Only)"
     },
+    "rolesHelp": "Organization Admin automatically includes Asset Manager, Auditor, and Viewer permissions.",
     "rolesDescriptions": {
       "org_admin": "Full system access, user management, audit logs, and organization settings.",
       "asset_manager": "Create, edit, assign, and manage complete asset inventory.",
       "auditor": "Access to audit reports and detailed system inspection views.",
       "viewer": "Restricted read-only access to browse assets and information."
     },
+    "passwordRequirements": "Minimum 8 characters.",
     "status": {
       "active": "Active",
       "inactive": "Inactive",
@@ -348,6 +350,7 @@
     },
     "asset": {
       "notFound": "Asset not found.",
+      "alreadyArchived": "This asset has already been archived.",
       "archiveTitle": "Archive Asset",
       "archiveDescription": "Are you sure you want to archive this asset? This action will hide the asset from active lists.",
       "archiveConfirm": "Yes, archive",
@@ -397,6 +400,7 @@
       "resetting": "Resetting...",
       "resetSuccess": "Password reset successfully.",
       "resetError": "Failed to reset password.",
+      "passwordMinLengthError": "Password must be at least 8 characters long.",
       "noRoles": "No roles"
     },
     "loading": "Loading...",
@@ -441,6 +445,10 @@
     "emptyTitle": "No imports found",
     "emptyDescription": "Start by uploading a CSV file with your assets.",
     "errorTitle": "Unable to load imports",
+    "errorTooLarge": "The uploaded CSV exceeds the maximum allowed file size.",
+    "errorRateLimit": "Too many import requests. Please wait a moment and try again.",
+    "refreshJob": "Refresh status",
+    "refreshingJob": "Refreshing...",
     "dropzone": {
       "title": "Upload CSV",
       "description": "Drag and drop a CSV file here, or click to select.",
@@ -572,5 +580,10 @@
     "asset": "Asset",
     "user": "User",
     "person": "Person"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you requested does not exist or has been moved.",
+    "backHome": "Go to dashboard"
   }
 }

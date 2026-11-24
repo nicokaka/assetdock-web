@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { TableSkeleton } from '@/components/ui/table-skeleton'
 import { PeopleList } from '@/features/people/components/people-list'
 import { usePeopleListQuery } from '@/features/people/hooks/use-people'
+import { useSessionQuery } from '@/features/auth/hooks/use-session'
+import { canManagePeople } from '@/features/auth/utils/permissions'
 import { PaginationControls } from '@/components/ui/pagination-controls'
 import { SearchInput } from '@/components/ui/search-input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -22,6 +24,8 @@ export function PeoplePage() {
   const [status, setStatus] = useState<string>('all')
   const debouncedSearch = useDebounce(search, 400)
   const { t } = useTranslation()
+  const sessionQuery = useSessionQuery()
+  const canEditPeople = canManagePeople(sessionQuery.data?.user.role)
 
   const peopleQuery = usePeopleListQuery({
     page,
@@ -36,9 +40,11 @@ export function PeoplePage() {
         title={peopleQuery.data ? `${t('app.people.title', 'People')} (${peopleQuery.data.totalItems})` : t('app.people.title', 'People')}
         description={t('app.people.description', 'Manage the people/employees to whom you assign assets.')}
         action={
-          <Button variant="default" onClick={() => navigate('/app/people/new')}>
-            {t('app.people.newPerson', 'New Person')}
-          </Button>
+          canEditPeople ? (
+            <Button variant="default" onClick={() => navigate('/app/people/new')}>
+              {t('app.people.newPerson', 'New Person')}
+            </Button>
+          ) : undefined
         }
       />
 
@@ -94,11 +100,13 @@ export function PeoplePage() {
                 : t('app.people.emptyDescriptionStart', 'Create the first person to begin assigning computers.')}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button variant="outline" onClick={() => navigate('/app/people/new')}>
-              {t('app.people.newPerson', 'New Person')}
-            </Button>
-          </CardContent>
+          {canEditPeople ? (
+            <CardContent>
+              <Button variant="outline" onClick={() => navigate('/app/people/new')}>
+                {t('app.people.newPerson', 'New Person')}
+              </Button>
+            </CardContent>
+          ) : null}
         </Card>
       ) : null}
 

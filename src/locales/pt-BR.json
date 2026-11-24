@@ -290,12 +290,14 @@
       "auditor": "Auditor do Sistema",
       "viewer": "Visualizador (Apenas Leitura)"
     },
+    "rolesHelp": "Administrador da Organização inclui automaticamente as permissões de Gestor de Ativos, Auditor e Visualizador.",
     "rolesDescriptions": {
       "org_admin": "Acesso total ao sistema, gestão de usuários, auditoria e configurações.",
       "asset_manager": "Criar, editar, atribuir e gerenciar o inventário completo de ativos.",
       "auditor": "Acesso a relatórios de auditoria e visualização detalhada do sistema.",
       "viewer": "Acesso restrito apenas para visualização e consulta de ativos."
     },
+    "passwordRequirements": "Mínimo de 8 caracteres.",
     "status": {
       "active": "Ativo",
       "inactive": "Inativo",
@@ -348,6 +350,7 @@
     },
     "asset": {
       "notFound": "Ativo não encontrado.",
+      "alreadyArchived": "Este ativo já foi arquivado.",
       "archiveTitle": "Arquivar Ativo",
       "archiveDescription": "Tem certeza de que deseja arquivar este ativo? Esta ação ocultará o ativo das listas ativas.",
       "archiveConfirm": "Sim, arquivar",
@@ -397,6 +400,7 @@
       "resetting": "Redefinindo...",
       "resetSuccess": "Senha redefinida com sucesso.",
       "resetError": "Falha ao redefinir a senha.",
+      "passwordMinLengthError": "A senha deve ter pelo menos 8 caracteres.",
       "noRoles": "Sem funções"
     },
     "loading": "Carregando...",
@@ -441,6 +445,10 @@
     "emptyTitle": "Nenhuma importação encontrada",
     "emptyDescription": "Comece enviando um arquivo CSV com seus ativos.",
     "errorTitle": "Não foi possível carregar as importações",
+    "errorTooLarge": "O arquivo CSV excede o tamanho máximo permitido.",
+    "errorRateLimit": "Muitas tentativas de importação. Aguarde um instante e tente novamente.",
+    "refreshJob": "Atualizar status",
+    "refreshingJob": "Atualizando...",
     "dropzone": {
       "title": "Enviar CSV",
       "description": "Arraste e solte um arquivo CSV aqui, ou clique para selecionar.",
@@ -572,5 +580,10 @@
     "asset": "Ativo",
     "user": "Usuário",
     "person": "Pessoa"
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "A página solicitada não existe ou foi movida.",
+    "backHome": "Ir para o painel"
   }
 }

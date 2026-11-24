@@ -29,6 +29,7 @@ import { AssetHealthBar } from '@/features/dashboard/components/asset-health-bar
 import { RecentActivityFeed } from '@/features/dashboard/components/recent-activity-feed'
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { useSessionQuery } from '@/features/auth/hooks/use-session'
+import { canImportAssets, canManageAssets, canManageUsers } from '@/features/auth/utils/permissions'
 import { usePageTitle } from '@/hooks/use-page-title'
 import { useCategoriesQuery } from '@/features/catalog/hooks/use-catalog-lookups'
 import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
@@ -248,6 +249,8 @@ export function AppOverviewPage() {
   }
 
   const firstName = sessionQuery.data?.user.fullName?.split(' ')[0] ?? ''
+  const role = sessionQuery.data?.user.role
+  const showQuickActions = canManageAssets(role) || canManageUsers(role) || canImportAssets(role)
 
   return (
     <section className="space-y-6">
@@ -257,26 +260,34 @@ export function AppOverviewPage() {
           description={t('app.overview.description', 'Asset inventory status and recent operational activity.')}
           className="pb-0"
         />
-        <div className="flex flex-wrap items-center gap-2">
-          <Button asChild variant="outline" size="sm" className="h-8">
-            <Link to="/app/assets/new">
-              <Plus className="mr-1.5 h-3.5 w-3.5" />
-              {t('app.overview.quick.newAsset', 'New Asset')}
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="sm" className="h-8">
-            <Link to="/app/users/new">
-              <Plus className="mr-1.5 h-3.5 w-3.5" />
-              {t('app.overview.quick.newUser', 'New User')}
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="sm" className="h-8">
-            <Link to="/app/imports">
-              <FileUp className="mr-1.5 h-3.5 w-3.5" />
-              {t('app.overview.quick.import', 'Import CSV')}
-            </Link>
-          </Button>
-        </div>
+        {showQuickActions && (
+          <div className="flex flex-wrap items-center gap-2">
+            {canManageAssets(role) && (
+              <Button asChild variant="outline" size="sm" className="h-8">
+                <Link to="/app/assets/new">
+                  <Plus className="mr-1.5 h-3.5 w-3.5" />
+                  {t('app.overview.quick.newAsset', 'New Asset')}
+                </Link>
+              </Button>
+            )}
+            {canManageUsers(role) && (
+              <Button asChild variant="outline" size="sm" className="h-8">
+                <Link to="/app/users/new">
+                  <Plus className="mr-1.5 h-3.5 w-3.5" />
+                  {t('app.overview.quick.newUser', 'New User')}
+                </Link>
+              </Button>
+            )}
+            {canImportAssets(role) && (
+              <Button asChild variant="outline" size="sm" className="h-8">
+                <Link to="/app/imports">
+                  <FileUp className="mr-1.5 h-3.5 w-3.5" />
+                  {t('app.overview.quick.import', 'Import CSV')}
+                </Link>
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Category Inline Horizontal Switcher */}

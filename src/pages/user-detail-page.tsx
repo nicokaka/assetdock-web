@@ -7,6 +7,8 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { UserDetailView } from '@/features/users/components/user-detail-view'
 import { AdminResetPasswordDialog } from '@/features/users/components/admin-reset-password-dialog'
 import { useUserDetailQuery } from '@/features/users/hooks/use-users'
+import { useSessionQuery } from '@/features/auth/hooks/use-session'
+import { canManageUsers } from '@/features/auth/utils/permissions'
 import { HttpError } from '@/lib/http-client'
 import { usePageTitle } from '@/hooks/use-page-title'
 
@@ -14,6 +16,8 @@ export function UserDetailPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { userId = '' } = useParams()
+  const sessionQuery = useSessionQuery()
+  const canEditUsers = canManageUsers(sessionQuery.data?.user.role)
   const userQuery = useUserDetailQuery(userId)
 
   const userLabel = userQuery.data?.fullName || t('breadcrumb.user', 'User')
@@ -37,7 +41,7 @@ export function UserDetailPage() {
           <button onClick={() => navigate('/app/users')} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
             {t('userForm.back', 'Back to users')}
           </button>
-          {userQuery.isSuccess ? (
+          {userQuery.isSuccess && canEditUsers ? (
             <>
               <button
                 onClick={() => navigate(`/app/users/${userId}/edit`)}

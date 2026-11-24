@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { usePersonDetailQuery, usePersonHistoryQuery } from '@/features/people/hooks/use-people'
 import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
+import { useSessionQuery } from '@/features/auth/hooks/use-session'
+import { canManagePeople } from '@/features/auth/utils/permissions'
 import { formatTimestamp } from '@/lib/format'
 import { HttpError } from '@/lib/http-client'
 import { usePageTitle } from '@/hooks/use-page-title'
@@ -16,6 +18,8 @@ export function PersonDetailPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { personId = '' } = useParams()
+  const sessionQuery = useSessionQuery()
+  const canEditPeople = canManagePeople(sessionQuery.data?.user.role)
   
   const personQuery = usePersonDetailQuery(personId)
   const historyQuery = usePersonHistoryQuery(personId)
@@ -53,7 +57,7 @@ export function PersonDetailPage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t('personForm.back', 'Back to people')}
           </button>
-          {personQuery.isSuccess ? (
+          {personQuery.isSuccess && canEditPeople ? (
             <Link
               to={`/app/people/${personId}/edit`}
               className={buttonVariants({ variant: 'outline', size: 'sm' })}

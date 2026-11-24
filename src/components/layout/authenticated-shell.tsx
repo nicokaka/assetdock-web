@@ -8,6 +8,7 @@ import { CommandPalette } from '@/components/ui/command-palette'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LanguageToggle } from '@/components/language-toggle'
 import { useLogoutMutation, useSessionQuery } from '@/features/auth/hooks/use-session'
+import { canViewAuditLogs, canViewImports, canViewUsers } from '@/features/auth/utils/permissions'
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { cn } from '@/lib/utils'
 import { APP_VERSION } from '@/lib/version'
@@ -25,6 +26,7 @@ export function AuthenticatedShell() {
   const logoutMutation = useLogoutMutation()
   const { stats } = useDashboardStats()
   const { t } = useTranslation()
+  const role = sessionQuery.data?.user.role
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -79,39 +81,45 @@ export function AuthenticatedShell() {
                   >
                     {t('app.header.people', 'People')} {stats.peopleCount > 0 && <span className="ml-1 opacity-60">({stats.peopleCount})</span>}
                   </NavLink>
-                  <NavLink
-                    to="/app/users"
-                    className={({ isActive }) =>
-                      cn(
-                        'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
-                        isActive && 'bg-secondary text-foreground shadow-sm'
-                      )
-                    }
-                  >
-                    {t('app.header.users', 'Users')}
-                  </NavLink>
-                  <NavLink
-                    to="/app/imports"
-                    className={({ isActive }) =>
-                      cn(
-                        'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
-                        isActive && 'bg-secondary text-foreground shadow-sm'
-                      )
-                    }
-                  >
-                    {t('app.header.imports', 'Imports')}
-                  </NavLink>
-                  <NavLink
-                    to="/app/audit-logs"
-                    className={({ isActive }) =>
-                      cn(
-                        'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
-                        isActive && 'bg-secondary text-foreground shadow-sm'
-                      )
-                    }
-                  >
-                    {t('app.header.auditLogs', 'Audit Logs')}
-                  </NavLink>
+                  {canViewUsers(role) && (
+                    <NavLink
+                      to="/app/users"
+                      className={({ isActive }) =>
+                        cn(
+                          'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
+                          isActive && 'bg-secondary text-foreground shadow-sm'
+                        )
+                      }
+                    >
+                      {t('app.header.users', 'Users')}
+                    </NavLink>
+                  )}
+                  {canViewImports(role) && (
+                    <NavLink
+                      to="/app/imports"
+                      className={({ isActive }) =>
+                        cn(
+                          'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
+                          isActive && 'bg-secondary text-foreground shadow-sm'
+                        )
+                      }
+                    >
+                      {t('app.header.imports', 'Imports')}
+                    </NavLink>
+                  )}
+                  {canViewAuditLogs(role) && (
+                    <NavLink
+                      to="/app/audit-logs"
+                      className={({ isActive }) =>
+                        cn(
+                          'rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all duration-200 hover:bg-accent/80 hover:text-foreground focus-visible:outline-none',
+                          isActive && 'bg-secondary text-foreground shadow-sm'
+                        )
+                      }
+                    >
+                      {t('app.header.auditLogs', 'Audit Logs')}
+                    </NavLink>
+                  )}
                 </nav>
                 <div className="flex items-center gap-2 self-start lg:self-auto">
                   <LanguageToggle />

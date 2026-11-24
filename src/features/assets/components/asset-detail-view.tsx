@@ -20,6 +20,8 @@ import { QrCodeViewer } from './qr-code-viewer'
 import { CheckoutDialog } from '@/features/checkout/components/checkout-dialog'
 import { CheckinDialog } from '@/features/checkout/components/checkin-dialog'
 import { AssetTimeline } from './asset-timeline'
+import { useSessionQuery } from '@/features/auth/hooks/use-session'
+import { canManageAssets } from '@/features/auth/utils/permissions'
 import {
   useArchiveAssetMutation,
   useUpdateAssetStatusMutation,
@@ -46,6 +48,8 @@ const VALID_TRANSITIONS: Record<AssetStatus, AssetStatus[]> = {
 
 export function AssetDetailView({ asset }: AssetDetailViewProps) {
   const { t } = useTranslation()
+  const sessionQuery = useSessionQuery()
+  const canEditAssets = canManageAssets(sessionQuery.data?.user.role)
   const [draftStatus, setDraftStatus] = useState<AssetDetail['status'] | null>(null)
   const [isArchiveOpen, setIsArchiveOpen] = useState(false)
   const updateStatusMutation = useUpdateAssetStatusMutation(asset.id)
@@ -92,16 +96,18 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
             <p className="text-sm text-muted-foreground">{asset.assetTag}</p>
           </div>
           <div className="flex items-center gap-2">
-            {asset.status === 'IN_STOCK' && (
+            {canEditAssets && asset.status === 'IN_STOCK' && (
               <CheckoutDialog assetId={asset.id} assetName={asset.displayName || asset.assetTag} />
             )}
-            {asset.status === 'ASSIGNED' && (
+            {canEditAssets && asset.status === 'ASSIGNED' && (
               <CheckinDialog assetId={asset.id} assetName={asset.displayName || asset.assetTag} />
             )}
             <QrCodeViewer assetId={asset.id} assetTag={asset.assetTag} />
-            <Button asChild variant="outline" size="sm">
-              <Link to={`/app/assets/${asset.id}/edit`}>{t('details.actions.edit', 'Edit')}</Link>
-            </Button>
+            {canEditAssets && (
+              <Button asChild variant="outline" size="sm">
+                <Link to={`/app/assets/${asset.id}/edit`}>{t('details.actions.edit', 'Edit')}</Link>
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -116,7 +122,8 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
               </span>
             </div>
           </div>
-          <div className="space-y-3 rounded-md border border-border p-4">
+          {canEditAssets ? (
+            <div className="space-y-3 rounded-md border border-border p-4">
             <div className="space-y-1">
               <h2 className="text-sm font-medium text-foreground">{t('details.sections.lifecycle', 'Lifecycle')}</h2>
               <p className="text-sm text-muted-foreground">
@@ -155,7 +162,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
                 {isArchived
-                  ? t('details.asset.notFound', 'This asset has already been archived.')
+                  ? t('details.asset.alreadyArchived', 'This asset has already been archived.')
                   : t('details.asset.archiveDescription', 'Archive is intended for retired assets.')}
               </p>
               <AlertDialog open={isArchiveOpen} onOpenChange={setIsArchiveOpen}>
@@ -197,7 +204,8 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
             {archiveErrorMessage ? (
               <p className="text-sm text-destructive">{archiveErrorMessage}</p>
             ) : null}
-          </div>
+            </div>
+          ) : null}
           <DetailRow label={t('assetForm.labels.serialNumber', 'Serial number')} value={asset.serialNumber} />
           <DetailRow label={t('assetForm.labels.hostname', 'Hostname')} value={asset.hostname} />
           <DetailRow label={t('assetForm.labels.description', 'Description')} value={asset.description} />
