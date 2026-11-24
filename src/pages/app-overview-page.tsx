@@ -88,7 +88,7 @@ export function AppOverviewPage() {
   const sessionQuery = useSessionQuery()
   const { stats, isLoading: statsLoading } = useDashboardStats()
   const { data: categories = [] } = useCategoriesQuery()
-  const assetsQuery = useAssetsQuery({ size: 1000 })
+  const assetsQuery = useAssetsQuery({ size: 100 })
   const allAssets = useMemo(() => assetsQuery.data?.items ?? [], [assetsQuery.data?.items])
   const isAssetsLoading = assetsQuery.isPending
 

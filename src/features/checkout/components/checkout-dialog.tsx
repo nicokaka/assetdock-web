@@ -41,7 +41,7 @@ export function CheckoutDialog({ assetId, assetName }: CheckoutDialogProps) {
 
   const checkoutMutation = useCheckoutMutation(assetId)
   const peopleQuery = usePeopleQuery()
-  const people = peopleQuery.data?.items ?? []
+  const people = (peopleQuery.data?.items ?? []).filter((person) => person.active)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

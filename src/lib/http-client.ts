@@ -23,6 +23,12 @@ function shouldIncludeJsonContentType(body: unknown, headers: Headers) {
   return body !== undefined && !isFormData(body) && !headers.has('Content-Type')
 }
 
+function isJsonContentType(contentType: string | null) {
+  if (!contentType) return false
+  const normalized = contentType.toLowerCase()
+  return normalized.includes('application/json') || normalized.includes('+json')
+}
+
 function shouldAttachCsrfToken(method: HttpMethod, path: string) {
   const isMutate = method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE'
   if (!isMutate) return false
@@ -43,10 +49,17 @@ export class HttpError extends Error {
     let message = `HTTP ${status}`
     if (body !== null && typeof body === 'object') {
       const b = body as Record<string, unknown>
-      if (typeof b.message === 'string') message = b.message
-      else if (typeof b.detail === 'string') message = b.detail
-      else if (typeof b.error === 'string') message = b.error
-      else message = JSON.stringify(body)
+      const violations = Array.isArray(b.violations)
+        ? (b.violations as Array<{ message?: unknown }>)
+        : undefined
+      const firstViolation = violations?.find((v) => typeof v?.message === 'string')?.message as
+        | string
+        | undefined
+      if (typeof b.message === 'string' && b.message.trim() !== '') message = b.message
+      else if (firstViolation && firstViolation.trim() !== '') message = firstViolation
+      else if (typeof b.detail === 'string' && b.detail.trim() !== '') message = b.detail
+      else if (typeof b.title === 'string' && b.title.trim() !== '') message = b.title
+      else if (typeof b.error === 'string' && b.error.trim() !== '') message = b.error
     } else if (typeof body === 'string' && body.trim() !== '') {
       message = body
     }
@@ -113,7 +126,7 @@ export class HttpClient {
       const contentType = response.headers.get('content-type')
       
       try {
-        if (contentType && contentType.includes('application/json')) {
+        if (isJsonContentType(contentType)) {
           body = await response.json()
         } else {
           body = await response.text()
@@ -134,7 +147,7 @@ export class HttpClient {
     }
 
     const contentType = response.headers.get('content-type')
-    if (contentType && contentType.includes('application/json')) {
+    if (isJsonContentType(contentType)) {
       return (await response.json()) as TResponse
     }
 

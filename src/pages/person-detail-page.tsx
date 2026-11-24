@@ -19,7 +19,7 @@ export function PersonDetailPage() {
   
   const personQuery = usePersonDetailQuery(personId)
   const historyQuery = usePersonHistoryQuery(personId)
-  const assetsQuery = useAssetsQuery({ size: 1000 }) // Load up to 1000 assets to map asset IDs
+  const assetsQuery = useAssetsQuery({ size: 100 })
 
   const personLabel = personQuery.data?.fullName || t('breadcrumb.person', 'Person')
   usePageTitle(personLabel)
