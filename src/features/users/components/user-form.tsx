@@ -180,10 +180,10 @@ export function UserForm({
                     </span>
                   </Button>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1.5">
-                  {t('userForm.passwordRequirements', 'A senha deve ter no mínimo 8 caracteres, contendo letra maiúscula, letra minúscula, número e caractere especial (ex: Senha123!).')}
-                </p>
               </FormControl>
+              <p className="text-xs text-muted-foreground mt-1.5">
+                {t('userForm.passwordRequirements', 'A senha deve ter no mínimo 8 caracteres, contendo letra maiúscula, letra minúscula, número e caractere especial (ex: Senha123!).')}
+              </p>
               <FormMessage />
             </FormItem>
           )}
