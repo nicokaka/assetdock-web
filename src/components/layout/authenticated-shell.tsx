@@ -9,6 +9,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { LanguageToggle } from '@/components/language-toggle'
 import { useLogoutMutation, useSessionQuery } from '@/features/auth/hooks/use-session'
 import { canViewAuditLogs, canViewImports, canViewUsers } from '@/features/auth/utils/permissions'
+import { ChangePasswordDialog } from '@/features/users/components/change-password-dialog'
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { cn } from '@/lib/utils'
 import { APP_VERSION } from '@/lib/version'
@@ -144,6 +145,9 @@ export function AuthenticatedShell() {
                     <Search className="h-4 w-4" />
                     <span className="sr-only">{t('app.header.search', 'Search')}</span>
                   </Button>
+                  {sessionQuery.data?.user.id ? (
+                    <ChangePasswordDialog userId={sessionQuery.data.user.id} />
+                  ) : null}
                   <Button
                     variant="outline"
                     onClick={() => logoutMutation.mutate()}

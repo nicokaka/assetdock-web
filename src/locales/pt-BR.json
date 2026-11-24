@@ -31,6 +31,23 @@
       "errorRateLimit": "Muitas tentativas de login. Por favor, aguarde {{seconds}} segundos e tente novamente.",
       "errorRateLimitGeneric": "Muitas tentativas de login. Por favor, aguarde 1 minuto e tente novamente."
     },
+    "changePassword": {
+      "trigger": "Alterar senha",
+      "title": "Alterar senha",
+      "description": "Atualize sua senha de acesso. Por segurança, todas as sessões ativas serão encerradas.",
+      "currentPasswordLabel": "Senha atual",
+      "currentPasswordPlaceholder": "Digite a senha atual",
+      "newPasswordLabel": "Nova senha",
+      "newPasswordPlaceholder": "Digite a nova senha",
+      "confirmPasswordLabel": "Confirmar nova senha",
+      "confirmPasswordPlaceholder": "Repita a nova senha",
+      "submit": "Atualizar senha",
+      "submitting": "Atualizando...",
+      "success": "Senha alterada. Faça login novamente com sua nova senha.",
+      "error": "Não foi possível alterar a senha neste momento.",
+      "mismatchError": "A nova senha e a confirmação não coincidem.",
+      "policyError": "A nova senha deve ter entre 8 e 72 caracteres, incluindo letra maiúscula, número e caractere especial."
+    },
     "loadingSession": "Carregando sessão..."
   },
   "app": {
@@ -297,7 +314,7 @@
       "auditor": "Acesso a relatórios de auditoria e visualização detalhada do sistema.",
       "viewer": "Acesso restrito apenas para visualização e consulta de ativos."
     },
-    "passwordRequirements": "Mínimo de 8 caracteres.",
+    "passwordRequirements": "8 a 72 caracteres, com pelo menos uma letra maiúscula, um número e um caractere especial.",
     "status": {
       "active": "Ativo",
       "inactive": "Inativo",

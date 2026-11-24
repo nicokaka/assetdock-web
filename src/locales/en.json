@@ -31,6 +31,23 @@
       "errorRateLimit": "Too many attempts. Please wait {{seconds}} seconds before trying again.",
       "errorRateLimitGeneric": "Too many login attempts. Please wait before trying again."
     },
+    "changePassword": {
+      "trigger": "Change password",
+      "title": "Change password",
+      "description": "Update your password. For security reasons, all active sessions will be signed out.",
+      "currentPasswordLabel": "Current password",
+      "currentPasswordPlaceholder": "Enter current password",
+      "newPasswordLabel": "New password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPasswordLabel": "Confirm new password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "submit": "Update password",
+      "submitting": "Updating...",
+      "success": "Password changed. Please sign in with your new password.",
+      "error": "Unable to change your password right now.",
+      "mismatchError": "New password and confirmation do not match.",
+      "policyError": "New password must be 8-72 characters and include at least one uppercase letter, one number, and one special character."
+    },
     "loadingSession": "Loading session..."
   },
   "app": {
@@ -297,7 +314,7 @@
       "auditor": "Access to audit reports and detailed system inspection views.",
       "viewer": "Restricted read-only access to browse assets and information."
     },
-    "passwordRequirements": "Minimum 8 characters.",
+    "passwordRequirements": "8–72 characters, including at least one uppercase letter, one number, and one special character.",
     "status": {
       "active": "Active",
       "inactive": "Inactive",

@@ -1,12 +1,20 @@
+import { useEffect } from 'react'
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
+import { isDynamicImportError, reloadOnceForChunkError } from '@/lib/chunk-reload'
 
 export function RouteErrorBoundary() {
   const error = useRouteError()
   // L-11: Wrap strings in t() for i18n consistency.
   const { t } = useTranslation()
+
+  useEffect(() => {
+    if (isDynamicImportError(error)) {
+      reloadOnceForChunkError()
+    }
+  }, [error])
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-background px-4 text-center">

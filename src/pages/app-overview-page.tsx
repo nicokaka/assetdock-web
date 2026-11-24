@@ -29,7 +29,7 @@ import { AssetHealthBar } from '@/features/dashboard/components/asset-health-bar
 import { RecentActivityFeed } from '@/features/dashboard/components/recent-activity-feed'
 import { useDashboardStats } from '@/features/dashboard/hooks/use-dashboard-stats'
 import { useSessionQuery } from '@/features/auth/hooks/use-session'
-import { canImportAssets, canManageAssets, canManageUsers } from '@/features/auth/utils/permissions'
+import { canImportAssets, canManageAssets, canManageUsers, canViewAuditLogs } from '@/features/auth/utils/permissions'
 import { usePageTitle } from '@/hooks/use-page-title'
 import { useCategoriesQuery } from '@/features/catalog/hooks/use-catalog-lookups'
 import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
@@ -402,7 +402,7 @@ export function AppOverviewPage() {
       </div>
 
       {/* Activity Feed */}
-      <RecentActivityFeed />
+      {canViewAuditLogs(role) ? <RecentActivityFeed /> : null}
     </section>
   )
 }
