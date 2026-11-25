@@ -30,21 +30,25 @@ export function CheckinDialog({ assetId, assetName }: CheckinDialogProps) {
 
   const checkinMutation = useCheckinMutation(assetId)
 
+  const resetForm = () => {
+    setNotes('')
+    checkinMutation.reset()
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     try {
       await checkinMutation.mutateAsync({
-        notes: notes || undefined,
+        notes: notes.trim() || undefined,
       })
       setIsOpen(false)
-      setNotes('')
+      resetForm()
     } catch (error) {
-      // H-4: Show error toast and keep dialog open so the user can retry.
       const message =
-        error instanceof HttpError
+        error instanceof HttpError && error.message
           ? error.message
-          : t('app.checkin.error', 'Failed to check in asset. Please try again.')
+          : t('app.checkin.error', 'Failed to return asset. Please try again.')
       toast.error(message)
     }
   }
@@ -52,57 +56,67 @@ export function CheckinDialog({ assetId, assetName }: CheckinDialogProps) {
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open)
     if (!open) {
-      checkinMutation.reset()
+      resetForm()
     }
   }
+
+  const errorMessage = checkinMutation.isError
+    ? checkinMutation.error instanceof HttpError && checkinMutation.error.message
+      ? checkinMutation.error.message
+      : t('app.checkin.error', 'Unable to return this asset right now.')
+    : null
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button size="sm" variant="outline" className="gap-2">
           <ArrowDownToLine className="h-4 w-4" />
-          {t('app.checkin.button', 'Check-in')}
+          {t('app.checkin.button', 'Return asset')}
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{t('app.checkin.title', 'Check-in Asset')}</DialogTitle>
+            <DialogTitle>{t('app.checkin.title', 'Return asset to stock')}</DialogTitle>
             <DialogDescription>
               {t('app.checkin.description', 'Return this asset to the inventory.')}
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <Label>{t('app.checkin.asset', 'Asset')}</Label>
-              <div className="text-sm font-medium p-2 bg-muted rounded-md">{assetName}</div>
+              <div className="rounded-md bg-muted px-3 py-2 text-sm font-medium">{assetName}</div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="notes">{t('app.checkin.notes', 'Return Notes')}</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor={`checkin-notes-${assetId}`}>{t('app.checkin.notes', 'Return Notes')}</Label>
               <Textarea
-                id="notes"
+                id={`checkin-notes-${assetId}`}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder={t('app.checkin.notesPlaceholder', 'Condition upon return, issues found, etc.')}
+                disabled={checkinMutation.isPending}
               />
             </div>
+
+            {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
           </div>
 
-          {checkinMutation.isError ? (
-            <p className="text-sm text-destructive px-1">
-              {t('app.checkin.error', 'Unable to check in this asset. Please try again.')}
-            </p>
-          ) : null}
-
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={checkinMutation.isPending}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleOpenChange(false)}
+              disabled={checkinMutation.isPending}
+            >
               {t('common.cancel', 'Cancel')}
             </Button>
             <Button type="submit" disabled={checkinMutation.isPending}>
-              {checkinMutation.isPending ? t('common.saving', 'Saving...') : t('app.checkin.submit', 'Confirm Check-in')}
+              {checkinMutation.isPending
+                ? t('common.saving', 'Saving...')
+                : t('app.checkin.submit', 'Confirm return')}
             </Button>
           </DialogFooter>
         </form>

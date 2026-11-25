@@ -43,6 +43,9 @@ export function useUnassignAssetMutation(assetId: string) {
       void queryClient.invalidateQueries({ queryKey: ['assets'] })
       void queryClient.invalidateQueries({ queryKey: ['assets', assetId] })
       void queryClient.invalidateQueries({ queryKey: ['assets', assetId, 'assignments'] })
+      void queryClient.invalidateQueries({ queryKey: ['asset-timeline', assetId] })
+      void queryClient.invalidateQueries({ queryKey: ['people', 'history'] })
+      void queryClient.invalidateQueries({ queryKey: ['dashboard', 'stats'] })
       toast.success(t('toast.assignment.unassignSuccess', 'Asset unassigned'))
     },
     onError: () => {

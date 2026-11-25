@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ArrowLeft, Edit2, Calendar, Clipboard, Laptop } from 'lucide-react'
@@ -9,7 +10,9 @@ import { Badge } from '@/components/ui/badge'
 import { usePersonDetailQuery, usePersonHistoryQuery } from '@/features/people/hooks/use-people'
 import { useAssetsQuery } from '@/features/assets/hooks/use-assets'
 import { useSessionQuery } from '@/features/auth/hooks/use-session'
-import { canManagePeople } from '@/features/auth/utils/permissions'
+import { canManageAssignments, canManagePeople } from '@/features/auth/utils/permissions'
+import { CheckinDialog } from '@/features/checkout/components/checkin-dialog'
+import { PersonCheckoutDialog } from '@/features/checkout/components/person-checkout-dialog'
 import { formatTimestamp } from '@/lib/format'
 import { HttpError } from '@/lib/http-client'
 import { usePageTitle } from '@/hooks/use-page-title'
@@ -18,9 +21,12 @@ export function PersonDetailPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { personId = '' } = useParams()
+  const [nowTimestamp] = useState(() => Date.now())
   const sessionQuery = useSessionQuery()
-  const canEditPeople = canManagePeople(sessionQuery.data?.user.role)
-  
+  const role = sessionQuery.data?.user.role
+  const canEditPeople = canManagePeople(role)
+  const canAssign = canManageAssignments(role)
+
   const personQuery = usePersonDetailQuery(personId)
   const historyQuery = usePersonHistoryQuery(personId)
   const assetsQuery = useAssetsQuery({ size: 100 })
@@ -35,7 +41,7 @@ export function PersonDetailPage() {
 
   const assetsMap = new Map<string, { name: string; tag: string }>()
   if (assetsQuery.data?.items) {
-    assetsQuery.data.items.forEach(asset => {
+    assetsQuery.data.items.forEach((asset) => {
       assetsMap.set(asset.id, {
         name: asset.displayName || asset.assetTag,
         tag: asset.assetTag,
@@ -43,20 +49,27 @@ export function PersonDetailPage() {
     })
   }
 
+  const allCheckouts = historyQuery.data ?? []
+  const activeCheckouts = allCheckouts.filter((checkout) => checkout.checkedInAt === null)
+  const pastCheckouts = allCheckouts.filter((checkout) => checkout.checkedInAt !== null)
+
   return (
     <section className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <Breadcrumbs
           items={[
             { label: t('app.header.people', 'People'), href: '/app/people' },
             { label: personLabel },
           ]}
         />
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button onClick={() => navigate('/app/people')} className={buttonVariants({ variant: 'outline', size: 'sm' })}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t('personForm.back', 'Back to people')}
           </button>
+          {personQuery.isSuccess && personQuery.data.active && canAssign ? (
+            <PersonCheckoutDialog personId={personId} personName={personQuery.data.fullName} />
+          ) : null}
           {personQuery.isSuccess && canEditPeople ? (
             <Link
               to={`/app/people/${personId}/edit`}
@@ -141,98 +154,181 @@ export function PersonDetailPage() {
             </Card>
           </div>
 
-          {/* Right Column: Checkout History Timeline */}
-          <div className="md:col-span-2 space-y-6">
+          {/* Right Column: Active Holdings & Returned History */}
+          <div className="space-y-6 md:col-span-2">
+            {/* Active Holdings */}
             <Card className="border-border shadow-none">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold tracking-tight">
-                  {t('details.assignments.history', 'Asset History')}
-                </CardTitle>
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle className="text-lg font-semibold tracking-tight">
+                    {t('details.assignments.currentHoldings', 'Currently Assigned Assets')} ({activeCheckouts.length})
+                  </CardTitle>
+                </div>
                 <CardDescription>
-                  {t('details.assignments.historyDescription', 'Timeline of computers and physical items checked out to this person.')}
+                  {t(
+                    'details.assignments.currentHoldingsDescription',
+                    'Equipment and items currently in custody of this person.',
+                  )}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {historyQuery.isPending ? (
-                  <p className="text-sm text-muted-foreground">{t('details.assignments.loading', 'Loading history...')}</p>
+                  <p className="text-sm text-muted-foreground">{t('details.assignments.loading', 'Loading assignments...')}</p>
                 ) : null}
 
                 {historyQuery.isError ? (
                   <p className="text-sm text-destructive">{t('details.assignments.historyError', 'Unable to load checkout history right now.')}</p>
                 ) : null}
 
-                {historyQuery.isSuccess && historyQuery.data.length === 0 ? (
-                  <div className="py-8 text-center text-sm text-muted-foreground">
-                    <Laptop className="mx-auto h-8 w-8 text-muted-foreground/50 mb-2" />
-                    {t('details.assignments.historyEmpty', 'No checkout history found for this person.')}
+                {historyQuery.isSuccess && activeCheckouts.length === 0 ? (
+                  <div className="py-6 text-center text-sm text-muted-foreground">
+                    <Laptop className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
+                    {t('details.assignments.currentHoldingsEmpty', 'No assets currently assigned to this person.')}
                   </div>
                 ) : null}
 
-                {historyQuery.isSuccess && historyQuery.data.length > 0 ? (
-                  <div className="space-y-4 relative border-l border-border pl-6 ml-3">
-                    {historyQuery.data.map((checkout) => {
+                {historyQuery.isSuccess && activeCheckouts.length > 0 ? (
+                  <div className="space-y-3">
+                    {activeCheckouts.map((checkout) => {
                       const asset = assetsMap.get(checkout.assetId)
                       const assetName = asset ? asset.name : `Asset ${checkout.assetId.slice(0, 8)}…`
                       const assetTag = asset ? asset.tag : undefined
-                      const isActive = checkout.checkedInAt === null
+                      const isOverdue =
+                        checkout.expectedReturnDate !== null &&
+                        new Date(checkout.expectedReturnDate).getTime() < nowTimestamp
 
                       return (
-                        <div key={checkout.id} className="relative group pb-2">
-                          {/* Timeline dot */}
-                          <div className={`absolute -left-[31px] top-1.5 h-3.5 w-3.5 rounded-full border-2 bg-background z-10 transition-colors ${
-                            isActive ? 'border-amber-500' : 'border-emerald-500'
-                          }`} />
+                        <div key={checkout.id} className="rounded-lg border border-border bg-card p-4 shadow-none">
+                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <Laptop className="h-4 w-4 text-muted-foreground" />
+                              <Link
+                                to={`/app/assets/${checkout.assetId}`}
+                                className="font-medium text-foreground hover:text-primary hover:underline"
+                              >
+                                {assetName}
+                              </Link>
+                              {assetTag ? (
+                                <span className="font-mono text-xs text-muted-foreground">({assetTag})</span>
+                              ) : null}
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {isOverdue ? (
+                                <Badge variant="warning">{t('details.assignments.overdue', 'Overdue')}</Badge>
+                              ) : null}
+                              <Badge variant="success">{t('details.assignments.active', 'Active')}</Badge>
+                              {canAssign ? (
+                                <CheckinDialog assetId={checkout.assetId} assetName={assetName} />
+                              ) : null}
+                            </div>
+                          </div>
 
-                          <div className="rounded-lg border border-border p-4 bg-card shadow-none">
+                          <div className="mt-3 grid gap-x-4 gap-y-2 text-xs text-muted-foreground sm:grid-cols-2">
+                            <div className="flex items-center gap-1.5">
+                              <Calendar className="h-3.5 w-3.5" />
+                              <span>
+                                {t('details.assignments.assignedDate', 'Assigned')}: {new Date(checkout.checkedOutAt).toLocaleDateString()}
+                              </span>
+                            </div>
+                            {checkout.expectedReturnDate ? (
+                              <div className="flex items-center gap-1.5">
+                                <Calendar className="h-3.5 w-3.5" />
+                                <span>
+                                  {t('details.assignments.expectedReturn', 'Expected return')}: {new Date(checkout.expectedReturnDate).toLocaleDateString()}
+                                </span>
+                              </div>
+                            ) : null}
+                          </div>
+
+                          {checkout.notes ? (
+                            <div className="mt-3 flex items-start gap-1.5 rounded bg-muted/50 p-2 text-xs text-muted-foreground">
+                              <Clipboard className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                              <span className="whitespace-pre-wrap">{checkout.notes}</span>
+                            </div>
+                          ) : null}
+                        </div>
+                      )
+                    })}
+                  </div>
+                ) : null}
+              </CardContent>
+            </Card>
+
+            {/* Past Returned History */}
+            <Card className="border-border shadow-none">
+              <CardHeader>
+                <CardTitle className="text-lg font-semibold tracking-tight">
+                  {t('details.assignments.pastHistory', 'Past Assignment History')}
+                </CardTitle>
+                <CardDescription>
+                  {t(
+                    'details.assignments.pastHistoryDescription',
+                    'Timeline of previously assigned items that have been returned.',
+                  )}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {historyQuery.isPending ? (
+                  <p className="text-sm text-muted-foreground">{t('details.assignments.loading', 'Loading assignments...')}</p>
+                ) : null}
+
+                {historyQuery.isSuccess && pastCheckouts.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t('details.assignments.pastHistoryEmpty', 'No returned assets in history yet.')}
+                  </p>
+                ) : null}
+
+                {historyQuery.isSuccess && pastCheckouts.length > 0 ? (
+                  <div className="relative ml-3 space-y-4 border-l border-border pl-6">
+                    {pastCheckouts.map((checkout) => {
+                      const asset = assetsMap.get(checkout.assetId)
+                      const assetName = asset ? asset.name : `Asset ${checkout.assetId.slice(0, 8)}…`
+                      const assetTag = asset ? asset.tag : undefined
+
+                      return (
+                        <div key={checkout.id} className="group relative pb-2">
+                          <div className="absolute -left-[31px] top-1.5 z-10 h-3.5 w-3.5 rounded-full border-2 border-emerald-500 bg-background transition-colors" />
+
+                          <div className="rounded-lg border border-border bg-card p-4 shadow-none">
                             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                               <div className="flex items-center gap-2">
                                 <Laptop className="h-4 w-4 text-muted-foreground" />
                                 <Link
                                   to={`/app/assets/${checkout.assetId}`}
-                                  className="font-medium text-foreground hover:underline"
+                                  className="font-medium text-foreground hover:text-primary hover:underline"
                                 >
                                   {assetName}
                                 </Link>
-                                {assetTag && (
-                                  <span className="text-xs text-muted-foreground font-mono">({assetTag})</span>
-                                )}
+                                {assetTag ? (
+                                  <span className="font-mono text-xs text-muted-foreground">({assetTag})</span>
+                                ) : null}
                               </div>
-                              <Badge variant={isActive ? 'warning' : 'success'}>
-                                {isActive ? t('details.assignments.active', 'Checked Out') : t('details.assignments.closed', 'Returned')}
-                              </Badge>
+                              <Badge variant="muted">{t('details.assignments.closed', 'Closed')}</Badge>
                             </div>
 
                             <div className="mt-3 grid gap-x-4 gap-y-2 text-xs text-muted-foreground sm:grid-cols-2">
                               <div className="flex items-center gap-1.5">
                                 <Calendar className="h-3.5 w-3.5" />
                                 <span>
-                                  {t('app.timeline.checkedOut', 'Checked out')}: {new Date(checkout.checkedOutAt).toLocaleDateString()}
+                                  {t('details.assignments.assignedDate', 'Assigned')}: {new Date(checkout.checkedOutAt).toLocaleDateString()}
                                 </span>
                               </div>
-                              {checkout.expectedReturnDate && (
+                              {checkout.checkedInAt ? (
                                 <div className="flex items-center gap-1.5">
                                   <Calendar className="h-3.5 w-3.5" />
                                   <span>
-                                    {t('app.checkout.expectedReturn', 'Expected return')}: {new Date(checkout.expectedReturnDate).toLocaleDateString()}
+                                    {t('details.assignments.unassignedDate', 'Unassigned')}: {new Date(checkout.checkedInAt).toLocaleDateString()}
                                   </span>
                                 </div>
-                              )}
-                              {checkout.checkedInAt && (
-                                <div className="flex items-center gap-1.5">
-                                  <Calendar className="h-3.5 w-3.5" />
-                                  <span>
-                                    {t('app.timeline.checkedIn', 'Returned')}: {new Date(checkout.checkedInAt).toLocaleDateString()}
-                                  </span>
-                                </div>
-                              )}
+                              ) : null}
                             </div>
 
-                            {checkout.notes && (
-                              <div className="mt-3 text-xs bg-muted/50 p-2 rounded text-muted-foreground flex gap-1.5 items-start">
-                                <Clipboard className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                            {checkout.notes ? (
+                              <div className="mt-3 flex items-start gap-1.5 rounded bg-muted/50 p-2 text-xs text-muted-foreground">
+                                <Clipboard className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                                 <span className="whitespace-pre-wrap">{checkout.notes}</span>
                               </div>
-                            )}
+                            ) : null}
                           </div>
                         </div>
                       )

@@ -67,7 +67,16 @@ export function AssetsList({ assets }: AssetsListProps) {
               {asset.serialNumber || '—'}
             </TableCell>
             <TableCell className="text-muted-foreground">
-              {asset.currentAssignedPersonName || '—'}
+              {asset.currentAssignedPersonId && asset.currentAssignedPersonName ? (
+                <Link
+                  to={`/app/people/${asset.currentAssignedPersonId}`}
+                  className="text-foreground transition-colors hover:text-primary hover:underline"
+                >
+                  {asset.currentAssignedPersonName}
+                </Link>
+              ) : (
+                asset.currentAssignedPersonName || '—'
+              )}
             </TableCell>
             <TableCell className="text-right">
               <Link

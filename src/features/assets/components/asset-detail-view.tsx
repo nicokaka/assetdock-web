@@ -96,7 +96,7 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
             <p className="text-sm text-muted-foreground">{asset.assetTag}</p>
           </div>
           <div className="flex items-center gap-2">
-            {canEditAssets && asset.status === 'IN_STOCK' && (
+            {canEditAssets && asset.status === 'IN_STOCK' && !isArchived && (
               <CheckoutDialog assetId={asset.id} assetName={asset.displayName || asset.assetTag} />
             )}
             {canEditAssets && asset.status === 'ASSIGNED' && (
@@ -210,7 +210,21 @@ export function AssetDetailView({ asset }: AssetDetailViewProps) {
           <DetailRow label={t('assetForm.labels.hostname', 'Hostname')} value={asset.hostname} />
           <DetailRow label={t('assetForm.labels.description', 'Description')} value={asset.description} />
           {asset.status === 'ASSIGNED' && asset.currentAssignedPersonName && (
-            <DetailRow label={t('details.labels.assignedTo', 'Assigned to')} value={asset.currentAssignedPersonName} />
+            <DetailRow
+              label={t('details.labels.assignedTo', 'Assigned to')}
+              value={
+                asset.currentAssignedPersonId ? (
+                  <Link
+                    to={`/app/people/${asset.currentAssignedPersonId}`}
+                    className="text-foreground underline-offset-4 hover:text-primary hover:underline"
+                  >
+                    {asset.currentAssignedPersonName}
+                  </Link>
+                ) : (
+                  asset.currentAssignedPersonName
+                )
+              }
+            />
           )}
           {asset.purchaseDate && (
             <DetailRow label={t('details.labels.purchaseDate', 'Purchase date')} value={formatTimestamp(asset.purchaseDate).split(' ')[0]} />
